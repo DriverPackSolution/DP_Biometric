@@ -1,0 +1,218 @@
+; ===========================================================================
+; Application : BioVision LiveScanner LV121 Device (BV121 Mega Cam)
+; Purpose     : Fingerprint Live Scanner
+; Version     : 2.1.0.1
+; Copyright   : BioVision Co. Ltd., 2006
+; Support OS  : Windows98SE/2000/XP
+; Last Update : 2006. 01. 03
+; Homepage    : www.biovision.co.kr
+; E-Mail      : help@biovision.co.kr 
+; ===========================================================================
+
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+signature="$CHICAGO$"
+
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+
+Provider=%SWMfg%
+DriverVer=04/05/2002,2.1.0.1
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%HWMfg%=BIO
+ 
+[DestinationDirs]
+DefaultDestDir = 11
+BIO.USBDCam2800.Files = 10,System32\Drivers
+BIO.USBDCam2800.2000= 10,System32\Drivers
+BIO.TWAIN.CopyFiles = 10,TWAIN_32\OMCAM
+BIO.CopyCodec = 10,system
+BIO.Setting.CopyFiles = 10,OvtCam
+BIO.AP.CopyFiles = 10
+[BIO]
+%USB\VID_0100&PID_C031.DeviceDesc%=BIO.USBDCam2800,USB\VID_0100&PID_C031
+
+[BIO.USBDCam2800]
+Include=    ks.inf, kscaptur.inf, ksfilter.inf
+Needs=      KS.Registration,KSCAPTUR.Registration
+
+SubClass=StillImage
+DeviceType=2
+DeviceSubType=1
+Capabilities=1
+Events=BIO.Events
+DeviceData=BIO.STI.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+UpdateInis= BIO.USBDCam2800.Links
+AddReg=BIO.USBDCam2800.AddReg, BIO.USBDCam2800.BasicSetting, BIO.2800.AddReg
+CopyFiles=BIO.ext.CopyFiles, BIO.Setting.CopyFiles, BIO.USBDCam2800.Files, BIO.TWAIN.CopyFiles, BIO.CopyCodec, BIO.AP.CopyFiles
+
+[BIO.USBDCam2800.NT]
+Include=    ks.inf, kscaptur.inf, ksfilter.inf
+Needs=      KS.Registration,KSCAPTUR.Registration.NT
+
+SubClass=StillImage
+DeviceType=2
+DeviceSubType=1
+Capabilities=1
+Events=BIO.Events
+DeviceData=BIO.STI.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+UpdateInis= BIO.USBDCam2800.Links
+AddReg=BIO.USBDCam2800.AddReg, BIO.USBDCam2800.BasicSetting, BIO.2800.AddReg
+CopyFiles=BIO.ext.CopyFiles, BIO.Setting.CopyFiles, BIO.TWAIN.CopyFiles, BIO.USBDCam2800.2000, BIO.AP.CopyFiles
+;*****************************************
+
+[BIO.STI.DeviceData]
+TwainDS=%TwainDsName%
+SpecialInfo="My very special information"
+
+[BIO.Events]
+
+[BIO.USBDCam2800.AddReg]
+HKR,,HardwareConfig,1,1
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,ovtcam2.sys
+HKR,,OkToHibernate,3,01
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+HKR,,USDClass,,"{2e911b23-d6ce-49f8-af2d-dde837547639}"
+HKCR,CLSID\{2e911b23-d6ce-49f8-af2d-dde837547639} ,,,"BioVision MegaCam USD"
+HKCR,CLSID\{2e911b23-d6ce-49f8-af2d-dde837547639}\InProcServer32,,,%11%\ovtusd2.dll
+HKCR,CLSID\{2e911b23-d6ce-49f8-af2d-dde837547639}\InProcServer32,ThreadingModel,,"Both"
+
+;
+;  Custome Property Interface
+;
+HKCR,CLSID\{85d22798-5568-48f9-ae83-2066a70fe27d} ,,,"BioVision MegaCam"
+HKCR,CLSID\{85d22798-5568-48f9-ae83-2066a70fe27d}\InProcServer32,,,ext2800.ax
+HKCR,CLSID\{85d22798-5568-48f9-ae83-2066a70fe27d}\InProcServer32,ThreadingModel,,"Both"
+;
+; CLSID_VideoProcAmp Property Page
+HKCR,CLSID\{C1D60340-C253-11d5-ADD2-00D0B7C72236},,,%PropPage_CustomVideoProcAmp%
+HKCR,CLSID\{C1D60340-C253-11d5-ADD2-00D0B7C72236}\InprocServer32,,,ext2800.ax
+HKCR,CLSID\{C1D60340-C253-11d5-ADD2-00D0B7C72236}\InprocServer32,ThreadingModel,,Both
+
+; CLSID_CameraControl Property Page
+HKCR,CLSID\{C1D60341-C253-11d5-ADD2-00D0B7C72236},,,%PropPage_CustomCameraControl%
+HKCR,CLSID\{C1D60341-C253-11d5-ADD2-00D0B7C72236}\InprocServer32,,,ext2800.ax
+HKCR,CLSID\{C1D60341-C253-11d5-ADD2-00D0B7C72236}\InprocServer32,ThreadingModel,,Both
+;
+; Associate the property set with the property page
+HKLM,System\CurrentControlSet\Control\MediaSets\{85d22798-5568-48f9-ae83-2066a70fe27d}\PropertyPages\{C1D60340-C253-11d5-ADD2-00D0B7C72236},,,%PropPage_CustomVideoProcAmp%
+HKLM,System\CurrentControlSet\Control\MediaSets\{85d22798-5568-48f9-ae83-2066a70fe27d}\PropertyPages\{C1D60341-C253-11d5-ADD2-00D0B7C72236},,,%PropPage_CustomCameraControl%
+
+[BIO.USBDCam2800.BasicSetting]
+HKR,,ModulFileName,,twn2800.ds
+HKR,%CamSet%, StillSupportType, 0x10001, 2
+HKR,%CamSet%, PowerOnCamera, 1, 0f,01,ff,0f,03,ff,0f,01,ff
+HKR,%CamSet%, PowerDownCamera, 1, 0f,00,01
+HKR,%CamSet%, BandwidthAllocateRule, 0x10001, 0
+HKR,%CamSet%, FileDir,, \DosDevices\%10%\OvtCam
+
+[BIO.2800.AddReg]
+HKR,%CamSet%\CamSettingFiles,9600,,9600.set
+HKR,%CamSet%, IdleAltSetting, 0x10001, 0x0
+
+; ** For add/remove programs applet **
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%szUninstall%,"DisplayName",0,%szUninstallDisplay%
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%szUninstall%,"UninstallString",0,"%10%\omniuns.exe USB\VID_0100&PID_C031"
+
+[BIO.USBDCam2800.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,BIO.USBDCam2800.Interface
+AddInterface=%KSCATEGORY_VIDEO%,GLOBAL,BIO.USBDCam2800.Interface
+
+[BIO.USBDCam2800.NT.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,BIO.USBDCam2800.Interface
+AddInterface=%KSCATEGORY_VIDEO%,GLOBAL,BIO.USBDCam2800.Interface
+
+[BIO.USBDCam2800.Interface]
+AddReg=BIO.USBDCam2800.Intf.AddReg
+         
+[BIO.USBDCam2800.Intf.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%USB\VID_0100&PID_C031.DeviceDesc%
+HKR,,ExtensionDLL,,%BIO.ExtensionDLL%
+
+[BIO.USBDCam2800.NT.Services]
+AddService = OM2800,0x00000002,BIO.USBDCam2800.ServiceInstall
+
+[BIO.USBDCam2800.ServiceInstall]
+DisplayName   = %USB\VID_0100&PID_C031.DeviceDesc%
+ServiceType   = %SERVICE_KERNEL_DRIVER%
+StartType     = %SERVICE_DEMAND_START%
+ErrorControl  = %SERVICE_ERROR_NORMAL%
+ServiceBinary = %10%\System32\Drivers\ovtcam2.sys
+
+[BIO.USBDCam2800.Links]
+system.ini,drivers32,,"VIDC.I420=msh263.drv"
+
+[BIO.ext.CopyFiles]
+ext2800.ax
+ext2800.dll
+ovtusd2.dll
+
+[BIO.USBDCam2800.Files]
+ovtcam2.sys
+ovtusb2.sys
+
+[BIO.USBDCam2800.2000]
+ovtcam2.sys
+ovtusb2.sys
+
+[BIO.Setting.CopyFiles]
+9600.set
+
+[BIO.CopyCodec]
+msh263.drv
+
+[BIO.TWAIN.CopyFiles]
+twn2800.ds
+
+[BIO.AP.CopyFiles]
+omcamdib.dll
+omniuns.exe
+
+[SourceDisksNames]
+1="BV121 USB2.0 Mega Cam Driver Disk",,,
+
+[SourceDisksFiles]
+ovtcam2.sys=1
+ext2800.ax=1
+ext2800.dll=1
+9600.set=1
+ovtusb2.sys=1
+ovtusd2.dll=1
+twn2800.ds=1
+omcamdib.dll=1
+omniuns.exe=1
+
+[Strings]
+ProxyVCap.CLSID="{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+KSCATEGORY_CAPTURE="{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO="{6994ad05-93ef-11D0-A3cc-00A0C9223196}"
+SERVICE_KERNEL_DRIVER=1
+SERVICE_DEMAND_START=3
+SERVICE_ERROR_NORMAL=1
+
+; IHV's extension DLL
+BIO.ExtensionDLL = "ext2800.dll"
+
+SWMfg="BioVision"
+HWMfg="BioVision"
+USB\VID_0100&PID_C031.DeviceDesc="BV121 USB2.0 Mega Cam"
+CamSet="CameraSetting"
+PropPage_CustomVideoProcAmp= "BV121Cam VideoProcAmp Property Page"
+PropPage_CustomCameraControl= "BV121Cam CameraControl Property Page"
+ 
+UNS511P="Uninstall BV121 USB2.0 Mega Cam"
+WDMCAPTURE="BV121 Mega Cam WDM Capture"
+VFWCAPTURE="BV121 Mega Cam VFW Capture"
+Run="SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+TwainDsName = "BV121 USB2.0 Mega Cam"
+szUninstallDisplay   ="Uninstall BV121 USB2.0 Mega Cam"
+szUninstall="BV121 USB2.0 Mega Cam"
+UninstallPath="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"

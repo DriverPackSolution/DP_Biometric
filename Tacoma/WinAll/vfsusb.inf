@@ -1,0 +1,130 @@
+; vfsusb.inf
+;
+; Installation file (.inf) for the TACOMA MBF200 device.
+;
+;
+
+[Version]
+Signature="$CHICAGO$"
+Provider=%FMA%
+ClassGUID={36fc9e60-c465-11cf-8056-444553540000}
+Class=USB
+DriverVer=1/15/2002
+
+[DestinationDirs]
+vfsusb.files.sys = 10,System32\Drivers		
+vfsusb.files.dll = 10,System32
+vfsusb.files.inf = 10,INF
+vfsusb.files.dll = 10,System
+;
+; Driver information
+;
+
+[Manufacturer]
+%FMA%   = FMA.Mfg
+
+[FMA.Mfg]
+%FMA.DeviceDesc0% = vfsusb, USB\VID_061A&PID_0200
+%FMA.DeviceDesc1% = vfsusb, USB\VID_061A&PID_0110
+
+;
+; General installation section
+;
+
+[vfsusb]
+CopyFiles = vfsusb.files.sys, vfsusb.files.dll, vfsusb.files.inf
+AddReg=vfsusb.AddReg
+
+[vfsusb.nt]
+CopyFiles = vfsusb.files.sys, vfsusb.files.dll, vfsusb.files.inf
+AddReg=vfsusb.AddReg
+
+;
+; File sections
+;
+
+[vfsusb.files.sys]
+vfsusb.sys
+
+[vfsusb.files.dll]
+vfps.dll
+
+[vfsusb.files.inf]
+vfsusb.inf
+
+;
+; Service Installation
+;
+
+[vfsusb.nt.Services]
+AddService = vfsusb, 0x00000002 , vfsusb_Service_Inst, vfsusb_EventLog_Inst
+
+[vfsusb_Service_Inst]
+DisplayName    = %vfsusb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 2                  ; SERVICE_DEMAND_START
+ErrorControl   = 0x1                  ; SERVICE_ERROR_NORMAL
+;LoadOrderGroup = Pointer Port
+LoadOrderGroup = Base
+ServiceBinary  = %10%\System32\Drivers\vfsusb.sys
+
+
+[vfsusb_EventLog_Inst]
+AddReg = vfsusb_EventLog_AddReg
+
+[vfsusb_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\vfsusb.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+[Vfsusb.AddReg]
+; If name of driver or wrapper has been changed, don't forget to update here.
+HKLM,"System\CurrentControlSet\Services\TACOMA\Drivers","USBSys",,"VFSUSB.sys"
+HKLM,"System\CurrentControlSet\Services\TACOMA\Drivers","USBDll",,"VFPS.dll"
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,VFSUSB.sys
+
+
+;
+; Source file information
+;
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksNames.x86]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+; Files for disk TACOMA Technology Inc. Installation Disk #1 (USB)
+vfsusb.sys = 1,,
+vfps.dll = 1,,
+vfsusb.inf = 1,,
+
+[SourceDisksFiles.x86]
+; Files for disk TACOMA Technology Inc. Installation Disk #1 (USB)
+vfsusb.sys = 1,,
+vfps.dll = 1,,
+vfsusb.inf = 1,,
+
+[Strings]
+
+;
+; Non-Localizable Strings
+;
+
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+SERVICEROOT    = "System\CurrentControlSet\Services"
+
+;
+; Localizable Strings
+;
+
+FMA.DeviceDesc0 = "TACOMA MBF200 Module"
+FMA.DeviceDesc1 = "TACOMA MBF110 Module"
+FMA = "TACOMA Technology Inc."
+vfsusb.SvcDesc="TACOMA Fingerprint Sensor USB driver"

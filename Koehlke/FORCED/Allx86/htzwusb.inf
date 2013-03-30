@@ -1,0 +1,119 @@
+; Installation inf for Fingerprint USB Bulk Board
+;
+; (c) Copyright 2010 G-Spy
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%MSFT%
+DriverVer=01/12/2010,1.10.0000
+CatalogFile=htzwusb32.cat
+
+[SourceDisksNames]
+1=%Disk_Description%,,,
+
+[SourceDisksFiles]
+htzwusb.sys = 1
+
+[Manufacturer]
+%MfgName%=gspy, NTx86, NTia64, NTamd64
+
+[gspy.NTx86]
+%FingerPrintBoardName0%=htzwusb.Dev, USB\Vid_04D9&Pid_A06D
+%FingerPrintBoardName1%=htzwusb.Dev, USB\Vid_04D9&Pid_A06D&MI_00
+%FingerPrintBoardName2%=htzwusb.Dev, USB\Vid_04D9&Pid_1801
+%FingerPrintBoardName3%=htzwusb.Dev, USB\Vid_04D9&Pid_1801&MI_00
+%FingerPrintBoardName4%=htzwusb.Dev, USB\Vid_04D9&Pid_A06F
+%FingerPrintBoardName5%=htzwusb.Dev, USB\Vid_04D9&Pid_A06F&MI_00
+%FingerPrintBoardName6%=htzwusb.Dev, USB\Vid_04D9&Pid_A07A
+%FingerPrintBoardName7%=htzwusb.Dev, USB\Vid_04D9&Pid_A07A&MI_00
+%FingerPrintBoardName8%=htzwusb.Dev, USB\Vid_04D9&Pid_A07B
+%FingerPrintBoardName9%=htzwusb.Dev, USB\Vid_04D9&Pid_A07B&MI_00
+%FingerPrintBoardName10%=htzwusb.Dev, USB\Vid_04D9&Pid_A07C
+%FingerPrintBoardName11%=htzwusb.Dev, USB\Vid_04D9&Pid_A07C&MI_00
+%FingerPrintBoardName12%=htzwusb.Dev, USB\Vid_04D9&Pid_A07D
+%FingerPrintBoardName13%=htzwusb.Dev, USB\Vid_04D9&Pid_A07D&MI_00
+
+[gspy.NTia64]
+%FingerPrintBoardName0%=htzwusb.Dev, USB\Vid_04D9&Pid_A06D
+%FingerPrintBoardName1%=htzwusb.Dev, USB\Vid_04D9&Pid_A06D&MI_00
+%FingerPrintBoardName2%=htzwusb.Dev, USB\Vid_04D9&Pid_1801
+%FingerPrintBoardName3%=htzwusb.Dev, USB\Vid_04D9&Pid_1801&MI_00
+%FingerPrintBoardName4%=htzwusb.Dev, USB\Vid_04D9&Pid_A06F
+%FingerPrintBoardName5%=htzwusb.Dev, USB\Vid_04D9&Pid_A06F&MI_00
+%FingerPrintBoardName6%=htzwusb.Dev, USB\Vid_04D9&Pid_A07A
+%FingerPrintBoardName7%=htzwusb.Dev, USB\Vid_04D9&Pid_A07A&MI_00
+%FingerPrintBoardName8%=htzwusb.Dev, USB\Vid_04D9&Pid_A07B
+%FingerPrintBoardName9%=htzwusb.Dev, USB\Vid_04D9&Pid_A07B&MI_00
+%FingerPrintBoardName10%=htzwusb.Dev, USB\Vid_04D9&Pid_A07C
+%FingerPrintBoardName11%=htzwusb.Dev, USB\Vid_04D9&Pid_A07C&MI_00
+%FingerPrintBoardName12%=htzwusb.Dev, USB\Vid_04D9&Pid_A07D
+%FingerPrintBoardName13%=htzwusb.Dev, USB\Vid_04D9&Pid_A07D&MI_00
+
+[gspy.NTamd64]
+%FingerPrintBoardName0%=htzwusb.Dev, USB\Vid_04D9&Pid_A06D
+%FingerPrintBoardName1%=htzwusb.Dev, USB\Vid_04D9&Pid_A06D&MI_00
+%FingerPrintBoardName2%=htzwusb.Dev, USB\Vid_04D9&Pid_1801
+%FingerPrintBoardName3%=htzwusb.Dev, USB\Vid_04D9&Pid_1801&MI_00
+%FingerPrintBoardName4%=htzwusb.Dev, USB\Vid_04D9&Pid_A06F
+%FingerPrintBoardName5%=htzwusb.Dev, USB\Vid_04D9&Pid_A06F&MI_00
+%FingerPrintBoardName6%=htzwusb.Dev, USB\Vid_04D9&Pid_A07A
+%FingerPrintBoardName7%=htzwusb.Dev, USB\Vid_04D9&Pid_A07A&MI_00
+%FingerPrintBoardName8%=htzwusb.Dev, USB\Vid_04D9&Pid_A07B
+%FingerPrintBoardName9%=htzwusb.Dev, USB\Vid_04D9&Pid_A07B&MI_00
+%FingerPrintBoardName10%=htzwusb.Dev, USB\Vid_04D9&Pid_A07C
+%FingerPrintBoardName11%=htzwusb.Dev, USB\Vid_04D9&Pid_A07C&MI_00
+%FingerPrintBoardName12%=htzwusb.Dev, USB\Vid_04D9&Pid_A07D
+%FingerPrintBoardName13%=htzwusb.Dev, USB\Vid_04D9&Pid_A07D&MI_00
+
+[DestinationDirs]
+htzwusb.Files.Ext = 10,System32\Drivers
+
+[htzwusb.Dev.NT]
+CopyFiles=htzwusb.Files.Ext
+
+[htzwusb.Dev.NT.Services]
+Addservice = htzwusb, 0x00000002, htzwusb.AddService
+
+[htzwusb.AddService]
+DisplayName    = %htzwusb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 2                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\htzwusb.sys
+AddReg         = htzwusb.AddReg
+LoadOrderGroup = Base
+
+[htzwusb.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,htzwusb.sys
+HKR,"Parameters","MaximumTransferSize",0x10001,4096
+HKR,"Parameters","DebugLevel",0x10001,2
+HKR,"Parameters","htzwusbEnable",0x10001,1
+
+[htzwusb.Files.Ext]
+htzwusb.sys
+
+;---------------------------------------------------------------;
+
+[Strings]
+MSFT="Fingerprint"
+MfgName="Fingerprint"
+Disk_Description="Installation Disk"
+FingerPrintBoardName0="Fingerprint Device Reader" 
+FingerPrintBoardName1="Fingerprint Device Reader"
+FingerPrintBoardName2="Fingerprint Device Mouse"
+FingerPrintBoardName3="Fingerprint Device Mouse"
+FingerPrintBoardName4="Fingerprint Device"
+FingerPrintBoardName5="Fingerprint Device"
+FingerPrintBoardName6="Fingerprint Device"
+FingerPrintBoardName7="Fingerprint Device"
+FingerPrintBoardName8="Fingerprint Device"
+FingerPrintBoardName9="Fingerprint Device"
+FingerPrintBoardName10="Fingerprint Device"
+FingerPrintBoardName11="Fingerprint Device"
+FingerPrintBoardName12="Fingerprint Device"
+FingerPrintBoardName13="Fingerprint Device"
+htzwusb.SvcDesc="Optical Fingerprint Device"

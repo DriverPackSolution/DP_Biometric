@@ -1,0 +1,118 @@
+;-------------------------------------------------------------------------
+; DFRWDF.INF - common device inf for USB DFR's (WDF based)
+; Win2K, XP, Server2003-2008, Vista, Windows 7
+; Copyright (c) 2010 L-1 Identity Solutions
+
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=%BiometricClassName%
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%L1-ID%
+DriverVer=09/21/2010,1.0.1.0
+CatalogFile=dfrWDF.cat
+;DriverPackageDisplayName = %DriverPackageDescription%		; for DIFx use
+
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=Biometric_ClassAddReg     
+
+[Biometric_ClassAddReg]
+HKR,,,0,%BiometricClassName%
+HKR,,Icon,,-24
+
+[DestinationDirs]
+DefaultDestDir = 12   ; 12 = %windir%\system32\drivers
+
+; ================= Device section =====================
+
+[Manufacturer]
+%MfgName%=Models,NTAMD64
+
+; For Win2K
+[Models]
+%USB\VID_0D85&PID_0006.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_0006	;DFR2100U2
+%USB\VID_0D85&PID_0007.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_0007	;DFR500
+%USB\VID_0D85&PID_0009.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_0009	;DFR2300
+%USB\VID_0D85&PID_000B.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_000B	;DFR500P
+%USB\VID_0D85&PID_000C.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_000C	;DFR500F
+
+; For XP and later
+[Models.NTAMD64]
+%USB\VID_0D85&PID_0006.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_0006	;DFR2100U2
+%USB\VID_0D85&PID_0007.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_0007	;DFR500
+%USB\VID_0D85&PID_0009.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_0009	;DFR2300
+%USB\VID_0D85&PID_000B.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_000B	;DFR500P
+%USB\VID_0D85&PID_000C.DeviceDesc%=dfrWDF.Dev, USB\VID_0D85&PID_000C	;DFR500F
+
+[dfrWDF.Dev.NT]
+CopyFiles=dfrWDF.Files.Ext
+
+[dfrWDF.Dev.NT.Services]
+Addservice = DFRWDF, 0x00000002, dfrWDF.AddService
+
+[dfrWDF.AddService]
+DisplayName    = %dfrWDF.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\dfrWDF.sys
+AddReg         = dfrWDF.AddReg
+LoadOrderGroup = Base
+
+[dfrWDF.AddReg]
+HKR,"Parameters","MaximumTransferSize",0x10001,65536
+HKR,"Parameters","DebugLevel",0x10001,2
+
+[dfrWDF.Files.Ext]
+dfrWDF.sys
+
+[SourceDisksNames]
+1=%Disk_Description%,,,
+
+[SourceDisksFiles]
+dfrWDF.sys = 1
+
+;-------------- WDF Coinstaller installation
+[DestinationDirs]
+CoInstaller_CopyFiles = 11
+
+[dfrWDF.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01009.dll
+
+[SourceDisksFiles]
+WdfCoInstaller01009.dll=1 ; make sure the number matches with SourceDisksNames
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01009.dll,WdfCoInstaller"
+
+[dfrWDF.Dev.NT.Wdf]
+KmdfService = DFRWDF, dfrWDF_wdfsect
+
+[dfrWDF_wdfsect]
+KmdfLibraryVersion = 1.9
+
+;---------------------------------------------------------------;
+
+[Strings]
+L1-ID                    = "L-1 Identity Solutions"
+MfgName                  = "L-1 Identity Solutions"
+Disk_Description         = "L-1 Identity Solutions DFR SDK/FRC"
+dfrWDF.SvcDesc           = "L-1 Identity Solutions Common USB Driver for DFR"
+BiometricClassName       = "Biometric"
+USB\VID_0D85&PID_0006.DeviceDesc="DFR-2100U2 USB Fingerprint Reader"
+USB\VID_0D85&PID_0007.DeviceDesc="DFR-500 USB Fingerprint Reader"
+USB\VID_0D85&PID_0009.DeviceDesc="DFR-2300/DFR-510U USB Fingerprint Reader"
+USB\VID_0D85&PID_000B.DeviceDesc="DFR-500P USB Fingerprint Reader"
+USB\VID_0D85&PID_000C.DeviceDesc="DFR-500F USB Fingerprint Reader"
+
+;DriverPackageDescription = "DFR Common USB Device Driver"
+
+
+

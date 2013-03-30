@@ -1,0 +1,74 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+;ClassGUID={C62FAD09-FB71-4c28-B64C-93D70D911B1F}
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+;CatalogFile=sfudusb.cat
+;CatalogFile.NT=sfudusb.cat
+Provider=%SFUDUSB.Provider%
+LayoutFile=layout.inf
+DriverVer=11/11/2005,1.2.0
+
+[Manufacturer]
+%SFUDUSB.Manufacturer%=Suprema
+
+[Suprema]
+%SFUDUSB.DeviceDesc%=SFUDUSB.INSTALL, USB\VID_16d1&PID_0002
+
+;[SourceDisksNames]
+;1=%SFUDUSB.DriverDiskName%,,,
+
+;[SourceDisksFiles]
+;sfudusb.sys=1
+;sfudusb.inf=1
+
+[DestinationDirs]
+SFUDUSB.Files.Ext = 10,System32\Drivers
+SFUDUSB.Files.Inf = 10,INF
+
+;[ClassInstall32]
+;CopyFiles=SFUDUSB.Files.Ext, SFUDUSB.Files.Inf
+;AddReg=SFUDUSB.AddReg
+
+[SFUDUSB.Install]
+CopyFiles=SFUDUSB.Files.Ext, SFUDUSB.Files.Inf
+AddReg=SFUDUSB.AddReg
+
+[SFUDUSB.Install.NT]
+CopyFiles=SFUDUSB.Files.Ext, SFUDUSB.Files.Inf
+AddReg=SFUDUSB.AddReg
+
+[SFUDUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,sfudusb.sys
+
+[SFUDUSB.Install.NT.Services]
+AddService = SFUDUSB, 0x00000002, SFUDUSB.AddService
+
+[SFUDUSB.AddService]
+DisplayName    = %SFUDUSB.DeviceDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\sfudusb.sys
+LoadOrderGroup = Base
+
+;[SFUDUSB.AddReg]
+;HKLM,%SFUDUSB.DriverGUID%,,0x00000010,
+;HKLM,%SFUDUSB.DriverGUID%,"Name",,"Suprema SFU100 Driver"
+;HKLM,%SFUDUSB.DriverGUID%,"Version",,"1.0.0"
+
+[SFUDUSB.Files.Ext]
+sfudusb.sys
+
+[SFUDUSB.Files.Inf]
+sfudusb.inf
+
+;---------------------------------------------------------------;
+
+[Strings]
+;SFUDUSB.DriverGUID = "SOFTWARE\Suprema\SFU100"
+SFUDUSB.Provider       = "Suprema"
+SFUDUSB.Manufacturer   = "Suprema"
+SFUDUSB.DeviceDesc     = "Suprema SFR300"
+;SFUDUSB.DriverDiskName = "SFU100 USB Driver Installation Disk"

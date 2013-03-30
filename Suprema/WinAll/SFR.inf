@@ -1,0 +1,206 @@
+;  Copyright (C) 2012 Suprema Inc.
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider="Suprema"
+CatalogFile=sfr500.cat
+DriverVer=03/08/2012,1.0.0.0
+
+[SourceDisksNames.x86]
+1=%SUPREMA_INSTALL%,,,\x86
+
+[SourceDisksNames.amd64]
+1=%SUPREMA_INSTALL%,,,\amd64
+
+
+[SourceDisksFiles]
+SFRUSB.sys = 1
+SFR500.sys = 1
+SFR500DL.sys = 1
+SFR500.spt = 1
+
+[Manufacturer]
+%MFGNAME%=Suprema,NTx86,NTamd64
+
+;for all platforms
+[Suprema]
+%VID_04B4&PID_8613.DeviceDesc%=SFR500, USB\VID_04B4&PID_8613
+%VID_16D1&PID_0400.DeviceDesc%=SFRUSB, USB\VID_16D1&PID_0400
+%VID_16D1&PID_0402.DeviceDesc%=SFR500, USB\VID_16D1&PID_0402
+%VID_16D1&PID_0406.DeviceDesc%=SFR500, USB\VID_16D1&PID_0406
+
+%VID_16D1&PID_0401.DeviceDesc%=SFRUSB, USB\VID_16D1&PID_0401
+%VID_16D1&PID_0403.DeviceDesc%=SFR500DL, USB\VID_16D1&PID_0403
+
+;for all platforms
+[Suprema.NTx86]
+%VID_04B4&PID_8613.DeviceDesc%=SFR500, USB\VID_04B4&PID_8613
+%VID_16D1&PID_0400.DeviceDesc%=SFRUSB, USB\VID_16D1&PID_0400
+%VID_16D1&PID_0402.DeviceDesc%=SFR500, USB\VID_16D1&PID_0402
+%VID_16D1&PID_0406.DeviceDesc%=SFR500, USB\VID_16D1&PID_0406
+
+%VID_16D1&PID_0401.DeviceDesc%=SFRUSB, USB\VID_16D1&PID_0401
+%VID_16D1&PID_0403.DeviceDesc%=SFR500DL, USB\VID_16D1&PID_0403
+
+;for x64 platforms
+[Suprema.NTamd64]
+%VID_04B4&PID_8613.DeviceDesc%=SFR500, USB\VID_04B4&PID_8613
+%VID_16D1&PID_0400.DeviceDesc%=SFRUSB, USB\VID_16D1&PID_0400
+%VID_16D1&PID_0402.DeviceDesc%=SFR500, USB\VID_16D1&PID_0402
+%VID_16D1&PID_0406.DeviceDesc%=SFR500, USB\VID_16D1&PID_0406
+
+%VID_16D1&PID_0401.DeviceDesc%=SFRUSB, USB\VID_16D1&PID_0401
+%VID_16D1&PID_0403.DeviceDesc%=SFR500DL, USB\VID_16D1&PID_0403
+
+[DestinationDirs]
+SFRUSB.Files.Ext = 10,System32\Drivers
+SFR500.Files.Ext = 10,System32\Drivers
+SFR500DL.Files.Ext = 10,System32\Drivers
+SFR500FW.Files  = 10,System32\Drivers
+
+;---------------------------------------------------------------------;
+;----------------------- BioMini Device/Loader -----------------------;
+[SFRUSB.PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SFRUSB.NTx86]
+CopyFiles=SFRUSB.Files.Ext
+AddReg=SFRUSB.AddReg
+
+[SFRUSB.NTx86.HW]
+AddReg=SFRUSB.AddReg.Guid
+
+[SFRUSB.NTx86.Services]
+Addservice = SFRUSB, 0x00000002, SFRUSB.AddService
+
+[SFRUSB.NTamd64]
+CopyFiles=SFRUSB.Files.Ext
+AddReg=SFRUSB.AddReg
+
+[SFRUSB.NTamd64.HW]
+AddReg=SFRUSB.AddReg.Guid
+
+[SFRUSB.NTamd64.Services]
+Addservice = SFRUSB, 0x00000002, SFRUSB.AddService
+
+[SFRUSB.AddService]
+DisplayName    = "Suprema BioMini USB Driver"
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\SFRUSB.sys
+LoadOrderGroup = Base
+
+[SFRUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SFRUSB.sys
+
+[SFRUSB.AddReg.Guid]
+;HKR,,DriverGUID,,%Suprema.GUID%
+;---------------------------------------------------------------------;
+
+;---------------------------------------------------------------------;
+;---------------- BioMini Plus / BioMini Ver.02 Device ---------------;
+[SFR500.NTx86]
+CopyFiles=SFR500.Files.Ext
+AddReg=SFR500.AddReg
+
+[SFR500.NTx86.HW]
+AddReg=SFR500.AddReg.Guid
+
+[SFR500.NTx86.Services]
+Addservice = SFR500,2,SFR500.AddService
+
+[SFR500.NTamd64]
+CopyFiles=SFR500.Files.Ext
+AddReg=SFR500.AddReg
+
+[SFR500.NTamd64.HW]
+AddReg=SFR500.AddReg.Guid
+
+[SFR500.NTamd64.Services]
+Addservice = SFR500,2,SFR500.AddService
+
+[SFR500.AddService]
+DisplayName    = "Suprema USB Driver"
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\SFR500.sys
+LoadOrderGroup = Base
+
+[SFR500.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SFR500.sys
+
+[SFR500.AddReg.Guid]
+;HKR,,DriverGUID,,%Suprema.GUID%
+;---------------------------------------------------------------------;
+
+;---------------------------------------------------------------------;
+;------------------------ BioMini Plus Loader ------------------------;
+[SFR500DL.NTx86]
+CopyFiles=SFR500.Files.Ext
+CopyFiles=SFR500DL.Files.Ext
+CopyFiles=SFR500FW.Files
+AddReg=SFR500DL.AddReg
+
+[SFR500DL.NTx86.HW]
+AddReg=SFR500DL.AddReg.Guid
+
+[SFR500DL.NTx86.Services]
+Addservice = SFR500DL,2,SFR500DL.AddService
+
+[SFR500DL.NTamd64]
+CopyFiles=SFR500.Files.Ext
+CopyFiles=SFR500DL.Files.Ext
+CopyFiles=SFR500FW.Files
+AddReg=SFR500DL.AddReg
+
+[SFR500DL.NTamd64.HW]
+AddReg=SFR500DL.AddReg.Guid
+
+[SFR500DL.NTamd64.Services]
+Addservice = SFR500DL,2,SFR500DL.AddService
+
+[SFR500DL.AddService]
+DisplayName    = "Suprema USB Driver Loader"
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\SFR500DL.sys
+LoadOrderGroup = Base
+
+[SFR500DL.AddReg]
+HKR,,DevLoader,,*ntkern
+
+[SFRUSB.Files.Ext]
+SFRUSB.sys
+
+[SFR500.Files.Ext]
+SFR500.sys
+
+[SFR500DL.Files.Ext]
+SFR500DL.sys
+
+[SFR500FW.Files]
+SFR500.spt
+
+[SFR500DL.AddReg.Guid]
+HKR,,DriverEXECSCRIPT,,\systemroot\system32\Drivers\SFR500.spt
+;---------------------------------------------------------------------;
+
+;---------------------------------------------------------------------;
+[Strings]
+MFGNAME           = "Suprema"
+SUPREMA_Install   = "Suprema USB Driver Installation Disk"
+VID_04B4&PID_8613.DeviceDesc="Cypress EZ-USB FX2LP - EEPROM missing"
+VID_16D1&PID_0400.DeviceDesc="Suprema Fingerprint Scanner"
+VID_16D1&PID_0402.DeviceDesc="Suprema BioMini Plus"
+VID_16D1&PID_0406.DeviceDesc="Suprema Fingerprint Scanner(Ver.02)"
+
+VID_16D1&PID_0401.DeviceDesc="Suprema Fingerprint Scanner Loader"
+VID_16D1&PID_0403.DeviceDesc="Suprema BioMini Plus Loader"
+Suprema.GUID="{88C56824-2F44-4073-96ED-E3014DD436EF}"

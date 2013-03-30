@@ -1,0 +1,4 @@
+libusb version libusb-win32-device-bin-0.1.10.1.tar.gz
+downloaded from http://libusb-win32.sourceforge.net/
+
+f08aff3e9030d5bfd020ae062c0b1924 libusb-win32-device-bin-0.1.10.1.tar.gz

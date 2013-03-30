@@ -1,0 +1,68 @@
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%ZKS%
+DriverVer = 06/08/2007, 1.0.0.0
+
+[SourceDisksNames]
+1="SBUM1_0 USB Driver Installation Disk",,0
+
+[SourceDisksFiles]
+SBUM1_0.sys = 1
+SBUM1_0.inf = 1
+
+[Manufacturer]
+%MfgName%=ZKS
+
+
+[ZKS]
+%USB\VID_f410&PID_3010.DeviceDesc%=SBUM1_0.Dev, USB\VID_f410&PID_3010
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+SBUM1_0.Files.Ext = 12
+SBUM1_0.Files.Inf = 17
+
+[SBUM1_0.Dev]
+CopyFiles=SBUM1_0.Files.Ext, SBUM1_0.Files.Inf
+AddReg=SBUM1_0.AddReg
+
+[SBUM1_0.Dev.NT]
+CopyFiles=SBUM1_0.Files.Ext, SBUM1_0.Files.Inf
+AddReg=SBUM1_0.AddReg
+
+[SBUM1_0.Dev.NT.Services]
+Addservice = SBUM1_0, 0x00000002, SBUM1_0.AddService
+
+[SBUM1_0.AddService]
+DisplayName    = %SBUM1_0.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\SBUM1_0.sys
+LoadOrderGroup = Base
+
+[SBUM1_0.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SBUM1_0.sys
+HKLM,"System\Currentcontrolset\Services\SBUM1_0\Parameters","MaximumTransferSize",0x10001,1023
+
+[SBUM1_0.Files.Ext]
+SBUM1_0.sys
+
+[SBUM1_0.Files.Inf]
+SBUM1_0.Inf
+
+;---------------------------------------------------------------;
+
+[Strings]
+ZKS="ZKSbio Co.,Ltd."
+MfgName="ZKSbio Co.,Ltd."
+
+USB\VID_f410&PID_3010.DeviceDesc="ZKSbio USB Module Ver 1.0"
+
+SBUM1_0.SvcDesc="ZKSbio USB Module Driver"

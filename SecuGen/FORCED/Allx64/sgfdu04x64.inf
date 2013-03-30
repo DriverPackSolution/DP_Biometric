@@ -1,0 +1,129 @@
+;
+; Installation file (.inf) for the SecuGen FDU04 and SDU04P fingerprint devices.
+;
+; (c) Copyright 2007-2012 SecuGen Corp. 
+
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf  
+Signature="$Chicago$"                            ;win9x, winnt
+Provider=%SecuGen%
+Class=%BiometricClassName%
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+DriverVer=04/24/2012,2.3.7.1
+CatalogFile.NT=sgfdu04x64.cat
+
+[ClassInstall32]
+Addreg=BiometricClassReg
+
+[BiometricClassReg]
+HKR,,,0,%BiometricClassName%
+HKR,,Icon,,-20
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1 = %DISK1%,,,
+
+[SourceDisksFiles]
+sgfdu04x64.sys=1,,
+sgfdu04x64.dll=1,,
+sgfdu04m.dll=1,,
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+SGFDU04.Files.Ext = 10,System32\Drivers
+SGFDU04.Files.Dll = 11			; 9x - System Dir, NT - System32 Dir
+SGFDU04.Files.Dll.Wow64 = 10, SysWow64			; Windows\SysWow64
+
+[ControlFlags]
+;ExcludeFromSelect=*             ; removes all device here from the device installer list
+
+[Manufacturer]
+%SecuGen%=SecuGen, NTamd64
+
+[SecuGen.NTamd64]
+;----------------------------------------------------------------
+; FDU04A, SecuGen USB Fx2 mega sensor Fingerprint device, 2006.7
+; SDU04P, 2011.09
+;----------------------------------------------------------------
+%USB\VID_1162&PID_0330.DeviceDesc%=SGFDU04, USB\VID_1162&PID_0330	; FDU04
+%USB\VID_1162&PID_2000.DeviceDesc%=SGFDU04, USB\VID_1162&PID_2000	; SDU04P
+
+
+; =================== FDU04 USB FRD Driver ===================
+;---------------
+; For Win98...
+;---------------
+[SGFPUSBHid]
+Include=hiddev.inf
+Needs=USBHIDDevice
+
+[SGFPUSBComposite]
+Include=usb.inf
+Needs=composite.dev
+
+[SGFDU04]
+CopyFiles=SGFDU04.Files.Ext, SGFDU04.Files.Dll, SGFDU04.Files.Dll.WOW64
+AddReg=SGFDU04.AddReg
+
+[SGFDU04.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,sgfdu04x64.sys
+
+[SGFDU04.Files.Ext]
+sgfdu04x64.sys
+
+[SGFDU04.Files.Dll]
+sgfdu04x64.dll
+
+[SGFDU04.Files.Dll.WOW64]
+sgfdu04m.dll
+
+;-------------------
+; For Windows NT...
+;-------------------
+; HID
+[SGFPUSBHid.NT]
+Include=input.inf
+Needs=HID_Inst.NT
+
+[SGFPUSBHid.NT.Services]
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+; composite
+[SGFPUSBComposite.NT]
+Include=usb.inf
+Needs= Composite.Dev.NT
+
+[SGFPUSBComposite.NT.Services]
+Include=usb.inf
+Needs=Composite.Dev.NT.Services
+
+; FRD
+[SGFDU04.NT]
+CopyFiles=SGFDU04.Files.Ext, SGFDU04.Files.Dll, SGFDU04.Files.Dll.WOW64
+
+[SGFDU04.NT.Services]
+Addservice = SGFDU04, 0x00000002, SGFDU04_AddService_Inst 
+
+[SGFDU04_AddService_Inst]
+DisplayName    = %SGFDU04.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\sgfdu04x64.sys
+
+[Strings]
+SecuGen="SecuGen Corporation"
+DISK1="SecuGen Installation Disk"
+SGFDU04.SvcDesc="SecuGen USB FDU04 Service"
+BiometricClassName="Biometric"
+USB\VID_1162&PID_0330.DeviceDesc="SecuGen FDU04A USB mega FRD"
+USB\VID_1162&PID_2000.DeviceDesc="SecuGen SDU04P USB FRD"
+
+
+
+

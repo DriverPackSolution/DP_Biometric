@@ -1,0 +1,196 @@
+; Installation INF for the Hongda USB Scanner Driver for Windows 98ME/2000/XP/2003/vista
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=IMAGE
+
+;USB Class GUID
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+provider=%PROVIDER%
+
+DriverVer=09/06/2007,6.0.6000
+;CatalogFile = hds500e.cat
+
+
+[SourceDisksNames]
+1=%HDUSB_INSTALL%,,,
+
+;[SourceDisksFiles]
+;hds500e.sys = 1
+
+
+[Manufacturer]
+%MFGNAME%=Hongda, NTx86, NTia64, NTamd64
+
+[Hongda]
+%VID_7D45&PID_1001.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1001
+%VID_7D45&PID_1002.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1002
+
+%VID_7D45&PID_1005.DeviceDesc%=HdFpDev270, USB\VID_7D45&PID_1005
+%VID_7D45&PID_1006.DeviceDesc%=HdUsb270, USB\VID_7D45&PID_1006
+
+
+[Hongda.NTx86]
+%VID_7D45&PID_1001.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1001
+%VID_7D45&PID_1002.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1002
+
+%VID_7D45&PID_1005.DeviceDesc%=HdFpDev270, USB\VID_7D45&PID_1005
+%VID_7D45&PID_1006.DeviceDesc%=HdUsb270, USB\VID_7D45&PID_1006
+
+[Hongda.NTia64]
+%VID_7D45&PID_1001.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1001
+%VID_7D45&PID_1002.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1002
+
+%VID_7D45&PID_1005.DeviceDesc%=HdFpDev270, USB\VID_7D45&PID_1005
+%VID_7D45&PID_1006.DeviceDesc%=HdUsb270, USB\VID_7D45&PID_1006
+
+[Hongda.NTamd64]
+%VID_7D45&PID_1001.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1001
+%VID_7D45&PID_1002.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1002
+
+%VID_7D45&PID_1005.DeviceDesc%=HdFpDev270, USB\VID_7D45&PID_1005
+%VID_7D45&PID_1006.DeviceDesc%=HdUsb270, USB\VID_7D45&PID_1006
+
+
+[DestinationDirs]
+HdUsbME.Files.Ext = 10,System32\Drivers
+HdUsb.Files.Ext = 10,System32\Drivers
+
+;==============================================
+[HdFpDev]
+;CopyFiles = HdUsbME.Files.Ext
+AddReg = HdUsbME.AddReg
+
+[HdFpDev.NT]
+;CopyFiles = HdUsb.Files.Ext
+AddReg = HdUsb.AddReg
+
+[HdFpDev.NT.HW]
+AddReg = HdFpDev.AddReg.Guid
+
+[HdFpDev.NT.Services]
+Addservice = HdS500E,0x00000002, HdUsb.AddService
+
+[HdFpDev.AddReg.Guid]
+HKR,,DriverGUID,,%HdFpDev.GUID%
+;==============================================
+
+[HdFpDev270]
+;CopyFiles = HdUsbME270.Files.Ext
+AddReg = HdUsbME270.AddReg
+
+[HdFpDev270.NT]
+;CopyFiles = HdUsb.Files.Ext
+AddReg = HdUsb270.AddReg
+
+[HdFpDev270.NT.HW]
+AddReg = HdFpDev270.AddReg.Guid
+
+[HdFpDev270.NT.Services]
+Addservice = HdS270,0x00000002, HdUsb270.AddService
+
+[HdFpDev270.AddReg.Guid]
+HKR,,DriverGUID,,%HdFpDev270.GUID%
+
+;==============================================
+
+[HdUsb]
+;CopyFiles=HdUsbME.Files.Ext
+AddReg=HdUsbME.AddReg
+
+[HdUsb.HW]
+AddReg=HdUsb.AddReg.Guid
+
+[HdUsb.NT]
+;CopyFiles=HdUsb.Files.Ext
+AddReg=HdUsb.AddReg
+
+[HdUsb.NT.HW]
+AddReg=HdUsb.AddReg.Guid
+
+[HdUsb.NT.Services]
+Addservice = HdS500E, 0x00000002, HdUsb.AddService
+
+[HdUsb.AddService]
+DisplayName    = %HdUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\hds500e.sys
+LoadOrderGroup = Base
+
+[HdUsbME.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds500e.sys
+
+[HdUsb.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds500e.sys
+
+[HdUsbME.Files.Ext]
+hds500e.sys
+
+[HdUsb.Files.Ext]
+hds500e.sys
+
+[HdUsb.AddReg.Guid]
+HKR,,DriverGUID,,%HdUsb.GUID%
+;==============================================
+
+[HdUsb270]
+;CopyFiles=HdUsbME.Files.Ext
+AddReg=HdUsbME270.AddReg
+
+[HdUsb270.HW]
+AddReg=HdUsb270.AddReg.Guid
+
+[HdUsb270.NT]
+;CopyFiles=HdUsb270.Files.Ext
+AddReg=HdUsb270.AddReg
+
+[HdUsb270.NT.HW]
+AddReg=HdUsb270.AddReg.Guid
+
+[HdUsb270.NT.Services]
+Addservice = HdS270, 0x00000002, HdUsb270.AddService
+
+[HdUsb270.AddService]
+DisplayName    = %HdUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\hds500e.sys
+LoadOrderGroup = Base
+
+[HdUsbME270.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds500e.sys
+
+[HdUsb270.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds500e.sys
+
+[HdUsbME270.Files.Ext]
+hds500e.sys
+
+[HdUsb270.Files.Ext]
+hds500e.sys
+
+[HdUsb270.AddReg.Guid]
+HKR,,DriverGUID,,%HdUsb270.GUID%
+;---------------------------------------------------------------;
+
+[Strings]
+PROVIDER="Hongda"
+MFGNAME="Hongda"
+HDUSB_INSTALL="Hongda Scanner Driver Installation Disk"
+VID_7D45&PID_1001.DeviceDesc="Hongda USB Fingerprint Scanner (S500E) - Firmware missing"
+VID_7D45&PID_1002.DeviceDesc="Hongda USB Fingerprint Scanner (S500E)"
+VID_7D45&PID_1005.DeviceDesc="Hongda USB Fingerprint Scanner (S270) - Firmware missing"
+VID_7D45&PID_1006.DeviceDesc="Hongda USB Fingerprint Scanner (S270)"
+HdUsb.SvcDesc="Hongda Fingerprint Scanner Driver"
+HdUsb270.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B46}"
+HdFpDev270.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B45}"
+HdUsb.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B42}"
+HdFpDev.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B41}"

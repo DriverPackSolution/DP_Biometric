@@ -1,0 +1,213 @@
+; FtrWudfBioUsb.inf - Install the WBDI USB user-mode driver
+;
+; Copyright (c) Futronic Technology Company Ltd.
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%Organization%
+DriverVer=10/26/2009, 1.0.28.0
+CatalogFile=FtrWudfBioUsb.cat
+
+[Manufacturer]
+%Organization%=Futronic, NTx86, NTamd64
+
+[Futronic.NTx86]
+%FtrUsbDeviceName%=Biometric_Install, USB\VID_1491&PID_0020
+%FtrUsbDeviceName%=Biometric_Install, USB\VID_1491&PID_0088
+%FtrUsbDeviceName%=Biometric_Install, USB\VID_1491&PID_0090
+
+[Futronic.NTamd64]
+%FtrUsbDeviceName%=Biometric_Install, USB\VID_1491&PID_0020
+%FtrUsbDeviceName%=Biometric_Install, USB\VID_1491&PID_0088
+%FtrUsbDeviceName%=Biometric_Install, USB\VID_1491&PID_0090
+
+[ClassInstall32]
+AddReg=BiometricClass_RegistryAdd
+
+[BiometricClass_RegistryAdd]
+HKR,,,,%ClassName%
+HKR,,Icon,,"-1"
+HKR,,IconPath,0x00010000,"%SYSTEMROOT%\system32\biocpl.dll,-1"
+
+[SourceDisksFiles.x86]
+ftrWBFDrv.dll=1,x86
+ftrEngineAdapter.dll=1,x86
+WudfUpdate_01009.dll=1,x86
+WdfCoInstaller01009.dll=1,x86
+WinUsbCoinstaller2.dll=1,x86
+ftrScanAPI.dll=1,x86
+ftrEnrollApp.exe=1,x86
+
+[SourceDisksFiles.amd64]
+ftrWBFDrv.dll=1,amd64
+ftrEngineAdapter.dll=1,amd64
+WudfUpdate_01009.dll=1,amd64
+WdfCoInstaller01009.dll=1,amd64
+WinUsbCoinstaller2.dll=1,amd64
+ftrScanAPI.dll=1,amd64
+ftrEnrollApp.exe=1,amd64
+ftrScanAPI_32.dll=1,amd64
+
+[SourceDisksNames]
+1 = %MediaDescription%
+
+; =================== Futronic Scanner Device - WBDI IOCTL interface ==================================
+
+[Biometric_Install.NTx86]
+CopyFiles=UMDriverCopy, WinBioEngineAdapterCopy, ftrScanAPICopy, EnrollAppCopy
+Include=WINUSB.INF                      ; Import sections from WINUSB.INF
+Needs=WINUSB.NT                         ; Run the CopyFiles & AddReg directives for WinUsb.INF
+
+[Biometric_Install.NTamd64]
+CopyFiles=UMDriverCopy, WinBioEngineAdapterCopy, ftrScanAPICopy, EnrollAppCopy, ftrScanAPI32_CopyFile
+Include=WINUSB.INF                      ; Import sections from WINUSB.INF
+Needs=WINUSB.NT                         ; Run the CopyFiles & AddReg directives for WinUsb.INF
+
+;=====================================================
+
+[Biometric_Install.NTx86.hw]
+AddReg=Biometric_Device_AddReg
+AddReg=DriverPlugInAddReg, DatabaseAddReg
+
+[Biometric_Install.NTamd64.hw]
+AddReg=Biometric_Device_AddReg
+AddReg=DriverPlugInAddReg, DatabaseAddReg
+
+;=====================================================
+
+[Biometric_Install.NTx86.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+[Biometric_Install.NTamd64.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+;=====================================================
+
+[Biometric_Install.NTx86.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+UmdfDispatcher=WinUsb
+UmdfService=FtrWudfBioUsb, FtrWudfBioUsb_Install
+UmdfServiceOrder=FtrWudfBioUsb
+
+[Biometric_Install.NTamd64.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+UmdfDispatcher=WinUsb
+UmdfService=FtrWudfBioUsb, FtrWudfBioUsb_Install
+UmdfServiceOrder=FtrWudfBioUsb
+
+;====================================================
+
+[Biometric_Install.NTx86.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[Biometric_Install.NTamd64.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+;====================================================
+
+[WinUsb_Install]
+KmdfLibraryVersion = 1.9
+
+[FtrWudfBioUsb_Install]
+UmdfLibraryVersion= 1.9.0
+DriverCLSID = "{DA80A30E-D19A-11DB-AF7F-005056C00008}"
+ServiceBinary = %12%\UMDF\ftrWBFDrv.dll
+
+[Biometric_Device_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{ec0db5fc-48f8-49f3-880b-ee51bd0de8c6}"
+HKR,,"DeviceCharacteristics",0x10001,0x0100     ; Use same security checks on relative opens
+HKR,,"Security",,"D:P(A;;GA;;;BA)(A;;GA;;;SY)"  ; Allow generic-all access to Built-in administrators and Local system
+HKR,,"LowerFilters",0x00010008,"WinUsb" ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
+HKR,,"Exclusive",0x10001,1
+HKR,,"SystemWakeEnabled",0x00010001,0
+HKR,,"DeviceIdleEnabled",0x00010001,1
+HKR,,"UserSetDeviceIdleEnabled",0x00010001,1
+HKR,,"ResetPortEnabled",0x00010001,1
+HKR,,"DefaultIdleState",0x00010001,1
+HKR,,"DefaultIdleTimeout",0x00010001,5000
+HKR,WUDF,"UpperDriverOK",0x00010001,1
+HKLM,SOFTWARE\Futronic\WinBio,"FARIndex",0x00010001,2
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\WinBio\FMA\Futronic Technology Company Ltd.\Futronic USB Fingerprint Scanner Device,"CommandLine",,"ftrEnrollApp.exe /%{biounitid}"
+
+[DriverPlugInAddReg]
+HKR,WinBio\Configurations,DefaultConfiguration,,"0"
+HKR,WinBio\Configurations\0,SensorMode,0x10001,1                                ; Basic - 1, Advanced - 2
+HKR,WinBio\Configurations\0,SystemSensor,0x10001,1                              ; UAC/Winlogon - 1
+HKR,WinBio\Configurations\0,SensorAdapterBinary,,"WinBioSensorAdapter.DLL"      ; Windows built-in WBDI sensor adapter.
+HKR,WinBio\Configurations\0,EngineAdapterBinary,,"ftrEngineAdapter.DLL"            ;;; Vendor engine
+HKR,WinBio\Configurations\0,StorageAdapterBinary,,"WinBioStorageAdapter.DLL"    ; Windows built-in storage adapter
+HKR,WinBio\Configurations\0,DatabaseId,,"DA80A30F-D19A-11DB-AF7F-005056C00008"  ; Unique database GUID
+
+[DatabaseAddReg]
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},BiometricType,0x00010001,0x00000008
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},Attributes,0x00010001,0x00000001
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},Format,,"00000000-0000-0000-0000-000000000000"
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},InitialSize,0x00010001,0x00000020
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},AutoCreate,0x00010001,0x00000001
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},AutoName,0x00010001,0x00000001
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},FilePath,,""
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{DA80A30F-D19A-11DB-AF7F-005056C00008},ConnectionString,,""
+
+[WUDFRD_ServiceInstall]
+DisplayName = %WudfRdDisplayName%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\WUDFRd.sys
+LoadOrderGroup = Base
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WudfUpdate_01009.dll","WinUsbCoinstaller2.dll","WdfCoInstaller01009.dll,WdfCoInstaller"
+;;; HKR,,CoInstallers32,0x00010000,"WudfCoinstaller.dll"
+
+[CoInstallers_CopyFiles]
+WudfUpdate_01009.dll
+WdfCoInstaller01009.dll
+WinUsbCoinstaller2.dll
+
+[DestinationDirs]
+UMDriverCopy=12,UMDF ; copy to \Windows\System32\drivers\UMDF
+WinBioEngineAdapterCopy=11,WinBioPlugins ; copy to \Windows\System32\WinBioPlugins
+CoInstallers_CopyFiles=11
+ftrScanAPICopy=11
+EnrollAppCopy=11
+ftrScanAPI32_CopyFile=16425
+
+[UMDriverCopy]
+ftrWBFDrv.dll
+
+[WinBioEngineAdapterCopy]
+ftrEngineAdapter.dll
+
+[ftrScanAPICopy]
+ftrScanAPI.dll
+
+[EnrollAppCopy]
+ftrEnrollApp.exe
+
+[ftrScanAPI32_CopyFile]
+ftrScanAPI.dll, ftrScanAPI_32.dll
+
+; =================== Generic ==================================
+
+[Strings]
+Organization="Futronic Technology Company Ltd."
+MediaDescription="Futronic WBF Driver Installation Media"
+ClassName="Biometric Devices"
+WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"
+FtrUsbDeviceName="Futronic USB Fingerprint Scanner Device" 
+WinUsb_SvcDesc="WinUSB Driver"

@@ -1,0 +1,243 @@
+; ------------------------------------------
+;
+; Copyright (c) 2008,2012 AuthenTec, Inc.
+; Manufacturer: AuthenTec, Inc.
+;
+; WBF driver with advanced mode adapters
+;
+; ------------------------------------------
+
+[Version]
+Signature="$Windows NT$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%Mfg%
+DriverVer=08/08/2012,1.6.1.0341
+CatalogFile=tcwbfadv.cat
+
+[Manufacturer]
+%Mfg%=Models,NTAMD64
+
+[Models.NTAMD64]
+; %Reader_DeviceDesc%        = TcWbf_Install,USB\VID_0483&PID_2015
+; %Reader_DeviceDesc%        = TcWbf_Install,USB\VID_0483&PID_2015&MI_00
+; %Reader_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_2015
+; %Reader_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_2015&MI_00
+; %Reader_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_3000
+; %Reader_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_3000&MI_00
+%Reader_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_3001
+%Reader_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_3001&MI_00
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_2016&REV_0001
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_2016&REV_0001&MI_00
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_1000
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_1000&MI_00
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_1001
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_1001&MI_00
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_1002
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_1002&MI_00
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_5002
+%Sensor_DeviceDesc%        = TcWbf_Install,USB\VID_147E&PID_5002&MI_00
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_0483&PID_2016
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_0483&PID_2016&MI_00
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_147E&PID_2016&REV_0002
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_147E&PID_2016&REV_0002&MI_00
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_147E&PID_2016&REV_0003
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_147E&PID_2016&REV_0003&MI_00
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_147E&PID_2020
+%Coprocessor_DeviceDesc%   = TcWbf_Install,USB\VID_147E&PID_2020&MI_00
+
+[SourceDisksFiles]
+tcwbf.dll=1
+WudfUpdate_01009.dll=1
+WdfCoInstaller01009.dll=1
+WinUsbCoinstaller2.dll=1
+tccoinst.dll=1
+upkbu.dll=1
+ufma.exe=1
+
+[SourceDisksNames]
+1 = %MediaDescription%
+
+; ---- TcWbf device ------------------------
+
+[TcWbf_Install.NT]
+CopyFiles=UMDriverCopy
+CopyFiles=EngineAdapterCopy
+CopyFiles=uFMACopy
+AddProperty=Company_Properties
+Include=WINUSB.INF                                 ; Import sections from WINUSB.INF
+Needs=WINUSB.NT                                    ; Run the CopyFiles & AddReg directives for WinUsb.INF
+FeatureScore=0xa0
+
+[TcWbf_Install.NT.HW]
+AddReg=TcWbf_Device_AddReg
+AddReg=DriverPlugInAddReg, DatabaseAddReg
+AddReg=TdbgAddReg,TdbgRootAddReg
+AddReg=uFMA_AddReg
+
+[Company_Properties]
+DeviceIcon,,,,"%12%\UMDF\tcwbf.dll,-1"
+
+[TcWbf_Install.NT.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+[TcWbf_Install.NT.WDF]
+KmdfService=WINUSB, WinUsb_Install
+UmdfDispatcher=WinUsb
+UmdfService=TcWbf, TcWbf_Install
+UmdfServiceOrder=TcWbf
+
+[TcWbf_Install.NT.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+AddReg=TcCoinst_AddReg
+CopyFiles=TcCoinst_CopyFiles
+
+[WinUsb_Install]
+KmdfLibraryVersion = 1.9
+
+[TcWbf_Install]
+UmdfLibraryVersion=1.9.0
+DriverCLSID = "{d9311c8f-7b1c-49b6-a2f7-56305ab533d7}"
+ServiceBinary = "%12%\UMDF\tcwbf.dll"
+
+[TcWbf_Device_AddReg]
+HKR,,"DeviceCharacteristics",0x10001,0x0100     ; Use same security checks on relative opens
+HKR,,"Security",,"D:P(A;;GA;;;BA)(A;;GA;;;SY)"  ; Allow generic-all access to Built-in administrators and Local system
+HKR,,"LowerFilters",0x00010008,"WinUsb"         ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
+HKR,,"Exclusive",0x10001,1
+HKR,,"SystemWakeEnabled",0x00010001,0
+HKR,,"DeviceIdleEnabled",0x00010003,1           ; prevent replacing existing entry which can be written by coinstaller
+HKR,,"UserSetDeviceIdleEnabled",0x00010001,1
+HKR,,"ResetPortEnabled",0x00010001,1
+HKR,,"DefaultIdleState",0x00010001,1
+HKR,,"DefaultIdleTimeout",0x00010001,5000
+HKR,WUDF,"HostTimeoutSeconds",0x00010001,550
+
+[DriverPlugInAddReg]
+HKR,WinBio\Configurations,DefaultConfiguration,2,"0"                            ; 0 - enrollment to WinBio, 1 - enrollment to device, 2 - enrollment to removable device
+HKR,WinBio\Configurations\0,SensorMode,0x10001,2                                ; Basic - 1, Advanced - 2
+HKR,WinBio\Configurations\0,SystemSensor,0x10001,1                              ; UAC/Winlogon - 1
+HKR,WinBio\Configurations\0,SensorAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\0,EngineAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\0,StorageAdapterBinary,,"winbiostorageadapter.dll"
+HKR,WinBio\Configurations\0,DatabaseId,,"031D23AD-15AF-4e25-B7B3-DE34893097ED"  ; Unique database GUID
+
+HKR,WinBio\Configurations\1,SensorMode,0x10001,2                                ; Basic - 1, Advanced - 2
+HKR,WinBio\Configurations\1,SystemSensor,0x10001,1                              ; UAC/Winlogon - 1
+HKR,WinBio\Configurations\1,SensorAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\1,EngineAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\1,StorageAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\1,DatabaseId,,"69CD40BF-96C6-4381-AC06-0BA518085C10"  ; Unique database GUID
+
+HKR,WinBio\Configurations\2,SensorMode,0x10001,2                                ; Basic - 1, Advanced - 2
+HKR,WinBio\Configurations\2,SystemSensor,0x10001,1                              ; UAC/Winlogon - 1
+HKR,WinBio\Configurations\2,SensorAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\2,EngineAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\2,StorageAdapterBinary,,"upkbu.dll"
+HKR,WinBio\Configurations\2,DatabaseId,,"443AB995-4F77-4640-BD84-3530CCFFAEE7"  ; Unique database GUID
+
+[DatabaseAddReg]
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},BiometricType,0x00010001,0x00000008
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},Attributes,0x00010001,0x00000001
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},Format,,"E1ADF84B-7BD8-4ba2-A2A3-606A1569E123"
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},InitialSize,0x00010001,0x00000020
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},AutoCreate,0x00010001,0x00000001
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},AutoName,0x00010001,0x00000001
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},FilePath,,""
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{031D23AD-15AF-4e25-B7B3-DE34893097ED},ConnectionString,,""
+
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},BiometricType,0x00010001,0x00000008
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},Attributes,0x00010001,0x00000003
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},Format,,"5C85AC0C-BDBD-4c97-9661-D89070B4014B"
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},InitialSize,0x00010001,0x00000000
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},AutoCreate,0x00010001,0x00000000
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},AutoName,0x00010001,0x00000000
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},FilePath,,""
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{69CD40BF-96C6-4381-AC06-0BA518085C10},ConnectionString,,""
+
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},BiometricType,0x00010001,0x00000008
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},Attributes,0x00010001,0x00010003
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},Format,,"5C85AC0C-BDBD-4c97-9661-D89070B4014B"
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},InitialSize,0x00010001,0x00000000
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},AutoCreate,0x00010001,0x00000000
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},AutoName,0x00010001,0x00000000
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},FilePath,,""
+HKLM,System\CurrentControlSet\Services\WbioSrvc\Databases\{443AB995-4F77-4640-BD84-3530CCFFAEE7},ConnectionString,,""
+
+[TdbgRootAddReg]
+; dbg begin
+HKLM,Software\tdbg_trace
+HKLM,Software\tdbg_trace\1.0
+
+[TdbgRootAddReg.Security]
+; add the ability for everyone to do anything in our TDBG section
+"D:AR(A;CI;GA;;;WD)"
+; dbg end
+
+[TdbgAddReg]
+; dbg begin
+; don't break to debugger and turn asserts to traces, instead
+HKLM,Software\tdbg_trace\1.0\tcwbf," option_autoassert",,"i"
+HKLM,Software\tdbg_trace\1.0\upkbu," option_autoassert",,"i"
+; dbg end
+
+[uFMA_AddReg]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\WinBio\FMA\AuthenTec\TouchChip Fingerprint Reader (WBF advanced mode),CommandLine,,"""%16422%\%Mfg%\TCFMA\ufma.exe"" /biounit:%{biounitid}"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\WinBio\FMA\AuthenTec\TouchStrip Fingerprint Sensor (WBF advanced mode),CommandLine,,"""%16422%\%Mfg%\TCFMA\ufma.exe"" /biounit:%{biounitid}"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\WinBio\FMA\AuthenTec\TouchChip Fingerprint Coprocessor (WBF advanced mode),CommandLine,,"""%16422%\%Mfg%\TCFMA\ufma.exe"" /biounit:%{biounitid}"
+
+[WUDFRD_ServiceInstall]
+DisplayName = %WudfRdDisplayName%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\WUDFRd.sys
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WudfUpdate_01009.dll","WinUsbCoinstaller2.dll","WdfCoInstaller01009.dll,WdfCoInstaller"
+
+[TcCoinst_AddReg]
+HKR,,CoInstallers32,0x00010008,"tccoinst.dll,TcCoInstaller"
+
+[CoInstallers_CopyFiles]
+WudfUpdate_01009.dll
+WdfCoInstaller01009.dll
+WinUsbCoinstaller2.dll
+
+[TcCoinst_CopyFiles]
+tccoinst.dll
+
+[DestinationDirs]
+UMDriverCopy=12,UMDF ; copy to driversMdf
+CoInstallers_CopyFiles=11
+TcCoinst_CopyFiles=11
+EngineAdapterCopy=11,WinBioPlugIns
+uFMACopy=16422,%Mfg%\TCFMA
+
+[UMDriverCopy]
+tcwbf.dll
+
+[EngineAdapterCopy]
+upkbu.dll
+
+[uFMACopy]
+ufma.exe
+
+[Strings]
+Mfg                     = "AuthenTec"
+MediaDescription        = "Windows Biometric Framework driver for AuthenTec devices"
+ClassName               = "Biometric Devices"
+WudfRdDisplayName       = "Windows Driver Foundation - User-mode Driver Framework Reflector"
+WinUsb_SvcDesc          = "WinUSB Driver"
+Reader_DeviceDesc       = "TouchChip Fingerprint Reader (WBF advanced mode)"
+Sensor_DeviceDesc       = "TouchStrip Fingerprint Sensor (WBF advanced mode)"
+Coprocessor_DeviceDesc  = "TouchChip Fingerprint Coprocessor (WBF advanced mode)"

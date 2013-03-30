@@ -1,0 +1,78 @@
+;------------------------------------------------------------------------------
+; Copyright (c) 2000-2002 Identix Incorporated
+
+[Version]
+Signature=$Windows NT$
+DriverVer=09/15/2003,1.1.18.0
+Class = Biometric
+ClassGuid = {53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%DeviceManufacturer%
+CatalogFile=DFRUSB.cat
+
+
+;---------- Class installer
+
+; Win NT 2000 section
+[ClassInstall32]
+AddReg=DFR_ClassAddReg32
+
+[DFR_ClassAddReg32]
+HKR,,,0,%DFRClassName%
+
+[Manufacturer]
+%DeviceManufacturer%=Identix_Incorporated
+
+;---------- devices list
+[Identix_Incorporated]
+%DFRUSB_Anchor%=DFRUSB,USB\VID_0547&PID_2131
+%DFRUSB_SL%=DFRUSB,USB\VID_04ce&PID_07d1
+%DFRUSB_SL%=DFRUSB,USB\VID_04ce&PID_04ce
+%DFRUSB_SL%=DFRUSB,USB\VID_03e8&PID_0006
+%DFRUSB_Seneca%=DFRUSB,USB\VID_06FC&PID_0000
+%DFRUSB_Anchor%=DFRUSB,USB\VID_0D85&PID_0002
+%DFRUSB_Anchor5404%=DFRUSB,USB\VID_0D85&PID_0001
+
+; --- for WinNT 2000, XP
+[DFRUSB.NT]
+CopyFiles=SysCopyFileSection2K
+
+[DFRUSB.NT.Services]
+AddService = DfrUSB,0x00000002,DFRUSB_ServiceInst2K
+
+[DFRUSB_ServiceInst2K]
+DisplayName=%DeviceDescription%
+ServiceType=1 ; kernel driver
+StartType=3; demand start
+ErrorControl=1 ; normal
+ServiceBinary=%12%\dfrusb.sys
+LoadOrderGroup = extended base
+DelReg = DFRUSBDelReg2K
+
+[DFRUSBDelReg2K]
+HKR,Security
+
+[ControlFlags]
+ExcludeFromSelect= *
+
+[DestinationDirs]
+DefaultDestDir=11
+SysCopyFileSection2K=12
+
+[SysCopyFileSection2K]
+DFRUSB.sys
+
+[SourceDisksNames]
+1=%DriverDiskName%,,
+
+[SourceDisksFiles]
+DFRUSB.sys=1
+
+[Strings]
+DeviceManufacturer="Identix Incorporated"
+DFRUSB_Anchor="DFR-300 USB Fingerprint Reader"
+DFRUSB_SL="DFR-200 USB Fingerprint Reader"
+DFRUSB_Seneca="DFR-400 USB Fingerprint Reader"
+DFRUSB_Anchor5404="DFR-200 USB Fingerprint Reader"
+DFRClassName="Biometric devices"
+DeviceDescription="DFR-300 USB Fingerprint Reader"
+DriverDiskName="BSS Drivers Installation Disk" 

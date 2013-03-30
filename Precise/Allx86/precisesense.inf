@@ -1,0 +1,71 @@
+; precisesense.inf  --  This file contains the Precise Sense HUB INF File
+; Copyright © 2011 Precise Biometrics AB
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%Precise%
+DriverVer=03/28/2011,1.0.0.7
+CatalogFile.NTamd64 = pbsenseamd64.cat
+CatalogFile	    = pbsensex86.cat
+
+[Manufacturer]
+%Precise.Mfg%=Precise.Section,NTx86,NTamd64
+
+
+; =================== Precise Biometrics ================================
+[Precise.Section.NTx86]
+%USB\VID_08c3&PID_0600.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0600
+%USB\VID_08c3&PID_0601.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0601
+%USB\VID_08c3&PID_0602.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0602
+%USB\VID_08c3&PID_0603.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0603
+%USB\VID_08c3&PID_0604.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0604
+%USB\VID_08c3&PID_0605.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0605
+%USB\VID_08c3&PID_0611.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0611
+%USB\VID_08c3&PID_0613.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0613
+%USB\VID_08c3&PID_0615.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0615
+
+
+
+[Precise.Section.NTamd64]
+%USB\VID_08c3&PID_0600.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0600
+%USB\VID_08c3&PID_0601.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0601
+%USB\VID_08c3&PID_0602.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0602
+%USB\VID_08c3&PID_0603.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0603
+%USB\VID_08c3&PID_0604.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0604
+%USB\VID_08c3&PID_0605.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0605
+%USB\VID_08c3&PID_0611.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0611
+%USB\VID_08c3&PID_0613.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0613
+%USB\VID_08c3&PID_0615.DeviceDesc%=SenseHub.Install,USB\VID_08c3&PID_0615
+
+
+[SenseHub.Install.NT]
+Include		= usb.inf
+Needs		= StandardHub.Dev.NT
+
+
+[SenseHub.Install.NT.Services]
+Include		= usb.inf
+Needs		= StandardHub.Dev.NT.Services
+
+
+; =================== Global ==================================
+
+[Strings]
+;Non-Localizable
+Precise="Precise Biometrics"
+
+;Non-Localizable
+Precise.Mfg="Precise Biometrics"
+
+USB\VID_08C3&PID_0600.DeviceDesc="Precise Sense MC"
+USB\VID_08C3&PID_0601.DeviceDesc="Precise Sense MC-S"
+USB\VID_08C3&PID_0611.DeviceDesc="Precise Sense MC-S"
+USB\VID_08C3&PID_0602.DeviceDesc="Precise Sense CL"
+USB\VID_08C3&PID_0603.DeviceDesc="Precise Sense CL-S"
+USB\VID_08C3&PID_0613.DeviceDesc="Precise Sense CL-S"
+USB\VID_08C3&PID_0604.DeviceDesc="Precise Sense X"
+USB\VID_08C3&PID_0605.DeviceDesc="Precise Sense X-S"
+USB\VID_08C3&PID_0615.DeviceDesc="Precise Sense X-S"

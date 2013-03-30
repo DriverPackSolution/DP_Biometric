@@ -1,0 +1,29 @@
+13.03.3
+-------
++ Добавлены драйверы Precise Biometrics 1.0.4.0
++ Добавлены драйверы Athena ASEBIO ASEDrive KB Fingerprint Reader 1.9.2.0167
++ Добавлены драйверы EgisTec-Corp Finger Printer Sensor Reader 8.70.801.1024
+
+
+13.03.2
+-------
++ Добавлены драйверы Futronic USB Fingerprint Scanner 5.0.16385.10
+* Обновлены драйверы AuthenTec AES2810 Fingerprint Reader 8.4.4.25
+
+
+13.02.3
+-------
++ Добавлены драйверы AuthenTec AES Biometric
+
+
+13.02.2
+-------
++ Добавлены драйверы Validity Sensor 2.2.0.0
++ Добавлены драйверы STMicroelectronics USB 3.1.0.1
+* Обновлены драйверы NITGEN FDU11/14 USB FRD 1.0.3.8
+* Обновлены драйверы SecuGen FDU04/SDU04P USB FRD 2.4.1.1
+
+
+13.01.5
+-------
+* Первый релиз пакета драйверов для биометрических сканеров

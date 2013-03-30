@@ -1,0 +1,80 @@
+[Version]
+Signature="$Windows NT$"
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%PB%
+DriverVer=06/01/2010,1.0.4.0
+CatalogFile=P200Ccid.cat
+
+[SourceDisksNames]
+1=%Distribution%,P200Ccid.sys,, 
+
+[SourceDisksFiles]
+P200Ccid.sys = 1
+
+[ClassInstall32]
+Addreg=SmartCardReaderClassReg
+
+[ClassInstall]
+Addreg=SmartCardReaderClassReg
+
+[SmartCardReaderClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-25
+HKR,,NoInstallClass,,1
+HKR,,Installer32,,"winscard.dll,ClassInstall32"
+
+[Manufacturer]
+%MFG%=Precise
+
+; ============ Add reg for all readers ===============
+
+[Reader.Install.AddReg]
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+
+; **************************
+; Precise 2X0 Readers
+; **************************
+[Precise]
+%P200SC.DeviceDesc% = P200CCID.Install,USB\VID_08c3&PID_0400
+%P250MC.DeviceDesc% = P200CCID.Install,USB\VID_08c3&PID_0401
+%P200MC.DeviceDesc% = P200CCID.Install,USB\VID_08c3&PID_0402
+%P200SCUpg.DeviceDesc% = P200CCID.Install,USB\VID_08c3&PID_0404
+%P250MCUpg.DeviceDesc% = P200CCID.Install,USB\VID_08c3&PID_0405
+%P200MCUpg.DeviceDesc% = P200CCID.Install,USB\VID_08c3&PID_0406
+
+[P200CCID.Install.NT]
+AddReg          = Reader.Install.AddReg
+CopyFiles       = P200CCID.Install.CopyFiles
+
+[P200CCID.Install.CopyFiles]
+P200Ccid.sys,,,2
+
+[P200CCID.Install.NT.Services]
+AddService = P200CCID, 2, P200CCID.Service
+
+[P200CCID.Service]
+DisplayName     = %P200CCID.DeviceDesc%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\P200Ccid.sys
+
+[DestinationDirs]
+P200CCID.Install.CopyFiles = 12
+
+[Strings]
+PB                     = "Precise Biometrics"
+Distribution           = "Precise 200 Driver Disk"
+ClassName              = "Smart card readers"
+MFG                    = "Precise Biometrics"
+P200SC.DeviceDesc      = "Precise 200 SC"
+P250MC.DeviceDesc      = "Precise 250 MC"
+P200MC.DeviceDesc      = "Precise 200 MC"
+P200SCUpg.DeviceDesc   = "Precise 200 SC Upgrade"
+P250MCUpg.DeviceDesc   = "Precise 250 MC Upgrade"
+P200MCUpg.DeviceDesc   = "Precise 200 MC Upgrade"
+P200CCID.DeviceDesc    = "Precise CCID Reader"
+
+

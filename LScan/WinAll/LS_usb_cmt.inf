@@ -1,0 +1,132 @@
+; Copyright (C) 2006-2008 Cross Match Technologies. All rights reserved.
+
+[Version]
+Signature="$Windows NT$"
+;DriverVer=month/day/year,x.x.x.x
+DriverVer=11/09/2009,4.5.0.0
+Provider=%Provider%
+Class=%ClassName%
+ClassGUID={0254797E-0FD9-4935-A7C0-F890271C6768}
+CatalogFile=LS_usb_cmt.cat
+
+
+
+
+
+
+[DestinationDirs]
+DefaultDestDir              = 10,System32\Drivers
+Install_CopyDriver.nt      = 12 ; \system32\drivers
+Install_CopyDriver.ntamd64 = 12 ; \system32\drivers
+
+
+[ClassInstall32] 
+AddReg=ClassAddReg
+
+[ClassAddReg]
+HKR,,,,"%ClassName%"
+HKR,,Icon,,-20
+
+[Manufacturer]
+%Manufacturer%=Models,ntamd64
+
+[SourceDisksNames]
+1=%SourceDisk%,,,.
+
+[SourceDisksNames.amd64]
+1=%SourceDisk%,,,.
+
+[SourceDisksFiles]
+LSCANUsb.sys          = 1,,
+
+[SourceDisksFiles.amd64]
+LSCANUsbamd64.sys     = 1,,
+
+[Models]
+%DeviceDesc1%=Install,USB\VID_1645&PID_0103
+%DeviceDesc2%=Install,USB\VID_080B&PID_0036
+%DeviceDesc3%=Install,USB\VID_1645&PID_0105
+%DeviceDesc4%=Install,USB\VID_080B&PID_0077
+%DeviceDesc5%=Install,USB\VID_1645&PID_0106
+%DeviceDesc6%=Install,USB\VID_1645&PID_0100
+%DeviceDesc7%=Install,USB\VID_1645&PID_0101
+%DeviceDesc8%=Install,USB\VID_1645&PID_0102
+%DeviceDesc9%=Install,USB\VID_1645&PID_0107
+
+
+[Models.ntamd64]
+%DeviceDesc1%=Install,USB\VID_1645&PID_0103
+%DeviceDesc2%=Install,USB\VID_080B&PID_0036
+%DeviceDesc3%=Install,USB\VID_1645&PID_0105
+%DeviceDesc4%=Install,USB\VID_080B&PID_0077
+%DeviceDesc5%=Install,USB\VID_1645&PID_0106
+%DeviceDesc6%=Install,USB\VID_1645&PID_0100
+%DeviceDesc7%=Install,USB\VID_1645&PID_0101
+%DeviceDesc8%=Install,USB\VID_1645&PID_0102
+%DeviceDesc9%=Install,USB\VID_1645&PID_0107
+
+
+
+;==================Win 2000 / XP / Vista 32 Bit ==============
+[Install.nt]
+AddReg    =Install_AddReg.nt
+CopyFiles =Install_CopyDriver.nt
+
+[Install_AddReg.nt]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,LSCANUsb.sys
+
+[Install_CopyDriver.nt]
+LSCANUsb.sys,,,2
+;LSCANUsbamd64.sys,,,2
+
+[Install.nt.Services]
+AddService=LSCANUsb,2,LSCANUsb_ServiceInstall.nt
+
+[LSCANUsb_ServiceInstall.nt]
+DisplayName=%SvcDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\LSCANUsb.sys
+
+;==================Win XP / Vista 64 Bit (X64) ==================
+
+[Install.ntamd64]
+AddReg    =Install_AddReg.ntamd64
+CopyFiles =Install_CopyDriver.ntamd64
+
+[Install_AddReg.ntamd64]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,LSCANUsbamd64.sys
+
+[Install_CopyDriver.ntamd64]
+LSCANUsbamd64.sys,,,2
+
+[Install.ntamd64.Services]
+AddService=LSCANUsb,2,LSCANUsb_ServiceInstall.ntamd64
+
+[LSCANUsb_ServiceInstall.ntamd64]
+DisplayName=%SvcDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\LSCANUsbamd64.sys
+
+[Strings]
+ClassName="LiveScanner USB"
+Provider="Cross Match Technologies"
+Manufacturer="Cross Match Technologies"
+SourceDisk="Cross Match LiveScanner Installation Disk"
+SvcDesc="LiveScanner USB Driver (LSCANUsb.sys)"
+
+DeviceDesc1="Cross Match Technologies USB Scanner"
+DeviceDesc2="Cross Match Technologies VERIFIER 320LC (Before ReNumeration)"
+DeviceDesc3="Cross Match Technologies VERIFIER 320LC"
+DeviceDesc4="Cross Match Technologies VERIFIER V320S (Before ReNumeration)"
+DeviceDesc5="Cross Match Technologies VERIFIER V320S"
+DeviceDesc6="Cross Match Technologies L SCAN 100"
+DeviceDesc7="Cross Match Technologies L SCAN 100R"
+DeviceDesc8="Cross Match Technologies L SCAN 100R version E"
+DeviceDesc9="Cross Match Technologies VERIFIER V320S2"
+

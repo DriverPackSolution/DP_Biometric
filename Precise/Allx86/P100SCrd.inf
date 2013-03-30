@@ -1,0 +1,163 @@
+; P100SCrd.inf
+; Copyright © 2005 Precise Biometrics AB
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$CHICAGO$"
+Provider=%ProviderName%
+
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+DriverVer=05/26/2005,3.0.1.0
+CatalogFile=P100SCrd.cat
+
+
+;--------- SourceDisksNames Section ------------------------------------------
+
+[SourceDisksNames]
+1=%CDName%,,,""
+
+
+;--------- SourceDisksFiles Section ------------------------------------------
+
+[SourceDisksFiles]
+P100SCrd.sys=1
+P100PcSc.sys=1
+PbSCard.sys=1
+cocpyinf.dll=1
+
+
+;--------- DestinationDirs Section -------------------------------------------
+
+[DestinationDirs]
+DefaultDestDir         = 10,System32\Drivers
+P100SCard_Files_Driver = 10,System32\Drivers
+PbSCard_Files_Driver   = 10,System32\Drivers
+CoCopyINF.CopyFiles    = 11 
+
+
+;--------- Control Flags Sections --------------------------------------------
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Mfg0
+
+[Mfg0]
+%DeviceDescA4%=P100SCard, P100Usb\Ali4SCard
+%DeviceDescA2%=PbSCard, P100Usb\Ali2SCard
+
+
+;---------- DDInstall Sections -----------------------------------------------
+
+;---------- 100 MC ---------------------
+
+;---------- Windows 2000/XP ------------
+
+[P100SCard.NTx86]
+DriverVer=05/26/2005,3.0.1.0
+AddReg=P100SCard_NTx86_AddReg
+CopyFiles=P100SCard_Files_Driver
+CopyINF=P100.INF
+
+[P100SCard.NTx86.CoInstallers]
+AddReg=CoCopyINF.AddReg
+CopyFiles=CoCopyINF.CopyFiles
+
+[P100SCard.NTx86.HW]
+AddReg=P100SCard.NTx86.HW.AddReg
+
+[P100SCard.NTx86.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"P100PcSc"
+
+[P100SCard.NTx86.Services]
+Addservice = P100SCard, 0x00000002, P100SCard_AddService
+Addservice = P100PcSc, , PCSC_Filter_AddService
+
+[P100SCard_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\P100SCrd.sys
+
+[PCSC_Filter_AddService]
+DisplayName    = %filter.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\P100PcSc.sys
+
+[P100SCard_NTx86_AddReg]
+
+
+; --------- Files (common) -------------
+
+[P100SCard_Files_Driver]
+P100SCrd.sys,,,2
+P100PcSc.sys,,,2
+
+
+;---------- 100 SC ---------------------
+
+;---------- Windows 2000/XP ------------
+
+[PbSCard.NTx86]
+DriverVer=05/26/2005,3.0.1.0
+AddReg=PbSCard_NTx86_AddReg
+CopyFiles=PbSCard_Files_Driver
+CopyINF=P100.INF
+
+[PbSCard.NTx86.CoInstallers]
+AddReg=CoCopyINF.AddReg
+CopyFiles=CoCopyINF.CopyFiles
+
+[PbSCard.NTx86.HW]
+AddReg=PbSCard.NTx86.HW.AddReg
+
+[PbSCard.NTx86.HW.AddReg]
+
+[PbSCard.NTx86.Services]
+Addservice = PbSCard, 0x00000002, PbSCard_AddService
+
+[PbSCard_AddService]
+DisplayName    = %SvcDescPb%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\PbSCard.sys
+
+[PbSCard_NTx86_AddReg]
+
+
+; --------- Files (common) -------------
+
+[PbSCard_Files_Driver]
+PbSCard.sys,,,2
+
+
+; --------- CoInstaller ----------------
+
+[CoCopyINF.AddReg]
+HKR,,CoInstallers32,0x10000,"cocpyinf.DLL,CoCopyINF"
+
+[CoCopyINF.CopyFiles]
+cocpyinf.dll,,,0x10
+
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="Precise Biometrics"
+MfgName="Precise Biometrics"
+CDName="Precise 100 Drivers"
+DeviceDescA4="Precise 100 MC Smart Card Reader"
+DeviceDescA2="Precise 100 SC Smart Card Reader"
+SvcDesc="Precise 100 MC SCard FDO Driver"
+SvcDescPb="Precise 100 SC SCard FDO Driver"
+filter.SvcDesc="Precise PCSC Filter"

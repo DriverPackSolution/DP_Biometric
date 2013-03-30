@@ -1,0 +1,179 @@
+;
+; Copyright (c) Futronic Technology Company Ltd. All rights Reserved
+;
+; Module Name:
+;    FtrWinUsb.inf
+;
+; Abstract:
+;    INF file for installing the WinUSB Futronic drivers
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=USBDevice
+ClassGUID={88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+CatalogFile=FtrWinUsb.cat
+Provider=%FTRUSB.Provider%
+PnpLockDown=1
+DriverVer=09/24/2012, 5.0.16385.10
+
+[Manufacturer]
+%FTRUSB.Manufacturer%=FTRUSB_WinUSB, NTx86, NTamd64, NTx86.6.0, NTamd64.6.0
+
+[ClassInstall32]
+AddReg=FTRUSB_WinUSB.AddClassReg
+
+[ClassInstall32.ntamd64]
+AddReg=FTRUSB_WinUSB.AddClassReg
+
+[FTRUSB_WinUSB.NTx86.6.0]
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0025
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0090
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0050
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0060
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0098
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_8098
+
+[FTRUSB_WinUSB.NTamd64.6.0]
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0025
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0090
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0050
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0060
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0098
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_8098
+
+[FTRUSB_WinUSB.NTx86]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0025
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0050
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0060
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0098
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_8098
+
+[FTRUSB_WinUSB.NTamd64]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0025
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0050
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0060
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0098
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_8098
+
+[FTRUSB_WinUSB]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0025
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0050
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0060
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0098
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_8098
+
+[USB_Install]
+
+[USB_Install.ntamd64]
+
+[USB_InstallVista]
+Include=winusb.inf
+Needs=WINUSB.NT
+AddProperty=USB_InstallVistaProperties
+
+[USB_InstallVistaProperties]
+DeviceIcon,,,,"%SystemRoot%\system32\SysClass.dll,-201" 
+
+[USB_Install.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[USB_Install.ntamd64.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[USB_InstallVista.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[WinUSB_ServiceInstall]
+DisplayName     = %WinUSB_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[USB_Install.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[USB_Install.ntamd64.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[USB_InstallVista.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[WinUSB_Install]
+KmdfLibraryVersion=1.11
+
+[USB_Install.HW]
+AddReg=Dev_AddReg
+
+[USB_Install.ntamd64.HW]
+AddReg=Dev_AddReg
+
+[USB_InstallVista.HW]
+AddReg=Dev_AddReg
+
+[FTRUSB_WinUSB.AddClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-20
+
+[Dev_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{ec0db5fc-48f8-49f3-880b-ee51bd0de8c6}"
+HKR,,"Security",,"D:P(A;;GA;;;S-1-1-0)"  ; Allow generic-all access to Everyone
+HKR,,"Exclusive",0x10001,0
+
+[USB_Install.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[USB_Install.ntamd64.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[USB_InstallVista.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01011.dll,WdfCoInstaller","WinUSBCoInstaller2.dll"
+
+[CoInstallers_CopyFiles]
+WinUSBCoInstaller2.dll
+WdfCoInstaller01011.dll
+
+[DestinationDirs]
+CoInstallers_CopyFiles=11
+
+[SourceDisksNames]
+1=%FTRUSB.DriverDiskName%,,,
+
+[SourceDisksFiles.x86]
+WinUSBCoInstaller2.dll=1,x86
+WdfCoInstaller01011.dll=1,x86
+
+[SourceDisksFiles.amd64]
+WinUSBCoInstaller2.dll=1,amd64
+WdfCoInstaller01011.dll=1,amd64
+
+[Strings]
+FTRUSB.Provider="Futronic Technology Company Ltd."
+FTRUSB.Manufacturer="Futronic Technology Company Ltd."
+FTRUSB.DeviceDesc="Futronic USB Fingerprint Scanner Device"
+ClassName="Universal Serial Bus devices"
+FTRUSB.DriverDiskName="Futronic Drivers Installation Disk (Fingerprint Scanner)"
+WinUSB_SvcDesc="WinUSB Driver"

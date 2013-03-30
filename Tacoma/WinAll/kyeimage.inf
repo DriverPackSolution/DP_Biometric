@@ -1,0 +1,63 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+provider=%KYE%
+LayoutFile=layout.inf
+;DriverVer=01/02/2001
+
+[Manufacturer]
+%KYE%=KYE
+
+[KYE]
+;
+;
+%FingerPrintImage%=USBIMAGEDrv.Dev, USB\VID_0458&PID_000C&MI_00
+
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+USBIMAGEDrv.Files.Ext = 10,System32\Drivers
+USBIMAGERUNONCE.File = 10
+
+[USBIMAGEDrv.Dev]
+CopyFiles=USBIMAGEDrv.Files.Ext
+AddReg=USBIMAGEDrv.AddReg
+
+[USBIMAGEDrv.Dev.NT]
+CopyFiles=USBIMAGEDrv.Files.Ext
+AddReg=USBIMAGEDrv.AddReg
+
+[USBIMAGEDrv.Dev.NT.Services]
+Addservice = USBIMAGEDrv, 0x00000002, USBIMAGEDrv.AddService
+
+[USBIMAGEDrv.AddService]
+DisplayName    = %USBIMAGEDrv.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\kyeimage.sys
+LoadOrderGroup = Base
+
+[USBIMAGEDrv.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,kyeimage.sys
+
+[USBIMAGEDrv.Files.Ext]
+kyeimage.sys
+
+[SourceDisksNames]
+1001 = "Insatll.CD",,1
+
+[SourceDisksFiles]
+kyeimage.sys=1001
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+KYE=""
+FingerPrintImage="TACOMA Fingerprint V1.06.01"
+USBIMAGEDrv.SvcDesc="TACOMA Fingerprint Sensor"
+DiskName="Fingerprint Mouse Install CD-ROM"

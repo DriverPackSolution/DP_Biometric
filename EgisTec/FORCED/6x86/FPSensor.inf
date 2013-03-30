@@ -1,0 +1,106 @@
+; Finger Printer Sensor Reader 
+; (c) Copyright 2008 EgisTec.
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=SecBioDev
+ClassGUID={a8e6a1b0-bce2-11dc-95ff-0800200c9a66}
+provider=%LTT%
+CatalogFile=FPSensor.cat
+DriverVer=01/15/2010,%FILEVER%
+
+[SourceDisksNames]
+1=%FPSInstall%,,,
+
+[SourceDisksFiles]
+FPSensor.sys = 1
+
+
+[Manufacturer]
+%LTT_Corp%=LTT_Corp,NTamd64
+
+[LTT_Corp]
+%FPSensorReader%=FPSensor.Dev, USB\VID_1C7A&PID_0803
+%FPSensorReader%=FPSensor.Dev, USB\VID_1C7A&PID_0801
+%FPSensorReader%=FPSensor.Dev, USB\VID_CD15&PID_6711
+;%FPSensorReader%=FPSensor.Dev, USB\VID_04D9&PID_F003
+;%FPSensorReader%=FPSensor.Dev, USB\VID_04D9&PID_F000
+
+
+
+[LTT_Corp.NTamd64]
+%FPSensorReader%=FPSensor.Dev, USB\VID_1C7A&PID_0803
+%FPSensorReader%=FPSensor.Dev, USB\VID_1C7A&PID_0801
+%FPSensorReader%=FPSensor.Dev, USB\VID_CD15&PID_6711
+;%FPSensorReader%=FPSensor.Dev, USB\VID_04D9&PID_F003
+;%FPSensorReader%=FPSensor.Dev, USB\VID_04D9&PID_F000
+
+
+
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+
+[ClassInstall32]
+AddReg=SecBioDev_Class_Addreg
+
+[SecBioDev_Class_Addreg]
+HKR,,,,Secure biometrics devices
+HKR,,SilentInstall,,1
+HKR,,Icon,,"-24"
+
+
+
+[DestinationDirs]
+FPSensor.Files.Ext = 10,System32\Drivers
+
+
+[FPSensor.Dev.NTx86]
+CopyFiles=FPSensor.Files.Ext
+AddReg=FPSensor.AddReg
+
+[FPSensor.Dev.NTx86.Services]
+Addservice = FPSensor, 0x00000002, FPSensor.AddService
+
+[FPSensor.Dev.NTamd64]
+CopyFiles=FPSensor.Files.Ext
+AddReg=FPSensor.AddReg
+
+[FPSensor.Dev.NTamd64.Services]
+Addservice = FPSensor, 0x00000002, FPSensor.AddService
+
+[FPSensor.AddService]
+DisplayName    = %FPSensor.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 2                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\FPSensor.sys
+AddReg         = FPSensor.AddReg
+LoadOrderGroup = Base
+
+[FPSensor.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FPSensor.sys
+HKR,"Parameters","C3ModeEnable",0x10001,1
+HKR,"Parameters","ContactSensor",0x10001,1
+HKR,"Parameters","Exception",0x10001,0
+HKR,"Parameters","JadeDCoffset",0x10001,54
+HKR,"Parameters","JadeGain",0x10001,4
+HKR,"Parameters","JadeVRT",0x10001,8
+HKR,"Parameters","JadeVRB",0x10001,13
+HKR,"DebugMsg","DEBUG",0x00010008,"111"
+
+[FPSensor.Files.Ext]
+FPSensor.sys
+
+;---------------------------------------------------------------;
+
+[Strings]
+LTT="EgisTec"
+LTT_Corp="EgisTec"
+FPSensorReader="Fingerprint Reader"
+FPSensor.SvcDesc="EgisTec-Corp Fingerprint Reader Driver (FPSensor.sys)"
+FPSInstall="Fingprint Sensor driver Installation Disk"
+FILEVER="8.70.801.1024"

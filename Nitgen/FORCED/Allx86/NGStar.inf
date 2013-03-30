@@ -1,0 +1,129 @@
+;
+; Installation file (.inf) for the FDU11/14/06M/06S devices.
+; 
+; Copyright(C) 2001-2012 NITGEN&COMPANY Co., Ltd. 
+;
+; Windows 2000/XP/2003/VISTA/7 
+;
+
+[Version]
+Signature="$Chicago$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+
+Provider=%NITGEN%
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+CatalogFile=fdu11.cat
+DriverVer=07/04/2012,1.0.3.8
+
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1=%DISK1%,,,
+
+[SourceDisksFiles]
+NGStar.sys=1,,
+NGStar.dll=1,, 
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+NGStar.Files.Ext = 10,System32\Drivers
+NGStar.Files.Dll = 11			; 9x - System Dir, NT - System32 Dir
+
+[ControlFlags]
+;ExcludeFromSelect=*             	; removes all device here from the device installer list
+
+[Manufacturer]
+%NITGEN%=NITGEN, NTx86, NTia64, NTamd64
+
+
+[NITGEN]
+;-------------------------------------------------
+; NITGEN USB Fingerprint Device (FDU11/14/06M/06S)
+;-------------------------------------------------
+%USB\VID_0A86&PID_0600.DeviceDesc%=FDU11, USB\VID_0A86&PID_0600
+%USB\VID_0A86&PID_0602.DeviceDesc%=FDU11, USB\VID_0A86&PID_0602
+
+
+[NITGEN.NTx86]
+;-------------------------------------------------
+; NITGEN USB Fingerprint Device (FDU11/14/06M/06S)
+;-------------------------------------------------
+%USB\VID_0A86&PID_0600.DeviceDesc%=FDU11, USB\VID_0A86&PID_0600
+%USB\VID_0A86&PID_0602.DeviceDesc%=FDU11, USB\VID_0A86&PID_0602
+
+
+[NITGEN.NTia64]
+;-------------------------------------------------
+; NITGEN USB Fingerprint Device (FDU11/14/06M/06S)
+;-------------------------------------------------
+%USB\VID_0A86&PID_0600.DeviceDesc%=FDU11, USB\VID_0A86&PID_0600
+%USB\VID_0A86&PID_0602.DeviceDesc%=FDU11, USB\VID_0A86&PID_0602
+
+
+[NITGEN.NTamd64]
+;-------------------------------------------------
+; NITGEN USB Fingerprint Device (FDU11/14/06M/06S)
+;-------------------------------------------------
+%USB\VID_0A86&PID_0600.DeviceDesc%=FDU11, USB\VID_0A86&PID_0600
+%USB\VID_0A86&PID_0602.DeviceDesc%=FDU11, USB\VID_0A86&PID_0602
+
+
+; =================== FDU11 USB FRD Driver ===================
+
+;---------------
+; For Win98...
+;---------------
+
+[FDU11]
+CopyFiles=NGStar.Files.Ext, NGStar.Files.Dll
+AddReg=FDU11.AddReg
+
+[FDU11.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,NGStar.sys
+
+[NGStar.Files.Ext]
+NGStar.sys
+
+[NGStar.Files.Dll]
+NGStar.dll
+
+
+;-------------------
+; For Windows NT...
+;-------------------
+
+; FRD
+
+[ClassInstall32]
+AddReg=AddRegBiometricClass
+
+[AddRegBiometricClass]
+HKR,,,,%BiometricClassName%
+
+
+[FDU11.NT]
+CopyFiles=NGStar.Files.Ext, NGStar.Files.Dll
+
+[FDU11.NT.Services]
+Addservice = FDU11, 0x00000002, FDU11_AddService_Inst 
+
+[FDU11_AddService_Inst]
+DisplayName    = %FDU11.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\NGStar.sys
+
+[Strings]
+BiometricClassName="Biometric"
+NITGEN="NITGEN"
+FDU11.SvcDesc="FDU11 Service"
+USB\VID_0A86&PID_0600.DeviceDesc="NITGEN FDU11/14 USB FRD"
+USB\VID_0A86&PID_0602.DeviceDesc="NITGEN FDU06M/06S USB FRD"
+
+DISK1="NITGEN FRD Installation Disk"

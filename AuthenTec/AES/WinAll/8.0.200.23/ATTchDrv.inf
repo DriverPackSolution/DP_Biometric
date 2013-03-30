@@ -1,0 +1,354 @@
+;/*++
+;
+;Copyright (c) AuthenTec, Inc 2006.  All rights reserved.
+;
+;Module Name:
+;
+;    FLMckUsb.inf
+;
+;Description:
+;
+;    Driver INF file for installing Authentec Touch sensor drivers on
+;    x86 and x64 platforms.
+;
+;    NOTE: Currently not supporting IA64 platforms.
+;
+;--*/
+[Version]
+Signature="$WINDOWS NT$"
+Class=Biometric
+ClassGUID={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%AuthentecInc%
+DriverVer=11/02/2007,7.10.0.2
+CatalogFile.NTx86   = ATTchDrv.cat
+CatalogFile.NTamd64 = ATTchDrvAMD64.cat
+
+
+; ================= Class section =====================
+
+[ClassInstall32.NT]
+Addreg=BiometricClassReg
+
+[BiometricClassReg]
+HKR,,,,%ClassName%
+HKR,,NoInstallClass,,1
+HKR,,Icon,,-30
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+
+; ================= Device Install section =====================
+
+
+;
+; Manufacturer section
+;  This consists of [Manufacturer][Models] with the
+;	supported OS platform decorations
+;
+;
+[Manufacturer]
+%AuthentecInc%=AuthentecModels,NTx86,NTamd64
+
+;-----------------------------------------------------------------
+; Models for Win2K, x86 based machines
+;
+;These are the VID/PIDs reserved for AuthenTec reference boards.
+[AuthentecModels]
+;
+;AES4000
+%AES4000REFBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_5500
+%AES4000REFBoard1%=ATTchDrv_Inst, USB\VID_08FF&PID_5501
+%AES4000REFBoard2%=ATTchDrv_Inst, USB\VID_08FF&PID_55FF
+%AES4000REFBoard_90%=ATTchDrv_Inst, USB\VID_08FF&PID_5503
+%AES4000REFBoard_0%=ATTchDrv_Inst, USB\VID_08FF&PID_5505
+%AES4000REFBoard_270%=ATTchDrv_Inst, USB\VID_08FF&PID_5507
+;
+;AES3500
+%AES3500REFBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_5700
+%AES3500REFBoard90%=ATTchDrv_Inst, USB\VID_08FF&PID_5701
+%AES3500REFBoard0%=ATTchDrv_Inst, USB\VID_08FF&PID_5702
+%AES3500REFBoard270%=ATTchDrv_Inst, USB\VID_08FF&PID_5703
+%AES3500REFBoardB%=ATTchDrv_Inst, USB\VID_08FF&PID_5704
+%AES3500REFBoard90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5705
+%AES3500REFBoard0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5706
+%AES3500REFBoard270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5707
+;
+;AES34XX
+%GoldFingerII_180%=ATTchDrv_Inst, USB\VID_08FF&PID_3400
+%GoldFingerII_270%=ATTchDrv_Inst, USB\VID_08FF&PID_3401
+%GoldFingerII_00%=ATTchDrv_Inst, USB\VID_08FF&PID_3402
+%GoldFingerII_90%=ATTchDrv_Inst, USB\VID_08FF&PID_3403
+%Indian_00%=ATTchDrv_Inst, USB\VID_08FF&PID_3404
+%Indian_90%=ATTchDrv_Inst, USB\VID_08FF&PID_3405
+%Indian_180%=ATTchDrv_Inst, USB\VID_08FF&PID_3406
+%Indian_270%=ATTchDrv_Inst, USB\VID_08FF&PID_3407
+%SYN3455REFBoard%=ATTchDrv_Inst, USB\VID_06CB&PID_0005
+;
+;These VID/PIDs are reserved for special products.
+%AES3500SpecBoard0%=ATTchDrv_Inst, USB\VID_08FF&PID_5710
+%AES3500SpecBoard270%=ATTchDrv_Inst, USB\VID_08FF&PID_5711
+%AES3500SpecBoard180%=ATTchDrv_Inst, USB\VID_08FF&PID_5712
+%AES3500SpecBoard90%=ATTchDrv_Inst, USB\VID_08FF&PID_5713
+%AES3500SpecBoard0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5714
+%AES3500SpecBoard270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5715
+%AES3500SpecBoard180B%=ATTchDrv_Inst, USB\VID_08FF&PID_5716
+%AES3500SpecBoard90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5717
+;
+;These VID/PIDs are reserved for chattoooga version F.
+%AES3500ChattyF0%=ATTchDrv_Inst, USB\VID_08FF&PID_5730
+%AES3500ChattyF90%=ATTchDrv_Inst, USB\VID_08FF&PID_5731
+%AES3500ChattyF180%=ATTchDrv_Inst, USB\VID_08FF&PID_5732
+%AES3500ChattyF270%=ATTchDrv_Inst, USB\VID_08FF&PID_5733
+%AES3500ChattyF0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5734
+%AES3500ChattyF90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5735
+%AES3500ChattyF180B%=ATTchDrv_Inst, USB\VID_08FF&PID_5736
+%AES3500ChattyF270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5737
+;
+;These VID/PIDs are reserved for the memory keys product family
+%AES3500mkey%=ATTchDrv_Inst, USB\VID_067B&PID_3500
+%AES3400mkey%=ATTchDrv_Inst, USB\VID_067B&PID_3400
+%SONYBioMV%=ATTchDrv_Inst, USB\VID_054C&PID_0171
+;
+;These VID/PIDs are reserved for Bloomberg
+%BSI100Pod2%=ATTchDrv_Inst, USB\VID_1188&PID_03E9 
+%BSI100Pod3%=ATTchDrv_Inst, USB\VID_08FF&PID_3419
+;
+;These VID/PIDs are reserved for the emulators
+%AESEMULATORBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_FFFE
+
+;-----------------------------------------------------------------
+; Models for XP or later, x86 based machines
+;
+;
+;These are the VID/PIDs reserved for AuthenTec reference boards.
+;
+[AuthentecModels.NTx86]
+;
+;AES4000
+%AES4000REFBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_5500
+%AES4000REFBoard1%=ATTchDrv_Inst, USB\VID_08FF&PID_5501
+%AES4000REFBoard2%=ATTchDrv_Inst, USB\VID_08FF&PID_55FF
+%AES4000REFBoard_90%=ATTchDrv_Inst, USB\VID_08FF&PID_5503
+%AES4000REFBoard_0%=ATTchDrv_Inst, USB\VID_08FF&PID_5505
+%AES4000REFBoard_270%=ATTchDrv_Inst, USB\VID_08FF&PID_5507
+;
+;AES3500
+%AES3500REFBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_5700
+%AES3500REFBoard90%=ATTchDrv_Inst, USB\VID_08FF&PID_5701
+%AES3500REFBoard0%=ATTchDrv_Inst, USB\VID_08FF&PID_5702
+%AES3500REFBoard270%=ATTchDrv_Inst, USB\VID_08FF&PID_5703
+%AES3500REFBoardB%=ATTchDrv_Inst, USB\VID_08FF&PID_5704
+%AES3500REFBoard90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5705
+%AES3500REFBoard0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5706
+%AES3500REFBoard270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5707
+;
+;AES34XX
+%GoldFingerII_180%=ATTchDrv_Inst, USB\VID_08FF&PID_3400
+%GoldFingerII_270%=ATTchDrv_Inst, USB\VID_08FF&PID_3401
+%GoldFingerII_00%=ATTchDrv_Inst, USB\VID_08FF&PID_3402
+%GoldFingerII_90%=ATTchDrv_Inst, USB\VID_08FF&PID_3403
+%Indian_00%=ATTchDrv_Inst, USB\VID_08FF&PID_3404
+%Indian_90%=ATTchDrv_Inst, USB\VID_08FF&PID_3405
+%Indian_180%=ATTchDrv_Inst, USB\VID_08FF&PID_3406
+%Indian_270%=ATTchDrv_Inst, USB\VID_08FF&PID_3407
+%SYN3455REFBoard%=ATTchDrv_Inst, USB\VID_06CB&PID_0005
+;
+;These VID/PIDs are reserved for special products.
+%AES3500SpecBoard0%=ATTchDrv_Inst, USB\VID_08FF&PID_5710
+%AES3500SpecBoard270%=ATTchDrv_Inst, USB\VID_08FF&PID_5711
+%AES3500SpecBoard180%=ATTchDrv_Inst, USB\VID_08FF&PID_5712
+%AES3500SpecBoard90%=ATTchDrv_Inst, USB\VID_08FF&PID_5713
+%AES3500SpecBoard0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5714
+%AES3500SpecBoard270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5715
+%AES3500SpecBoard180B%=ATTchDrv_Inst, USB\VID_08FF&PID_5716
+%AES3500SpecBoard90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5717
+;
+;These VID/PIDs are reserved for chattoooga version F.
+%AES3500ChattyF0%=ATTchDrv_Inst, USB\VID_08FF&PID_5730
+%AES3500ChattyF90%=ATTchDrv_Inst, USB\VID_08FF&PID_5731
+%AES3500ChattyF180%=ATTchDrv_Inst, USB\VID_08FF&PID_5732
+%AES3500ChattyF270%=ATTchDrv_Inst, USB\VID_08FF&PID_5733
+%AES3500ChattyF0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5734
+%AES3500ChattyF90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5735
+%AES3500ChattyF180B%=ATTchDrv_Inst, USB\VID_08FF&PID_5736
+%AES3500ChattyF270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5737
+;
+;These VID/PIDs are reserved for the memory keys product family
+%AES3500mkey%=ATTchDrv_Inst, USB\VID_067B&PID_3500
+%AES3400mkey%=ATTchDrv_Inst, USB\VID_067B&PID_3400
+%SONYBioMV%=ATTchDrv_Inst, USB\VID_054C&PID_0171
+;
+;These VID/PIDs are reserved for Bloomberg
+%BSI100Pod2%=ATTchDrv_Inst, USB\VID_1188&PID_03E9 
+%BSI100Pod3%=ATTchDrv_Inst, USB\VID_08FF&PID_3419
+;
+;These VID/PIDs are reserved for the emulators
+%AESEMULATORBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_FFFE
+
+;-----------------------------------------------------------------
+; Models for AMD64 (or Intel EM64T) based machines
+;
+;These are the VID/PIDs reserved for AuthenTec reference boards.
+;
+[AuthentecModels.NTamd64]
+;
+;AES4000
+%AES4000REFBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_5500
+%AES4000REFBoard1%=ATTchDrv_Inst, USB\VID_08FF&PID_5501
+%AES4000REFBoard2%=ATTchDrv_Inst, USB\VID_08FF&PID_55FF
+%AES4000REFBoard_90%=ATTchDrv_Inst, USB\VID_08FF&PID_5503
+%AES4000REFBoard_0%=ATTchDrv_Inst, USB\VID_08FF&PID_5505
+%AES4000REFBoard_270%=ATTchDrv_Inst, USB\VID_08FF&PID_5507
+;
+;AES3500
+%AES3500REFBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_5700
+%AES3500REFBoard90%=ATTchDrv_Inst, USB\VID_08FF&PID_5701
+%AES3500REFBoard0%=ATTchDrv_Inst, USB\VID_08FF&PID_5702
+%AES3500REFBoard270%=ATTchDrv_Inst, USB\VID_08FF&PID_5703
+%AES3500REFBoardB%=ATTchDrv_Inst, USB\VID_08FF&PID_5704
+%AES3500REFBoard90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5705
+%AES3500REFBoard0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5706
+%AES3500REFBoard270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5707
+;
+;AES34XX
+%GoldFingerII_180%=ATTchDrv_Inst, USB\VID_08FF&PID_3400
+%GoldFingerII_270%=ATTchDrv_Inst, USB\VID_08FF&PID_3401
+%GoldFingerII_00%=ATTchDrv_Inst, USB\VID_08FF&PID_3402
+%GoldFingerII_90%=ATTchDrv_Inst, USB\VID_08FF&PID_3403
+%Indian_00%=ATTchDrv_Inst, USB\VID_08FF&PID_3404
+%Indian_90%=ATTchDrv_Inst, USB\VID_08FF&PID_3405
+%Indian_180%=ATTchDrv_Inst, USB\VID_08FF&PID_3406
+%Indian_270%=ATTchDrv_Inst, USB\VID_08FF&PID_3407
+%SYN3455REFBoard%=ATTchDrv_Inst, USB\VID_06CB&PID_0005
+;
+;These VID/PIDs are reserved for special products.
+%AES3500SpecBoard0%=ATTchDrv_Inst, USB\VID_08FF&PID_5710
+%AES3500SpecBoard270%=ATTchDrv_Inst, USB\VID_08FF&PID_5711
+%AES3500SpecBoard180%=ATTchDrv_Inst, USB\VID_08FF&PID_5712
+%AES3500SpecBoard90%=ATTchDrv_Inst, USB\VID_08FF&PID_5713
+%AES3500SpecBoard0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5714
+%AES3500SpecBoard270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5715
+%AES3500SpecBoard180B%=ATTchDrv_Inst, USB\VID_08FF&PID_5716
+%AES3500SpecBoard90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5717
+;
+;These VID/PIDs are reserved for chattoooga version F.
+%AES3500ChattyF0%=ATTchDrv_Inst, USB\VID_08FF&PID_5730
+%AES3500ChattyF90%=ATTchDrv_Inst, USB\VID_08FF&PID_5731
+%AES3500ChattyF180%=ATTchDrv_Inst, USB\VID_08FF&PID_5732
+%AES3500ChattyF270%=ATTchDrv_Inst, USB\VID_08FF&PID_5733
+%AES3500ChattyF0B%=ATTchDrv_Inst, USB\VID_08FF&PID_5734
+%AES3500ChattyF90B%=ATTchDrv_Inst, USB\VID_08FF&PID_5735
+%AES3500ChattyF180B%=ATTchDrv_Inst, USB\VID_08FF&PID_5736
+%AES3500ChattyF270B%=ATTchDrv_Inst, USB\VID_08FF&PID_5737
+;
+;These VID/PIDs are reserved for the memory keys product family
+%AES3500mkey%=ATTchDrv_Inst, USB\VID_067B&PID_3500
+%AES3400mkey%=ATTchDrv_Inst, USB\VID_067B&PID_3400
+%SONYBioMV%=ATTchDrv_Inst, USB\VID_054C&PID_0171
+;
+;These VID/PIDs are reserved for Bloomberg
+%BSI100Pod2%=ATTchDrv_Inst, USB\VID_1188&PID_03E9 
+%BSI100Pod3%=ATTchDrv_Inst, USB\VID_08FF&PID_3419
+;
+;These VID/PIDs are reserved for the emulators
+%AESEMULATORBoard%=ATTchDrv_Inst, USB\VID_08FF&PID_FFFE
+
+; ================= File Copy section =====================
+
+[ATTchDrv_Inst]
+CopyFiles=ATTchDrvCopy
+
+[ATTchDrvCopy]
+ATTchDrv.sys
+
+; "12" is expanded by the installer to be
+;  %SystemRoot%\System32\Drivers
+[DestinationDirs]
+DefaultDestDir = 12
+
+[SourceDisksFiles]
+ATTchDrv.sys=1
+
+[SourceDisksNames.x86]
+1=%Disk1Name%,,,\i386
+
+[SourceDisksNames.amd64]
+1=%Disk1Name%,,,\amd64
+
+; ================= Service Installation section =====================
+
+[ATTchDrv_Inst.Services]
+Addservice = FLMckUsb, 0x00000002, ATTchDrvAddService, ATTchDrv_EventLog_Install
+
+[ATTchDrvAddService]
+DisplayName    = %ATTchDrv.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\ATTchDrv.sys
+AddReg         = ATTchDrv_AddReg
+
+[ATTchDrv_EventLog_Install]
+AddReg = ATTchDrv_EventLog_AddReg
+
+[ATTchDrv_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\ATTchDrv.sys"
+HKR,,TypesSupported,0x00010001,7
+
+[ATTchDrv_AddReg]
+HKR,,"DriverVersion",0,%DriverVersionInfo%
+
+; ================= Strings section =====================
+
+[Strings]
+AuthentecInc="AuthenTec, Inc."
+AES4000REFBoard="AuthenTec AES4000"
+AES4000REFBoard1="AuthenTec AES4000 TruePrint Sensor"
+AES4000REFBoard2="AuthenTec AES4000 TruePrint Sensor."
+AES4000REFBoard_90="AuthenTec AES4000 TruePrint Sensor"
+AES4000REFBoard_0="AuthenTec AES4000  TruePrint Sensor"
+AES4000REFBoard_270="AuthenTec AES4000  TruePrint  Sensor"
+AES3500REFBoard="AuthenTec AES3500 TruePrint Sensor"
+AES3500REFBoard90="AuthenTec AES3500 TruePrint Sensor"
+AES3500REFBoard0="AuthenTec AES3500  TruePrint Sensor"
+AES3500REFBoard270="AuthenTec AES3500  TruePrint  Sensor"
+AES3500REFBoardB="AuthenTec AES3500-BZ TruePrint Sensor"
+AES3500REFBoard90B="AuthenTec AES3500-BZ TruePrint Sensor"
+AES3500REFBoard0B="AuthenTec AES3500-BZ  TruePrint Sensor"
+AES3500REFBoard270B="AuthenTec AES3500-BZ  TruePrint  Sensor"
+AES3500SpecBoard0="AuthenTec AES3500  TruePrint Sensor"
+AES3500SpecBoard270="AuthenTec AES3500  TruePrint  Sensor"
+AES3500SpecBoard180="AuthenTec AES3500 TruePrint Sensor"
+AES3500SpecBoard90="AuthenTec AES3500 TruePrint  Sensor"
+AES3500SpecBoard0B="AuthenTec AES3500-BZ  TruePrint Sensor"
+AES3500SpecBoard270B="AuthenTec AES3500-BZ  TruePrint  Sensor"
+AES3500SpecBoard180B="AuthenTec AES3500-BZ TruePrint Sensor"
+AES3500SpecBoard90B="AuthenTec AES3500-BZ TruePrint  Sensor"
+AES3500ChattyF0="AuthenTec AES3500  TruePrint Sensor"
+AES3500ChattyF270="AuthenTec AES3500  TruePrint  Sensor"
+AES3500ChattyF180="AuthenTec AES3500 TruePrint Sensor"
+AES3500ChattyF90="AuthenTec AES3500 TruePrint  Sensor"
+AES3500ChattyF0B="AuthenTec AES3500-BZ  TruePrint Sensor"
+AES3500ChattyF270B="AuthenTec AES3500-BZ  TruePrint  Sensor"
+AES3500ChattyF180B="AuthenTec AES3500-BZ TruePrint Sensor"
+AES3500ChattyF90B="AuthenTec AES3500-BZ TruePrint  Sensor"
+GoldFingerII_00="Synaptics AES3400 Sensor"
+GoldFingerII_90="Synaptics AES3400 Sensor"
+GoldFingerII_180="Synaptics AES3400  Sensor"
+GoldFingerII_270="Synaptics AES3400  Sensor"
+Indian_00="AuthenTec AES3400 TruePrint Sensor"
+Indian_90="AuthenTec AES3400 TruePrint Sensor"
+Indian_180="AuthenTec AES3400  TruePrint Sensor"
+Indian_270="AuthenTec AES3400  TruePrint  Sensor"
+SYN3455REFBoard="Synaptics Touchpad/FPS"
+AES3500mkey="Hi-Speed USB Flash Disk with AuthenTec TruePrint AES3500"
+AES3400mkey="Hi-Speed USB Flash Disk with AuthenTec TruePrint AES3400"
+SONYBioMV="SONY Fingerprint Sensor 3500"
+BSI100Pod2="Bloomberg Secure Access Technology Device"
+BSI100Pod3="Bloomberg Secure Access Technology Device"
+AESEMULATORBoard="AuthenTec Touch Sensor (Emulator)"
+ATTchDrv.SvcDesc="AuthenTec TruePrint USB Driver for AES 3400, 3500, and 4000 Fingerprint Sensors"
+Disk1Name="Fingerprint Device CD-ROM"
+ClassName = "Personal identification devices"
+DriverVersionInfo="7.10.0.2"

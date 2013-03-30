@@ -1,0 +1,73 @@
+; Installation inf for the PAP003B
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%TACOMA%
+DriverVer=09/23/2002,1.0.0.2
+
+[SourceDisksNames]
+1="USB Camera Installation Disk",,,
+
+[SourceDisksFiles]
+PAPUSB.sys = 1
+PAPUSB.inf = 1
+
+[Manufacturer]
+%MfgName%=TACOMA
+
+[TACOMA]
+%USB\VID_093A&PID_0007.DeviceDesc%=PAPUSB.Dev, USB\VID_093A&PID_0007
+
+;[PreCopySection]
+;HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+PAPUSB.Files.Ext = 10,System32\Drivers
+PAPUSB.Files.Inf = 10,INF
+
+[PAPUSB.Dev]
+CopyFiles=PAPUSB.Files.Ext, PAPUSB.Files.Inf
+AddReg=PAPUSB.AddReg
+
+[PAPUSB.Dev.NT]
+CopyFiles=PAPUSB.Files.Ext, PAPUSB.Files.Inf
+AddReg=PAPUSB.AddReg
+
+[PAPUSB.Dev.NT.Services]
+Addservice = PAPUSB, 0x00000002, PAPUSB.AddService
+
+[PAPUSB.AddService]
+DisplayName    = %PAPUSB.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\PAPUSB.sys
+LoadOrderGroup = SERVICE_DEMAND_START	;Base
+
+[PAPUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,PAPUSB.sys
+HKLM,"System\Currentcontrolset\Services\PAPUsb\Parameters","MaximumTransferSize",0x10001,64448
+HKLM,"System\Currentcontrolset\Services\PAPUsb\Parameters","DebugLevel",0x10001,2
+HKLM,"System\Currentcontrolset\Services\PAPUsb\Parameters","AlternateSetting",0x10001,6
+HKLM,"System\Currentcontrolset\Services\PAPUsb\Parameters","IsoFlag",0x10001,0
+
+
+[PAPUSB.Files.Ext]
+PAPUSB.sys
+
+[PAPUSB.Files.Inf]
+PAPUsb.Inf
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+TACOMA="TACOMA"
+MfgName="TACOMA"
+USB\VID_093A&PID_0007.DeviceDesc="TACOMA CMOS Fingerprint Reader"
+PAPUSB.SvcDesc="TACOMA CMOS Driver for (Windows 98/ME/2000/XP)"
+

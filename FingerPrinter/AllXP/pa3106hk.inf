@@ -1,0 +1,120 @@
+;
+; pa3106hk.inf (Windows 98, Windows ME, Windows 2000, Windwos XP)
+;
+
+[Version]
+DriverVer=02/26/2008,1.9.0.13
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+signature="$CHICAGO$"
+
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+
+Provider=%str_Provider%
+
+[SourceDisksNames]
+2 = "Finger Printer Solution Installation Disk",,,
+
+[SourceDisksFiles]
+pa3106hk.sys =2
+
+[Manufacturer]
+%str_Manufacturer%=sec_Company
+
+[DestinationDirs]
+DefaultDestDir=11
+PA.USBDCam.CopyDrivers=10,system32\drivers
+;;PA.USBDCam.CopyVFWUI=11
+;;PA.USBDCam.CopyDsUI=11
+;;PA.USBDCam.CopyTwainDS  = 10,twain_32\pa3106hk
+
+[sec_Company]
+%DeviceDesc%=PA.USBDCam,USB\VID_093a&PID_0017
+
+[PA.USBDCam]
+Include=    ks.inf,kscaptur.inf,ksfilter.inf   ;;,PA3106de.inf
+Needs=      KS.Registration,KSCAPTUR.Registration,MSPCLOCK.Installation   ;;,DSHOWEXT.Registration
+AddReg=     PA.USBDCam.AddReg,PA.USBDCam.AddReg.DefaultValue
+CopyFiles=  PA.USBDCam.CopyDrivers   ;;,PA.USBDCam.CopyVFWUI,PA.USBDCam.CopyDsUI,PA.USBDCam.CopyTwainDS
+
+[PA.USBDCam.NTx86]
+Include=    ks.inf,kscaptur.inf,ksfilter.inf  ;;,PA3106de.inf
+Needs=      KS.Registration,KSCAPTUR.Registration.NT,MSPCLOCK.Installation  ;;,DSHOWEXT.Registration
+AddReg=     PA.USBDCam.AddReg,PA.USBDCam.AddReg.DefaultValue
+CopyFiles=  PA.USBDCam.CopyDrivers  ;;,PA.USBDCam.CopyVFWUI,PA.USBDCam.CopyDsUI,PA.USBDCam.CopyTwainDS
+
+[PA.USBDCam.AddReg.DefaultValue]
+HKLM,"Software%SettingRegistryPath%",Gamma		,	0x00010001,    11
+HKLM,"Software%SettingRegistryPath%",Brightness		,	0x00010001,    50
+HKLM,"Software%SettingRegistryPath%",Contrast		,	0x00010001,    10
+HKLM,"Software%SettingRegistryPath%",Hue		,	0x00010001,    0
+HKLM,"Software%SettingRegistryPath%",Saturation		,	0x00010001,    16
+HKLM,"Software%SettingRegistryPath%",Sharpness		,	0x00010001,    4
+HKLM,"Software%SettingRegistryPath%",AWBEnable		,	0x00010001,    1
+HKLM,"Software%SettingRegistryPath%",RGain		,	0x00010001,    1000
+HKLM,"Software%SettingRegistryPath%",BGain		,	0x00010001,    1000
+HKLM,"Software%SettingRegistryPath%",UpDownInverse	,	0x00010001,    0
+HKLM,"Software%SettingRegistryPath%",LeftRightInverse	,	0x00010001,    0
+HKLM,"Software%SettingRegistryPath%",AcFreq		,	0x00010001,    60
+HKLM,"Software%SettingRegistryPath%",Exposure		,	0x00010001,    110
+HKLM,"Software%SettingRegistryPath%",LightSource	,	0x00010001,    0
+
+[PA.USBDCam.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,pa3106hk.sys
+HKR,,PageOutWhenUnopened,3,00
+HKR,,PowerDownWhenUnopened,3,00
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+
+[PA.USBDCam.CopyDrivers]
+pa3106hk.sys
+
+[PA.USBDCam.CopyVFWUI]
+;pa3106ve.dll
+
+[PA.USBDCam.CopyDsUI]
+;PA3106de.ax
+
+[PA.USBDCam.CopyTwainDS]
+;PA3106TN.DS
+
+[PA.USBDCam.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,PA.USBDCam.Interface
+
+[PA.USBDCam.NTx86.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,PA.USBDCam.Interface
+
+[PA.USBDCam.Interface]
+AddReg=PA.USBDCam.Intf.AddReg
+         
+[PA.USBDCam.Intf.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%DeviceDesc%
+;;HKR,,ExtensionDLL,,%PA3106HK.ExtensionDLL%
+
+[PA.USBDCam.NTx86.Services]
+AddService = %str_Service%,0x00000002,PA.USBDCam.ServiceInstall
+
+[PA.USBDCam.ServiceInstall]
+DisplayName   = %DeviceDesc%
+ServiceType   = %SERVICE_KERNEL_DRIVER%
+StartType     = %SERVICE_DEMAND_START%
+ErrorControl  = %SERVICE_ERROR_NORMAL%
+ServiceBinary = %12%\pa3106hk.sys
+
+[Strings]
+ProxyVCap.CLSID="{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+KSCATEGORY_CAPTURE="{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+SERVICE_KERNEL_DRIVER=1
+; PnP should use demand start
+SERVICE_DEMAND_START=3
+SERVICE_ERROR_NORMAL=1
+
+;----------------
+; for OEM , please change following string 
+;----------------
+str_Provider="Finger Printer Solution"
+str_Manufacturer="Finger Printer Solution"
+DeviceDesc = "Finger Printer Solution"
+str_Service="Finger Printer Solution"
+SettingRegistryPath = "\PA3106HK\UISETTINGS"

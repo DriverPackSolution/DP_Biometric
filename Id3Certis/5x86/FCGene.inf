@@ -1,0 +1,77 @@
+; Atmel-Grenoble
+; Driver for the Genesys FingerChip
+; FCGene.inf
+
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$Windows 95$"
+Provider=%ProviderName%
+
+Class = Image
+ClassGuid = {6bdd1fc6-810f-11d0-bec7-08002be2092f} 
+
+
+;--------- DestinationDirs Section -------------------------------------------
+
+[DestinationDirs]
+FCGenesysDriver_Files_Driver = 10,System32\Drivers
+
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Atmel
+
+[Atmel]
+%DeviceDesc%=FCGenesysDriver_DDI, USB\VID_047B&PID_1000
+%DeviceDesc%=FCGenesysDriver_DDI, USB\VID_05E3&PID_0100
+
+;---------- DDInstall Sections -----------------------------------------------
+; --------- Windows 9X -----------------
+
+[FCGenesysDriver_DDI]
+;CopyFiles=FCGenesysDriver_Files_Driver
+AddReg=FCGenesysDriver_9X_AddReg
+
+[FCGenesysDriver_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FCGene.sys
+HKR, "Parameters", "BreakOnEntry", 0x00010001, 0
+
+; --------- Windows NT -----------------
+
+[FCGenesysDriver_DDI.NT]
+;CopyFiles=FCGenesysDriver_Files_Driver
+AddReg=FCGenesysDriver_NT_AddReg
+
+[FCGenesysDriver_DDI.NT.Services]
+Addservice = FCGenesysDriver, 0x00000002, FCGenesysDriver_AddService
+
+[FCGenesysDriver_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\FCGene.sys
+
+[FCGenesysDriver_NT_AddReg]
+HKLM, "System\CurrentControlSet\Services\FCGenesysDriver\Parameters",\
+	"BreakOnEntry", 0x00010001, 0
+
+
+; --------- Files (common) -------------
+
+[FCGenesysDriver_Files_Driver]
+FCGene.sys
+
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="Atmel"
+MfgName="Atmel"
+DeviceDesc="FingerChip with Genesys driver"
+DeviceClassName="GenesysDriverDevice"
+SvcDesc="FC service"

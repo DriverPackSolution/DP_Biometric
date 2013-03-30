@@ -1,0 +1,139 @@
+;------------------------------------------------------------------------------
+; DFR2080.INF - DFR2080 FDU02/FDU01 Device Installation .inf for 32-bit Windows
+; Copyright (c) 2010 L-1 Identity Solutions
+
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf  
+Signature="$WINDOWS NT$"
+Provider=%L1-ID%
+Class=%BiometricClassName%
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+DriverVer=11/02/2005,2.0.0.8
+
+[ClassInstall32]
+Addreg=BiometricClassReg
+
+[BiometricClassReg]
+HKR,,,0,%BiometricClassName%
+HKR,,Icon,,-24
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1 = %DISK1%,,,
+
+[SourceDisksFiles]
+VenusDrv.sys=1,,
+Venus.dll=1,,
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+FPUSB.Files.Ext = 10,System32\Drivers
+FPUSB.Files.Dll = 11			; 9x - System Dir, NT - System32 Dir
+
+[ControlFlags]
+;ExcludeFromSelect=*             ; removes all device here from the device installer list
+
+[Manufacturer]
+%L1-ID%=Models
+
+[Models]
+;-----------------------------------------------------
+; FDU02, L-1 Identity Solutions USB Fingerprint device
+;-----------------------------------------------------
+%USB\VID_0D85&PID_0005.DeviceDesc%=FPUSB, USB\VID_0D85&PID_0005
+
+
+;-----------------------------------------------------
+; FDU01, L-1 Identity Solutions USB Fingerprint device
+;-----------------------------------------------------
+%USB\VID_0d85&PID_0003.DeviceDesc%=FPUSB, USB\VID_0d85&PID_0003
+
+
+; L-1 Identity Solutions DFR2080 Fingerprint Device Isochronous Mode
+%USB\VID_0A86&PID_0100.DeviceDesc%=FPUSB, USB\VID_0A86&PID_0100
+
+; L-1 Identity Solutions DFR2080 Fingerprint Device Bulk Mode
+%USB\VID_1162&PID_0100.DeviceDesc%=FPUSB, USB\VID_1162&PID_0100
+
+
+
+; =================== FDU02 USB FRD Driver ===================
+;---------------
+; For Win98...
+;---------------
+[FPUSBHid]
+Include=hiddev.inf
+Needs=USBHIDDevice
+
+[FPUSBComposite]
+Include=usb.inf
+Needs=composite.dev
+
+[FPUSB]
+CopyFiles=FPUSB.Files.Ext, FPUSB.Files.Dll
+AddReg=FPUSB.AddReg
+
+[FPUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,VenusDrv.sys
+
+[FPUSB.Files.Ext]
+VenusDrv.sys
+
+[FPUSB.Files.Dll]
+Venus.dll
+
+
+;-------------------
+; For Windows NT...
+;-------------------
+; HID
+[FPUSBHid.NT]
+Include=input.inf
+Needs=HID_Inst.NT
+
+[FPUSBHid.NT.Services]
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+; composite
+[FPUSBComposite.NT]
+Include=usb.inf
+Needs= Composite.Dev.NT
+
+[FPUSBComposite.NT.Services]
+Include=usb.inf
+Needs=Composite.Dev.NT.Services
+
+; FRD
+[FPUSB.NT]
+CopyFiles=FPUSB.Files.Ext, FPUSB.Files.Dll
+
+[FPUSB.NT.Services]
+Addservice = FPUSB, 0x00000002, FPUSB_AddService_Inst 
+
+[FPUSB_AddService_Inst]
+DisplayName    = %FPUSB.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\VenusDrv.sys
+
+
+
+[Strings]
+L1-ID="L-1 Identity Solutions"
+DISK1="FRC"
+FPUSB.SvcDesc="DFR-2080 Device Driver"
+BiometricClassName="Biometric"
+
+;L1-ID
+USB\VID_0d85&PID_0003.DeviceDesc="L-1 Identity Solutions DFR2080 FDU01 USB"
+USB\VID_0D85&PID_0005.DeviceDesc="L-1 Identity Solutions DFR2080 FDU02 USB"
+
+;SecuGen IDs
+USB\VID_0A86&PID_0100.DeviceDesc="L-1 Identity Solutions DFR2080 FDU01 USB Isoch Mode"
+USB\VID_1162&PID_0100.DeviceDesc="L-1 Identity Solutions DFR2080 FDU01 USB Bulk Mode"

@@ -1,0 +1,67 @@
+; (c) Copyright 2009 by UnionCommunity Co., Ltd,
+
+[Version]
+Signature="$Windows NT$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%MSFT%
+Catalogfile=FOH02SB.cat
+DriverVer=03/27/2009,2.0.0.2  ;mm/dd/yy 
+
+[SourceDisksNames]
+1=%INSTDISK%,,,
+
+[SourceDisksFiles]
+FOH02SB.sys = 1
+
+[Manufacturer]
+%MfgName%=Union, NTx86, NTia64, NTamd64 
+
+[Union]
+%USB\VID_1866&PID_A017.DeviceDesc%=FOH02SB.Dev,USB\VID_1866&PID_A017
+
+[Union.NTx86]
+%USB\VID_1866&PID_A017.DeviceDesc%=FOH02SB.Dev,USB\VID_1866&PID_A017
+
+[Union.NTia64]
+%USB\VID_1866&PID_A017.DeviceDesc%=FOH02SB.Dev,USB\VID_1866&PID_A017
+
+[Union.NTamd64]
+%USB\VID_1866&PID_A017.DeviceDesc%=FOH02SB.Dev,USB\VID_1866&PID_A017  
+
+[DestinationDirs]
+FOH02SB.Files.Ext= 10,System32\Drivers
+
+[FOH02SB.Files.Ext]
+FOH02SB.sys
+
+[FOH02SB.Dev.NT]
+CopyFiles=FOH02SB.Files.Ext
+AddReg=FOH02SB.Dev.AddReg
+
+[FOH02SB.Dev.NT.Services]
+Addservice = FOH02SB, 2, FOH02SB.AddService
+
+[FOH02SB.AddService]
+DisplayName    = %FOH02SB.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\FOH02SB.sys
+AddReg         = FOH02SB.Dev.AddReg
+LoadOrderGroup = Base
+
+[FOH02SB.Dev.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FOH02SB.sys
+HKLM,System\Currentcontrolset\Services\FOH02SB\Parameters,"MaximumTransferSize",0x10001,262144
+HKLM,System\Currentcontrolset\Services\FOH02SB\Parameters,"DebugLevel",0x10001,2
+HKLM,System\Currentcontrolset\Services\FOH02SB\Parameters,"FOH02SBEnable",0x10001,1
+
+;---------------------------------------------------------------;
+[Strings]
+MSFT="unioncommunity"			
+MfgName="hamster driver"	
+USB\VID_1866&PID_A017.DeviceDesc="FOH02SB USB DRIVER V1.0"
+FOH02SB.SvcDesc="FOH02SB USB DRIVER V1.0"
+INSTDISK="Hamster Installation Disk"

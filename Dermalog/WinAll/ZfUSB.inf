@@ -1,0 +1,77 @@
+; ZfUSB.inf
+;
+; Copyright (c) DERMALOG Identification Systems GmbH.
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=Biometric
+ClassGUID={53D29EF7-377C-4D14-864B-EB3A85769359}
+CatalogFile=ZfUSB.cat
+LayoutFile=Layout.inf
+Provider=%ZfUSB.Provider%
+DriverVer=08/08/2006, 2.0.0.1
+
+[Manufacturer]
+%ZfUSB.Manufacturer%=ZfUSB
+
+[ClassInstall32]
+AddReg=ZfUSB.AddClassReg
+
+[ZfUSB]
+%ZfUSB.DeviceDesc%=ZfUSB.INSTALL, USB\VID_1491&PID_9860
+
+[SourceDisksNames]
+1=%ZfUSB.DriverDiskName%,InstDisk,0
+
+[SourceDisksFiles]
+ZfUSB.sys=1
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+ZfUSB.CopyFiles = 10,system32\drivers ; WINDOWS\SYSTEM32\DRIVERS
+
+[ZfUSB.INSTALL]
+CopyFiles=ZfUSB.CopyFiles
+AddReg=ZfUSB.AddRegLoader
+AddReg=ZfUSB.AddReg
+
+[ZfUSB.AddClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-21
+
+[ZfUSB.AddRegLoader]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,ZfUSB.sys
+
+[ZfUSB.AddReg]
+HKR,Parameters,MaxTransferSize,0x00010001,1000
+HKR,Parameters,Timeout,0x00010001,1F4
+
+[ZfUSB.INSTALL.NT]
+CopyFiles=ZfUSB.CopyFiles
+
+[ZfUSB.INSTALL.NT.Services]
+AddService = ZfUSB,0x00000002,ZfUSB_Service_Inst
+
+[ZfUSB_Service_Inst]
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ZfUSB.sys
+DisplayName     = %ZfUSB.DeviceDesc%
+
+[ZfUSB.CopyFiles]
+ZfUSB.sys
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Strings]
+ZfUSB.Provider="DERMALOG Identification Systems GmbH."
+ZfUSB.Manufacturer="DERMALOG Identification Systems GmbH."
+ZfUSB.DeviceDesc="DERMALOG Fingerprint Scanner ZF 1"
+ClassName="Personal identification devices"
+ZfUSB.DriverDiskName="DERMALOG Drivers Installation Disk (Fingerprint Scanner)"

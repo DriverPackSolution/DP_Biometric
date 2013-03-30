@@ -1,0 +1,106 @@
+;----------------------------------------------------------------------------
+; DFR500.INF -- Dfr500 Device .inf for Win 2K, XP, Server2003 - Vista (32bit)
+; Copyright (c) 2008 L-1 Identity Solutions
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=%BiometricClassName%
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%L1-ID%
+DriverVer=07/16/2008,2.0.0.0
+CatalogFile=dfr500.cat
+DriverPackageDisplayName = %DriverPackageDescription%		; for DIFx use
+
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=Biometric_ClassAddReg     
+
+[Biometric_ClassAddReg]
+HKR,,,0,%BiometricClassName%
+HKR,,Icon,,-24
+
+[DestinationDirs]
+DefaultDestDir = 12   ; 12 = %windir%\system32\drivers
+
+; ================= Device section =====================
+
+[Manufacturer]
+%Mfg%=Models,NTx86
+
+; For Win2K
+[Models]
+%DFR500.DeviceDesc%=Dfr500.Dev, USB\VID_0D85&PID_0007
+
+; For XP and later
+[Models.NTx86]
+%DFR500.DeviceDesc%=Dfr500.Dev, USB\VID_0D85&PID_0007
+
+
+[Dfr500.Dev.NT]
+CopyFiles=Dfr500.Files.Ext
+
+[Dfr500.Dev.NT.Services]
+Addservice = DFR500, 0x00000002, Dfr500.AddService
+
+[Dfr500.AddService]
+DisplayName    = %Dfr500.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\dfr500.sys
+AddReg         = Dfr500.AddReg
+LoadOrderGroup = Base
+
+[Dfr500.AddReg]
+HKR,"Parameters","MaximumTransferSize",0x10001,65536
+HKR,"Parameters","DebugLevel",0x10001,2
+HKR, Parameters\Wdf, VerboseOn,       0x00010001, 1
+HKR, Parameters\Wdf, VerifierOn,      0x00010001, 1
+HKR, Parameters\Wdf, DbgBreakOnError, 0x00010001, 1
+
+[Dfr500.Files.Ext]
+dfr500.sys
+
+[SourceDisksNames]
+1=%DriverDiskName%,,,
+
+[SourceDisksFiles]
+dfr500.sys = 1
+
+;-------------- WDF Coinstaller installation
+[DestinationDirs]
+CoInstaller_CopyFiles = 11
+
+[Dfr500.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01007.dll
+
+[SourceDisksFiles]
+WdfCoInstaller01007.dll=1 ; make sure the number matches with SourceDisksNames
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01007.dll,WdfCoInstaller"
+
+[Dfr500.Dev.NT.Wdf]
+KmdfService = DFR500, Dfr500_wdfsect
+
+[Dfr500_wdfsect]
+KmdfLibraryVersion = 1.7
+
+;---------------------------------------------------------------;
+
+[Strings]
+L1-ID                    = "L-1 Identity Solutions"
+Mfg                      = "L-1 Identity Solutions"
+DriverPackageDescription = "DFR-500 USB Device Driver"
+DriverDiskName           = "FRC"
+Dfr500.SvcDesc           = "DFR-500 USB Fingerprint Reader"
+BiometricClassName       = "Biometric"
+DFR500.DeviceDesc        = "DFR-500 USB Fingerprint Reader"
+
+

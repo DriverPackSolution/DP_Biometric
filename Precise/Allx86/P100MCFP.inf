@@ -1,0 +1,91 @@
+; P100MCFP.INF
+;
+;
+; INF file for Windows 2000/XP
+;
+;  Copyright © Precise Biometrics, 2003
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGuid={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%Mfg%
+CatalogFile=p100mcfp.cat
+DriverVer=09/02/2003,01.13.00.01
+
+[ControlFlags]
+ExcludeFromSelect = BIOMETRIC\PRECISE_100_MC
+
+[Manufacturer]
+%Mfg% = Models
+
+[ClassInstall32]
+AddReg=AddClassReg
+
+[Models]
+%CCID_FP% = CCID_FP, BIOMETRIC\PRECISE_100_MC
+
+
+[SourceDisksNames]
+1 = %Floppy_Description%,,,""
+
+[SourceDisksFiles]
+p100mcfp.sys=1
+
+[DestinationDirs]
+DefaultDestDir=10,system32\drivers
+CCID_FP.NTCopyFiles = 10,system32\drivers 
+
+
+[AddClassReg]
+HKR,,,0,%ClassName%
+HKR,,NoInstallClass,,1
+HKR,,Installer32,,"winscard.dll,ClassInstall32"
+
+[CCID_FP.NTCopyFiles]
+p100mcfp.sys
+
+[CCID_FP.AddReg.NT]
+HKR,,ShortProviderName,0,%ShortProviderName%
+HKR,,ReaderName,0,%CCID_FP%
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+[CCID_FP.NT]
+CopyFiles= CCID_FP.NTCopyFiles
+AddReg= CCID_FP.AddReg.NT
+
+[CCID_FP.NT.Services]
+AddService = %ServiceName%,0x00000002,CCID_FP_Service_Inst,CCID_FP_EventLog_Inst
+
+[CCID_FP_Service_Inst]
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\p100mcfp.sys
+DisplayName     = %CCID_FP%
+AddReg= CCID_FP.AddReg.NT
+
+[CCID_FP_EventLog_Inst]
+AddReg=CCID_FP.AddEventLogReg
+
+[CCID_FP.AddEventLogReg]
+HKR,,EventMessageFile,0x00020000,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\p100mcfp.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+[Strings]
+Mfg = "Precise Biometrics"
+ShortProviderName = "Precise"
+Floppy_Description = ""
+CCID_FP="Precise 100 MC"
+ServiceName="P100MCFP"
+ClassName="USB"

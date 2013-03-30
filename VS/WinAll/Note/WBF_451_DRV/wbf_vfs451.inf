@@ -1,0 +1,161 @@
+; Copyright (C) 2006-2010 Validity Sensors, Inc, All Rights Reserved.
+; wbf_vfs451.inf - Install the Validity Fingerprint Sensor USB user-mode driver
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%VFSUMDF%
+DriverVer=09/06/2012,4.4.234.00
+CatalogFile=wbf_vfs451.cat
+
+; ========== Manufacturer/Models sections ===========
+[Manufacturer]
+%VFSUMDF%=Validity,NTx86,NTamd64
+
+[Validity.NTx86]
+%VfsUsbDeviceName451%=Biometric_Install, USB\VID_138A&PID_0007
+
+[Validity.NTamd64]
+%VfsUsbDeviceName451%=Biometric_Install, USB\VID_138A&PID_0007
+
+; =================== Installation ===================
+; from Lofofest WLK test result, should remove it
+;[ClassInstall32]
+;AddReg=BiometricClass_RegistryAdd
+;
+;[BiometricClass_RegistryAdd]
+;HKR,,,,%ClassName%
+;HKR,,Icon,,"-201"
+;HKR,,IconPath,0x00010000,"%SYSTEMROOT%\system32\SysClass.dll,-201"
+
+; ================= Source Media Section =====================
+[SourceDisksNames]
+1 = %DISK_NAME%,,,\x86
+2 = %DISK_NAME%,,,\X64
+
+[SourceDisksFiles.x86]
+wbf_vfs451.dll=1
+vcsAPIFORWBF.dll=1
+; TODO: redist binaries not available in M3.  Uncomment for final release
+;WudfUpdate_$UMDFCOINSTALLERVERSION$.dll=1
+
+[SourceDisksFiles.amd64]
+wbf_vfs451.dll=2
+vcsAPIFORWBF.dll=2
+; TODO: redist binaries not available in M3.  Uncomment for final release
+;WudfUpdate_$UMDFCOINSTALLERVERSION$.dll=1
+
+; =================== UMDF wbvfs Device - WBDI IOCTL interface ==================================
+
+[Biometric_Install.NT]
+CopyFiles=UMDriverCopy
+CopyFiles=VCSAPIForWbfCopy
+Include=WINUSB.INF                      ; Import sections from WINUSB.INF
+Needs=WINUSB.NT                         ; Run the CopyFiles & AddReg directives for WinUsb.INF
+
+[Biometric_Install.NT.hw]
+AddReg=Biometric_Device_AddReg
+AddReg=DriverPlugInAddReg
+
+[Biometric_Install.NT.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+[Biometric_Install.NT.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+UmdfDispatcher=WinUsb
+UmdfService=wbf_vfs451, wbf_vfs_Install
+UmdfServiceOrder=wbf_vfs451
+
+[Biometric_Install.NT.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[WinUsb_Install]
+KmdfLibraryVersion = 1.9
+
+[wbf_vfs_Install]
+UmdfLibraryVersion=1.9.0
+DriverCLSID = "{AE99B43C-06A7-4edc-9980-A648BAAB6285}"  ; must unique for this driver
+ServiceBinary = %12%\UMDF\wbf_vfs451.dll
+
+[Biometric_Device_AddReg]
+HKR,,"DeviceCharacteristics",0x10001,0x0100     ; Use same security checks on relative opens
+HKR,,"Security",,"D:P(A;;GA;;;BA)(A;;GA;;;SY)"  ; Allow generic-all access to Built-in administrators and Local system
+HKR,,"LowerFilters",0x00010008,"WinUsb" ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
+HKR,,"Exclusive",0x10001,1
+HKR,,"SystemWakeEnabled",0x00010001,0
+HKR,,"DeviceIdleEnabled",0x00010001,1
+HKR,,"UserSetDeviceIdleEnabled",0x00010001,1
+HKR,,"DefaultIdleState",0x00010001,1
+HKR,,"DefaultIdleTimeout",0x00010001,5000
+
+[DriverPlugInAddReg]
+HKR,WinBio\Configurations,DefaultConfiguration,,"0"
+HKR,WinBio\Configurations\0,SensorMode,0x10001,1                                ; Basic - 1, Advanced - 2
+HKR,WinBio\Configurations\0,SystemSensor,0x10001,1                              ; UAC/Winlogon - 1
+HKR,WinBio\Configurations\0,SensorAdapterBinary,,"WinBioSensorAdapter.DLL"      ; Windows built-in WBDI sensor adapter.
+HKR,WinBio\Configurations\0,EngineAdapterBinary,,"vcsWBFEngineAdapter.DLL"          ; Vendor engine
+HKR,WinBio\Configurations\0,StorageAdapterBinary,,"winbioStorageAdapter.DLL"    ; Windows built-in storage adapter
+HKR,WinBio\Configurations\0,DatabaseId,,"1000F3B5-9412-490e-97BA-4AA5A1A171AE"  ; must have Validity specific GUID for DB
+
+[DatabaseAddReg]
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},BiometricType,0x00010001,0x00000008
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},Attributes,0x00010001,0x00000001
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},Format,,"00000000-0000-0000-0000-000000000000"
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},InitialSize,0x00010001,0x00000020
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},AutoCreate,0x00010001,0x00000001
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},AutoName,0x00010001,0x00000001
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},FilePath,,""
+HKLM, System\CurrentControlSet\Services\WbioSrvc\Databases\{1000F3B5-9412-490e-97BA-4AA5A1A171AE},ConnectionString,,""
+
+[WUDFRD_ServiceInstall]
+DisplayName = %WudfRdDisplayName%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\WUDFRd.sys
+LoadOrderGroup = Base
+AddReg=DatabaseAddReg
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WudfCoinstaller.dll"
+; TODO: redist binaries not available in M3.  Uncomment for final release
+;HKR,,CoInstallers32,0x00010000,"WudfUpdate_$UMDFCOINSTALLERVERSION$.dll"
+;HKR,,CoInstallers32,0x00010000,"WudfCoinstaller.dll"
+
+[CoInstallers_CopyFiles]
+; TODO: redist binaries not available in M3.  Uncomment for final release
+;WudfUpdate_$UMDFCOINSTALLERVERSION$.dll
+
+[DestinationDirs]
+UMDriverCopy=12,UMDF ; copy to driversMdf
+; TODO: redist binaries not available in M3.  Uncomment for final release
+;CoInstallers_CopyFiles=11
+VCSAPIForWbfCopy=11
+
+[UMDriverCopy]
+wbf_vfs451.dll
+
+[VCSAPIForWbfCopy]
+vcsAPIFORWBF.dll
+
+; =================== Generic ==================================
+
+[Strings]
+VFSUMDF="Validity Sensors, Inc."
+MediaDescription="Validity Sensor Driver Installation Media"
+ClassName="Biometric Devices"
+WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"
+VfsUsbDeviceName451="Validity Sensors (WBF) VFS451" 
+WinUsb_SvcDesc="WinUSB Driver"
+DISK_NAME="Validity WinBio Driver Install Disk"

@@ -1,0 +1,411 @@
+; ----------------------------------------------------------
+; Installation inf for Fx2000/Fx3000/HiScan and Multi-USB
+; 
+; Copyright (C) 2000-2009 BiometriKa
+; ----------------------------------------------------------
+
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=BioKFxUsbDevices
+ClassGuid={5BC0EDB4-9B6A-4536-A971-BAFBFDBB27F6}
+Provider=%BIOK%
+DriverVer=07/18/2012,233.233.201.0
+CatalogFile=Biometrika.cat
+
+
+; ================= Class section =====================
+
+[ClassInstall]
+CopyFiles=BiokClass16.Files
+AddReg=ClassAddReg98
+
+[ClassInstall32] 
+CopyFiles=BiokClass.Files
+AddReg=ClassAddReg
+
+[ClassAddReg]
+HKR,,,,%BiokClassName%
+HKR,,Installer32,,"BkClInst.dll,BiokClassInstaller"
+HKR,,Icon,,"101"
+HKR,,NoInstallClass,,1
+
+[ClassAddReg98]
+HKR,,,,%BiokClassName%
+HKR,,Installer,,"BkClIn16.dll"
+HKR,,Icon,,"0"
+HKR,,NoInstallClass,,1
+
+; ================= Device section =====================
+
+[Manufacturer]
+%MfgName%=Biometrika
+
+[Biometrika]
+%FxUsb.DeviceDesc%=FxUsb.Dev, USB\VID_0C43&PID_0500
+%FxOEM2.DeviceDesc%=FxOEM2.Dev, USB\VID_0C43&PID_0510
+%Fx2000.DeviceDesc%=Fx2000.Dev, USB\VID_0C43&PID_0200
+%Fx3000.DeviceDesc%=Fx3000.Dev, USB\VID_0C43&PID_0300
+%HiScan.DeviceDesc%=HiScan.Dev, USB\VID_0C43&PID_0400
+%Fx2kU01.DeviceDesc%=Fx2kU01.Dev, USB\VID_0C43&PID_0201
+
+
+; --------------------- Common - start -----------------------
+
+[FxCommon.Files.Cpl]
+BkClInst.dll
+fxoemdll.dll
+FxOemITA.dll
+FxOemENU.dll
+FxOemUsb.cpl
+SecBank.dll
+CheckPortUSB.dll
+
+[Twain.Files.Drv]
+twBiometrika.ds
+
+; --------------------- Common - end -------------------------
+
+
+;-------------------------- FxUsb ------------------------------
+
+[FxUsb.Dev]
+CopyFiles=FxUsb.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=FxUsb.AddReg
+
+[FxUsb.Dev.NT]
+CopyFiles=FxUsb.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=FxUsb.AddReg
+
+[FxUsb.Dev.NT.Services]
+Addservice = FxUsbDrv, 0x00000002, FxUsb.AddService
+
+[FxUsb.AddService]
+DisplayName    = %FxUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\FxUsb.sys
+AddReg         = FxUsb.AddReg
+LoadOrderGroup = Base
+
+[FxUsb.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FxUsb.sys
+HKLM,Software\BiometriKa,"DRIVER4",0x00000001,"1"
+HKLM,Software\BiometriKa,"DRIVER2",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER1",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER0",0x00000004,"1"
+HKLM,Software\BiometriKa,"FXOEM_BLOB",1,78,EE,92,63,16,BD,4C,CF,6A,19,C9,71,06,37,F1,B6,E3,5F,06,51,40,80,6D,6F,8D,91,F4,37,1A,30,C5,82,F7,8C,00,08,37,83,F4,8E,27,51,75,1E,FC,D5,90,FA,3E,F9,36,56,0D,9A,F1,3A,FE,BD,FD,4C,D7,FF,18,EE,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,38,AF,B8,C2,78,15,FA,DC,62,73,F3,20,AB,43,09,9C
+HKLM,SYSTEM\CurrentControlSet\Control\SafeBoot\Minimal\{5bc0edb4-9b6a-4536-a971-bafbfdbb27f6},,,"Driver"
+
+[FxUsb.Files.Drv]
+FxUsb.sys
+
+;---------------------------------------------------------------;
+
+;-------------------------- FxOEM2 ------------------------------
+
+[FxOEM2.Dev]
+CopyFiles=FxOEM2.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=FxOEM2.AddReg
+
+[FxOEM2.Dev.NT]
+CopyFiles=FxOEM2.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=FxOEM2.AddReg
+
+[FxOEM2.Dev.NT.Services]
+Addservice = FxOEM2Drv, 0x00000002, FxOEM2.AddService
+
+[FxOEM2.AddService]
+DisplayName    = %FxOEM2.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\FxOEM2.sys
+AddReg         = FxOEM2.AddReg
+LoadOrderGroup = Base
+
+[FxOEM2.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FxOEM2.sys
+HKLM,Software\BiometriKa,"DRIVER4",0x00000001,"1"
+HKLM,Software\BiometriKa,"DRIVER2",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER1",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER0",0x00000004,"1"
+HKLM,Software\BiometriKa,"FXOEM_BLOB",1,78,EE,92,63,16,BD,4C,CF,6A,19,C9,71,06,37,F1,B6,E3,5F,06,51,40,80,6D,6F,8D,91,F4,37,1A,30,C5,82,F7,8C,00,08,37,83,F4,8E,27,51,75,1E,FC,D5,90,FA,3E,F9,36,56,0D,9A,F1,3A,FE,BD,FD,4C,D7,FF,18,EE,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,38,AF,B8,C2,78,15,FA,DC,62,73,F3,20,AB,43,09,9C
+HKLM,SYSTEM\CurrentControlSet\Control\SafeBoot\Minimal\{5bc0edb4-9b6a-4536-a971-bafbfdbb27f6},,,"Driver"
+
+[FxOEM2.Files.Drv]
+FxOEM2.sys
+
+;---------------------------------------------------------------;
+
+; --------------------- Fx2000 - start -----------------------
+
+[Fx2000.Dev]
+CopyFiles=Fx2000.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=Fx2000.AddReg
+
+[Fx2000.Dev.NT]
+CopyFiles=Fx2000.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=Fx2000.AddReg
+
+[Fx2000.Dev.NT.Services]
+Addservice = FxUsbDrv2k, 0x00000002, Fx2000.AddService
+
+[Fx2000.AddService]
+DisplayName    = %Fx2000.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\Fx2kU.sys
+AddReg         = Fx2000.AddReg
+LoadOrderGroup = Base
+
+[Fx2000.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,Fx2kU.sys
+HKLM,Software\BiometriKa,"DRIVER4",0x00000001,"1"
+HKLM,Software\BiometriKa,"DRIVER2",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER1",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER0",0x00000004,"1"
+HKLM,Software\BiometriKa,"FXOEM_BLOB",1,78,EE,92,63,16,BD,4C,CF,6A,19,C9,71,06,37,F1,B6,E3,5F,06,51,40,80,6D,6F,8D,91,F4,37,1A,30,C5,82,F7,8C,00,08,37,83,F4,8E,27,51,75,1E,FC,D5,90,FA,3E,F9,36,56,0D,9A,F1,3A,FE,BD,FD,4C,D7,FF,18,EE,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,38,AF,B8,C2,78,15,FA,DC,62,73,F3,20,AB,43,09,9C
+HKLM,SYSTEM\CurrentControlSet\Control\SafeBoot\Minimal\{5bc0edb4-9b6a-4536-a971-bafbfdbb27f6},,,"Driver"
+
+[Fx2000.Files.Drv]
+Fx2kU.sys
+
+; --------------------- Fx2000 - end -------------------------
+
+; --------------------- Fx3000 - start -----------------------
+
+[Fx3000.Dev]
+CopyFiles=Fx3000.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=Fx3000.AddReg
+
+[Fx3000.Dev.NT]
+CopyFiles=Fx3000.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=Fx3000.AddReg
+
+[Fx3000.Dev.NT.Services]
+Addservice = FxUsbDrv3k, 0x00000002, Fx3000.AddService
+
+[Fx3000.AddService]
+DisplayName    = %Fx3000.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\Fx3kU.sys
+AddReg         = Fx3000.AddReg
+LoadOrderGroup = Base
+
+[Fx3000.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,Fx3kU.sys
+HKLM,Software\BiometriKa,"DRIVER4",0x00000001,"1"
+HKLM,Software\BiometriKa,"DRIVER2",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER1",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER0",0x00000004,"1"
+HKLM,Software\BiometriKa,"FXOEM_BLOB",1,78,EE,92,63,16,BD,4C,CF,6A,19,C9,71,06,37,F1,B6,E3,5F,06,51,40,80,6D,6F,8D,91,F4,37,1A,30,C5,82,F7,8C,00,08,37,83,F4,8E,27,51,75,1E,FC,D5,90,FA,3E,F9,36,56,0D,9A,F1,3A,FE,BD,FD,4C,D7,FF,18,EE,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,38,AF,B8,C2,78,15,FA,DC,62,73,F3,20,AB,43,09,9C
+HKLM,SYSTEM\CurrentControlSet\Control\SafeBoot\Minimal\{5bc0edb4-9b6a-4536-a971-bafbfdbb27f6},,,"Driver"
+
+[Fx3000.Files.Drv]
+Fx3kU.sys
+
+; --------------------- Fx3000 - end -------------------------
+
+; --------------------- HiScan - start -----------------------
+
+[HiScan.Dev]
+CopyFiles=HiScan.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=HiScan.AddReg
+
+[HiScan.Dev.NT]
+CopyFiles=HiScan.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=HiScan.AddReg
+
+[HiScan.Dev.NT.Services]
+Addservice = HiScanDrv, 0x00000002, HiScan.AddService
+
+[HiScan.AddService]
+DisplayName    = %HiScan.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\HiScan.sys
+AddReg         = HiScan.AddReg
+LoadOrderGroup = Base
+
+[HiScan.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,HiScan.sys
+HKLM,Software\BiometriKa,"DRIVER4",0x00000001,"1"
+HKLM,Software\BiometriKa,"DRIVER2",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER1",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER0",0x00000004,"1"
+HKLM,Software\BiometriKa,"FXOEM_BLOB",1,78,EE,92,63,16,BD,4C,CF,6A,19,C9,71,06,37,F1,B6,E3,5F,06,51,40,80,6D,6F,8D,91,F4,37,1A,30,C5,82,F7,8C,00,08,37,83,F4,8E,27,51,75,1E,FC,D5,90,FA,3E,F9,36,56,0D,9A,F1,3A,FE,BD,FD,4C,D7,FF,18,EE,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,38,AF,B8,C2,78,15,FA,DC,62,73,F3,20,AB,43,09,9C
+HKLM,SYSTEM\CurrentControlSet\Control\SafeBoot\Minimal\{5bc0edb4-9b6a-4536-a971-bafbfdbb27f6},,,"Driver"
+
+[HiScan.Files.Drv]
+HiScan.sys
+
+; --------------------- HiScan - end -------------------------
+
+; --------------------- Fx2kU01 - start -----------------------
+
+[Fx2kU01.Dev]
+CopyFiles=Fx2kU01.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=Fx2kU01.AddReg
+
+[Fx2kU01.Dev.NT]
+CopyFiles=Fx2kU01.Files.Drv, FxCommon.Files.Cpl, Twain.Files.Drv
+AddReg=Fx2kU01.AddReg
+
+[Fx2kU01.Dev.NT.Services]
+Addservice = Fx2kU01, 0x00000002, Fx2kU01.AddService
+
+[Fx2kU01.AddService]
+DisplayName    = %Fx2kU01.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\Fx2kU01.sys
+AddReg         = Fx2kU01.AddReg
+LoadOrderGroup = Base
+
+[Fx2kU01.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,Fx2kU01.sys
+HKLM,Software\BiometriKa,"DRIVER4",0x00000001,"1"
+HKLM,Software\BiometriKa,"DRIVER2",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER1",0x00000004,"1"
+HKLM,Software\BiometriKa,"DRIVER0",0x00000004,"1"
+HKLM,Software\BiometriKa,"FXOEM_BLOB",1,78,EE,92,63,16,BD,4C,CF,6A,19,C9,71,06,37,F1,B6,E3,5F,06,51,40,80,6D,6F,8D,91,F4,37,1A,30,C5,82,F7,8C,00,08,37,83,F4,8E,27,51,75,1E,FC,D5,90,FA,3E,F9,36,56,0D,9A,F1,3A,FE,BD,FD,4C,D7,FF,18,EE,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,C7,7E,4A,62,78,09,8D,89,C0,42,AE,76,A5,73,D8,6A,38,AF,B8,C2,78,15,FA,DC,62,73,F3,20,AB,43,09,9C
+HKLM,SYSTEM\CurrentControlSet\Control\SafeBoot\Minimal\{5bc0edb4-9b6a-4536-a971-bafbfdbb27f6},,,"Driver"
+
+[Fx2kU01.Files.Drv]
+Fx2kU01.sys
+
+; --------------------- Fx2kU01 - end -------------------------
+
+
+[SourceDisksNames]
+1=%SourceDiskName.DeviceDesc%,,,
+
+[SourceDisksFiles]
+FxUsb.sys = 1,,
+FxOEM2.sys = 1,,
+Fx2kU.sys = 1,,
+Fx3kU.sys = 1,,
+HiScan.sys = 1,,
+Fx2kU01.sys = 1,,
+fxoemdll.dll = 1,,
+FxOemITA.dll = 1,,
+FxOemENU.dll = 1,,
+FxOemUsb.cpl = 1,,
+BkClInst.dll = 1,,
+BkClIn16.dll = 1,,
+twBiometrika.ds = 1,,
+SecBank.dll = 1,,
+CheckPortUSB.dll = 1,,
+;FxCoInst.dll = 1,,
+
+[DestinationDirs]
+FxCommon.Files.Cpl = 11
+FxUsb.Files.Drv = 10,System32\Drivers
+FxOEM2.Files.Drv = 10,System32\Drivers
+Fx2000.Files.Drv = 10,System32\Drivers
+Fx3000.Files.Drv = 10,System32\Drivers
+HiScan.Files.Drv = 10,System32\Drivers
+Fx2kU01.Files.Drv = 10,System32\Drivers
+Twain.Files.Drv = 10,twain_32
+BiokClass.Files = 11
+BiokClass16.Files = 11
+
+[BiokClass.Files]
+BkClInst.dll
+
+[BiokClass16.Files]
+BkClIn16.dll
+
+;-------------- WDF Coinstaller installation
+[DestinationDirs]
+CoInstaller_CopyFiles = 11
+
+[FxUsb.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[FxOEM2.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[Fx2000.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[Fx3000.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[HiScan.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[Fx2kU01.Dev.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01009.dll
+;FxCoInst.dll
+
+[SourceDisksFiles]
+WdfCoInstaller01009.dll=1 ; make sure the number matches with SourceDisksNames
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01009.dll,WdfCoInstaller"
+;HKR,,CoInstallers32,0x00010000, "FxCoInst.dll, FxCoInstallerEntryPoint"
+
+[FxUsb.Dev.NT.Wdf]
+KmdfService = FxUsbDrv, FxUsb_wdfsect
+
+[FxOEM2.Dev.NT.Wdf]
+KmdfService = FxOEM2Drv, FxUsb_wdfsect
+
+[Fx2000.Dev.NT.Wdf]
+KmdfService = FxUsbDrv2k, FxUsb_wdfsect
+
+[Fx3000.Dev.NT.Wdf]
+KmdfService = FxUsbDrv3k, FxUsb_wdfsect
+
+[HiScan.Dev.NT.Wdf]
+KmdfService = HiScanDrv, FxUsb_wdfsect
+
+[Fx2kU01.Dev.NT.Wdf]
+KmdfService = Fx2kU01, FxUsb_wdfsect
+
+[FxUsb_wdfsect]
+KmdfLibraryVersion = 1.0
+
+;---------------------------------------------------------------;
+
+[Strings]
+BIOK            = "Biometrika"
+MfgName			= "Biometrika"
+BiokClassName="Biometrika Devices"
+SourceDiskName.DeviceDesc="Biometrika Drivers Installation Disk"
+FxUsb.DeviceDesc="Biometrika device"
+FxOEM2.DeviceDesc="Biometrika device"
+Fx2000.DeviceDesc="Fx2000"
+Fx3000.DeviceDesc="Fx3000"
+HiScan.DeviceDesc="HiScan"
+Fx2kU01.DeviceDesc="Fx2000_01"
+FxUsb.SvcDesc="Biometrika FxUsb driver"
+FxOEM2.SvcDesc="Biometrika FxOEM2 driver"
+Fx2000.SvcDesc="Biometrika Fx2000 Driver"
+Fx3000.SvcDesc="Biometrika Fx3000 Driver"
+HiScan.SvcDesc="Biometrika HiScan Driver"
+Fx2kU01.SvcDesc="Biometrika Fx2000_01 Driver"
+

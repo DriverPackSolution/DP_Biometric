@@ -1,0 +1,87 @@
+; LS1394_Livescanner.inf
+;
+; Installation file (.inf) for FireWire Live Scanner Devices.
+;
+; (c) Copyright 2004-2008 Cross Match Technologies
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=LiveScanner
+ClassGuid={8F8A1534-FD69-4b8d-B61A-6326E743D773} 
+Provider=%Prov%                  ; wird im Strings Bereich definiert
+;DriverVer=month/day/year,1.13.0.0
+DriverVer=08/14/2008,1.14.0.0
+CatalogFile=LS1394.cat
+
+[DestinationDirs]
+defaultdestdir=      11            ; \system32
+LS1394_CopyDriverNT= 12            ; \system32\drivers
+
+; =================== Class Sections ===========================
+[ClassInstall32.nt]
+Addreg=ClassReg
+
+[ClassReg]
+HKR,,,,%ClassName%
+HKR,,Icon,,-21
+
+; =================== Table of content =========================
+[Manufacturer]
+%Mfg%=LS.Mfg
+
+; =================== CMT ======================================
+[LS.Mfg]
+%LS.DeviceDesc0% = LS1394, 1394\HBS&LSCAN1000P, 1394\CrossMatch&1394LiveScanner
+%LS.DeviceDesc1% = LS1394, 1394\HBS&LSCAN1000T, 1394\CrossMatch&1394LiveScanner
+%LS.DeviceDesc2% = LS1394, 1394\HBS&LSCAN500C, 1394\CrossMatch&1394LiveScanner
+%LS.DeviceDesc3% = LS1394, 1394\HBS&LSCAN500P, 1394\CrossMatch&1394LiveScanner
+
+;==================Win 2000======================
+[LS1394.NT]
+AddReg    = LS1394_AddReg
+CopyFiles = LS1394_CopyDriverNT
+
+[LS1394_CopyDriverNT]
+LS1394.sys,,,2
+
+[LS1394.NT.Services]
+AddService=1394HBS,2,LS1394_ServiceInstall
+
+[LS1394_ServiceInstall]
+DisplayName="LS1394"
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\LS1394.sys
+
+
+;================================================
+[LS1394_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,LS1394.sys	
+
+[Strings]
+Prov="Cross Match Technologies GmbH"
+ClassName="LiveScanner"
+
+Mfg="Cross Match Technologies GmbH"
+
+LS.DeviceDesc0 = "L SCAN 1000P"
+LS.DeviceDesc1 = "L SCAN 1000T"
+LS.DeviceDesc2 = "L SCAN GUARDIAN"
+LS.DeviceDesc3 = "L SCAN 500P"
+
+DriverDisk1= "Cross Match Installation Disk #1 (1394)"
+
+; =================== Source file information ========================
+[SourceDisksNames.x86]
+1 = %DriverDisk1%,,,
+
+[SourceDisksFiles]
+; Files for disk Cross Match Installation Disk #1 (1394)
+LS1394.sys 	 = 1,,
+
+[SourceDisksFiles.x86]
+; Files for disk Cross Match Installation Disk #1 (1394)
+LS1394.sys 	 = 1

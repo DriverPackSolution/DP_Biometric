@@ -1,0 +1,107 @@
+;   IZZIX.inf
+;
+;	DIGENT USB Device Driver for IZZIX FM1000 and IZZIX FD1000
+;
+;	      (c) Copyright 2000-2004 DIGENT Co., Ltd.
+;
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36fc9e60-c465-11cf-8056-444553540000}
+Provider=%Provider%
+DriverVer=04/21/2004,01.00.10.00
+CatalogFile=IZZIX.cat
+
+;--------- DestinationDirs Section -------------------------------------------
+
+[DestinationDirs]
+DefaultDestDir = 10
+IZZIX_Files_Driver.NTx86 = 12
+IZZIX_Files_Driver = 10,system32\drivers
+
+;--------- SourceDiskNames and SourceDiskFiles Section -----------------------
+; These sections identify source disks and files for installation.
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+IZZIX.98_  = 1,,
+IZZIX.xp_  = 1,,
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName% = IZZIX_Mfg
+
+[IZZIX_Mfg]
+; DisplayName               Section           DeviceId
+%FD1000_DeviceDesc%=IZZIX_FD_DDI, USB\VID_1053&PID_0100		; IZZIX FD1000
+%FM1000_DeviceDesc%=IZZIX_FM_DDI, USB\VID_1053&PID_0120&MI_01	; IZZIX FM1000
+
+;---------- DDInstall Sections -----------------------------------------------
+
+; --------- Windows 98 -----------------
+
+[IZZIX_FD_DDI]
+CopyFiles=IZZIX_Files_Driver
+AddReg=IZZIX_FD_9X_AddReg
+
+[IZZIX_FD_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,IZZIX.sys
+HKR,,FD1000_Description,,%FD1000_DeviceDesc%
+
+[IZZIX_FM_DDI]
+CopyFiles=IZZIX_Files_Driver
+AddReg=IZZIX_FM_9X_AddReg
+
+[IZZIX_FM_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,IZZIX.sys
+HKR,,FM1000_Description,,%FM1000_DeviceDesc%
+
+; --------- Windows NT -----------------
+
+[IZZIX_FD_DDI.NTx86]
+CopyFiles=IZZIX_Files_Driver.NTx86
+
+[IZZIX_FD_DDI.NTx86.Services]
+Addservice = IZZIX, 0x00000002, IZZIX_Service.NTx86	; 0x00000002 = %FLG_ADDREG_NOCLOBBER%
+
+[IZZIX_FM_DDI.NTx86]
+CopyFiles=IZZIX_Files_Driver.NTx86
+
+[IZZIX_FM_DDI.NTx86.Services]
+Addservice = IZZIX, 0x00000002, IZZIX_Service.NTx86	; 0x00000002 = %FLG_ADDREG_NOCLOBBER%
+
+; --------- Service ----------------------
+
+[IZZIX_Service.NTx86]
+DisplayName    = %IZZIX_SvcDesc%
+ServiceType    = 0x00000001				; %SERVICE_KERNEL_DRIVER%
+StartType      = 0x3					; %SERVICE_DEMAND_START%
+ErrorControl   = 0x00000001				; %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %10%\System32\Drivers\IZZIX.sys
+LoadOrderGroup = Extended Base
+
+; --------- Files ----------------------
+
+[IZZIX_Files_Driver]
+IZZIX.sys,IZZIX.98_,,2						; %COPYFLG_NOSKIP%
+
+[IZZIX_Files_Driver.NTx86]
+IZZIX.sys,IZZIX.xp_,,2						; %COPYFLG_NOSKIP%
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+Provider = "DIGENT"
+MfgName = "DIGENT Co., Ltd."
+FD1000_DeviceDesc = "IZZIX FD1000"
+FM1000_DeviceDesc = "IZZIX FM1000"
+IZZIX_SvcDesc = "Driver for IZZIX Device"
+DiskId1 = "DIGENT IZZIX"

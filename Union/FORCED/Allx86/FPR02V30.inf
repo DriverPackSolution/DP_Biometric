@@ -1,0 +1,69 @@
+; (c) Copyright 2008 by UnionCommunity Co., Ltd,
+
+[Version]
+Signature="$Windows NT$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%MSFT%
+Catalogfile=FPR02V30.cat
+DriverVer=05/06/2009,2.0.0.1  ;mm/dd/yy 
+
+[SourceDisksNames]
+1=%INSTDISK%,,,
+
+[SourceDisksFiles]
+FPR02V30.sys = 1
+
+[Manufacturer]
+%MfgName%=Union, NTx86, NTia64, NTamd64 
+
+[Union]
+%USB\VID_1866&PID_A011.DeviceDesc%=FPR02V30.Dev,USB\VID_1866&PID_A011  ; FPR02V30
+
+[Union.NTx86]
+%USB\VID_1866&PID_A011.DeviceDesc%=FPR02V30.Dev,USB\VID_1866&PID_A011
+
+[Union.NTia64]
+%USB\VID_1866&PID_A011.DeviceDesc%=FPR02V30.Dev,USB\VID_1866&PID_A011
+
+
+[Union.NTamd64]
+%USB\VID_1866&PID_A011.DeviceDesc%=FPR02V30.Dev,USB\VID_1866&PID_A011
+
+
+[DestinationDirs]
+FPR02V30.Files.Ext= 10,System32\Drivers
+
+[FPR02V30.Files.Ext]
+FPR02V30.sys
+
+[FPR02V30.Dev.NT]
+CopyFiles=FPR02V30.Files.Ext
+AddReg=FPR02V30.Dev.AddReg
+
+[FPR02V30.Dev.NT.Services]
+Addservice = FPR02V30, 2, FPR02V30.AddService
+
+[FPR02V30.AddService]
+DisplayName    = %FPR02V30.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\FPR02V30.sys
+AddReg         = FPR02V30.Dev.AddReg
+LoadOrderGroup = Base
+
+[FPR02V30.Dev.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FPR02V30.sys
+HKLM,System\Currentcontrolset\Services\FPR02V30\Parameters,"MaximumTransferSize",0x10001,65536
+HKLM,System\Currentcontrolset\Services\FPR02V30\Parameters,"DebugLevel",0x10001,2
+HKLM,System\Currentcontrolset\Services\FPR02V30\Parameters,"FPR02V30Enable",0x10001,1
+
+;---------------------------------------------------------------;
+[Strings]
+MSFT="unioncommunity"			
+MfgName="hamster driver"
+USB\VID_1866&PID_A011.DeviceDesc="FPR02V30 USB DRIVER V1.0"
+FPR02V30.SvcDesc="FPR02V30 USB DRIVER V1.0"
+INSTDISK="Hamster Installation Disk"

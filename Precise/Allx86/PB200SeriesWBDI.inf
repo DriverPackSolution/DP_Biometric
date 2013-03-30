@@ -1,0 +1,109 @@
+;
+; Precise 200/250 MC Biometric Driver supporting WBDI.
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%PBAB%
+CatalogFile.NTx86=PB200SeriesWBDINTx86.cat
+CatalogFile.NTamd64=PB200SeriesWBDINTamd64.cat
+DriverVer=12/13/2011,1.1.1.0
+
+[Manufacturer]
+%PBAB%=BioDriver,NTAMD64
+%PBAB%=PreciseBiometricsModels,NTx86,NTamd64
+
+
+[PreciseBiometricsModels.NTx86]
+%PB250BiometricReaderName%=Biometric_Install.NT, BiometricDevice\P250MC
+%PB200BiometricReaderName%=Biometric_Install.NT, BiometricDevice\P200MC
+
+[PreciseBiometricsModels.NTamd64]
+%PB250BiometricReaderName%=Biometric_Install.NT, BiometricDevice\P250MC
+%PB200BiometricReaderName%=Biometric_Install.NT, BiometricDevice\P200MC
+
+[ClassInstall32]
+AddReg=BiometricClass_RegistryAdd
+
+[BiometricClass_RegistryAdd]
+HKR,,,,%ClassName%
+HKR,,Icon,,"-201"
+HKR,,IconPath,0x00010000,"%SYSTEMROOT%\system32\SysClass.dll,-201"
+
+[SourceDisksFiles]
+PB200SeriesWBDI.dll=1
+WudfUpdate_01009.dll=1
+
+[SourceDisksNames]
+1 = %MediaDescription%
+
+; =================== Precise UMDF Biometric Device - WBDI IOCTL interface ==================================
+
+[Biometric_Install.NT]
+CopyFiles=UMDriverCopy
+AddProperty=Device_Properties
+
+[Biometric_Install.NT.hw]
+AddReg=Biometric_Device_AddReg, DriverPlugInAddReg
+
+[Device_Properties]
+DeviceIcon,,,,"%SYSTEMROOT%\system32\SysClass.dll,-201" ; This is where a device specific icon can be specified.
+
+[Biometric_Install.NT.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+
+[Biometric_Install.NT.Wdf]
+UmdfService=PB200SeriesWBDI, PB200SeriesWBDI_Install
+UmdfServiceOrder=PB200SeriesWBDI
+
+[Biometric_Install.NT.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[PB200SeriesWBDI_Install]
+UmdfLibraryVersion=1.9.0
+; DriverCLSID corresponds to a value set in the dllsup.c file. They must match
+DriverCLSID = "{F1CB3A34-A916-47DD-BEA1-D5D4563BC6AE}"
+ServiceBinary = %12%\UMDF\PB200SeriesWBDI.dll
+
+[Biometric_Device_AddReg]
+HKR,,"Exclusive",0x10001,1
+
+[DriverPlugInAddReg]
+HKR,WinBio\Configurations,DefaultConfiguration,,"0"
+HKR,WinBio\Configurations\0,Dummy,0x10001,1
+
+[WUDFRD_ServiceInstall]
+DisplayName = %WudfRdDisplayName%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\WUDFRd.sys
+LoadOrderGroup = Base
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WudfUpdate_01009.dll"
+
+[CoInstallers_CopyFiles]
+WudfUpdate_01009.dll
+
+[DestinationDirs]
+UMDriverCopy=12,UMDF ; copy to \Windows\System32\drivers\UMDF
+CoInstallers_CopyFiles=11
+
+[UMDriverCopy]
+PB200SeriesWBDI.dll
+
+; =================== Generic ==================================
+
+[Strings]
+PBAB="Precise Biometrics"
+MediaDescription="Precise Biometrics Installer Package"
+ClassName="Biometric Devices"
+WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"
+PB200SeriesWBDIDisplayName="Precise 200-Series Biometric Device Service"
+PB250BiometricReaderName="Precise 250 MC Fingerprint Reader"
+PB200BiometricReaderName="Precise 200 MC Fingerprint Reader"
+

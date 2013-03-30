@@ -1,0 +1,166 @@
+;
+; Installation file (.inf) for the SecuGen FDU02 and FDU01 USB fingerprint devices.
+;
+; (c) Copyright 2004 SecuGen Corp. 
+;
+
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf  
+Signature="$Chicago$"                            ;win9x, winnt
+Provider=%SecuGen%
+Class=%BiometricClassName%
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+DriverVer=03/29/2004,2.0.0.6
+CatalogFile.NT=fdu02.cat
+
+[ClassInstall32]
+Addreg=BiometricClassReg
+
+[BiometricClassReg]
+HKR,,,0,%BiometricClassName%
+HKR,,Icon,,-20
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1 = %DISK1%,,,
+
+[SourceDisksFiles]
+VenusDrv.sys=1,,
+Venus.dll=1,,
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+FPUSB.Files.Ext = 10,System32\Drivers
+FPUSB.Files.Dll = 11			; 9x - System Dir, NT - System32 Dir
+
+[ControlFlags]
+;ExcludeFromSelect=*             ; removes all device here from the device installer list
+
+[Manufacturer]
+%SecuGen%=SecuGen
+
+[SecuGen]
+;------------------------------------------------
+; FDU02A, SecuGen USB Fingerprint device, 2002.12
+;------------------------------------------------
+%USB\VID_1162&PID_0300.DeviceDesc%=FPUSB, USB\VID_1162&PID_0300
+
+;------------------------------------------------
+; FDU02B, SecuGen USB Fingerprint Device with USB Mouse, FDU02B, 2003.4
+;------------------------------------------------
+;%USB\VID_1162&PID_0200.DeviceDesc%=FPUSBComposite, USB\VID_1162&PID_0200, USB\COMPOSITE
+%USB\VID_1162&PID_0200&MI_00.DeviceDesc%=FPUSB, USB\VID_1162&PID_0200&MI_00
+;%USB\VID_1162&PID_0200&MI_01.DeviceDesc%=FPUSBHid, USB\VID_1162&PID_0200&MI_01, USB\Class_03
+
+;------------------------------------------------
+; FDU01A, SecuGen USB Fingerprint Device
+;------------------------------------------------
+%USB\VID_0A86&PID_0100.DeviceDesc%=FPUSB, USB\VID_0A86&PID_0100
+
+;------------------------------------------------
+; FDU01B, SecuGen USB Fingerprint Device with USB Mouse
+;------------------------------------------------
+;%USB\VID_0A86&PID_0200.DeviceDesc%=FPUSBComposite, USB\VID_0A86&PID_0200, USB\COMPOSITE
+%USB\VID_0A86&PID_0200&MI_00.DeviceDesc%=FPUSB, USB\VID_0A86&PID_0200&MI_00
+;%USB\VID_0A86&PID_0200&MI_01.DeviceDesc%=FPUSBHid, USB\VID_0A86&PID_0200&MI_01, USB\Class_03
+
+
+;------------------------------------------------
+; FDU01A Bulk, SecuGen USB Fingerprint Device, 2002.12
+;------------------------------------------------
+%USB\VID_1162&PID_0100.DeviceDesc%=FPUSB, USB\VID_1162&PID_0100
+
+
+
+; =================== FDU02 USB FRD Driver ===================
+;---------------
+; For Win98...
+;---------------
+[FPUSBHid]
+Include=hiddev.inf
+Needs=USBHIDDevice
+
+[FPUSBComposite]
+Include=usb.inf
+Needs=composite.dev
+
+[FPUSB]
+CopyFiles=FPUSB.Files.Ext, FPUSB.Files.Dll
+AddReg=FPUSB.AddReg
+
+[FPUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,VenusDrv.sys
+
+[FPUSB.Files.Ext]
+VenusDrv.sys
+
+[FPUSB.Files.Dll]
+Venus.dll
+
+
+;-------------------
+; For Windows NT...
+;-------------------
+; HID
+[FPUSBHid.NT]
+Include=input.inf
+Needs=HID_Inst.NT
+
+[FPUSBHid.NT.Services]
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+; composite
+[FPUSBComposite.NT]
+Include=usb.inf
+Needs= Composite.Dev.NT
+
+[FPUSBComposite.NT.Services]
+Include=usb.inf
+Needs=Composite.Dev.NT.Services
+
+; FRD
+[FPUSB.NT]
+CopyFiles=FPUSB.Files.Ext, FPUSB.Files.Dll
+
+[FPUSB.NT.Services]
+Addservice = FPUSB, 0x00000002, FPUSB_AddService_Inst 
+
+[FPUSB_AddService_Inst]
+DisplayName    = %FPUSB.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\VenusDrv.sys
+
+[Strings]
+SecuGen="SecuGen Corporation"
+DISK1="SecuGen Installation Disk"
+FPUSB.SvcDesc="SecuGen USB FRD Service"
+;BiometricClassName="Personal identification devices"
+BiometricClassName="Biometric"
+
+;FDU02A, 2002.12
+USB\VID_1162&PID_0300.DeviceDesc="SecuGen FDU02A USB FRD"
+
+;FDU02B, 2003.4
+USB\VID_1162&PID_0200&MI_00.DeviceDesc="SecuGen FDU02B USB FRD"
+USB\VID_1162&PID_0200&MI_01.DeviceDesc="SecuGen FDU02B USB FRD HID"
+USB\VID_1162&PID_0200.DeviceDesc="SecuGen FDU02B USB FRD Composite"
+
+;FDU01A
+USB\VID_0A86&PID_0100.DeviceDesc="SecuGen FDU01A USB FRD"
+
+;FDU01B
+USB\VID_0A86&PID_0200&MI_00.DeviceDesc="SecuGen FDU01B USB FRD"
+USB\VID_0A86&PID_0200&MI_01.DeviceDesc="SecuGen FDU01B USB FRD HID"
+USB\VID_0A86&PID_0200.DeviceDesc="SecuGen FDU01B USB FRD Composite"
+
+;FDU01A  Bulk, 2002.12
+USB\VID_1162&PID_0100.DeviceDesc="SecuGen FDU01A USB Bulk Mode FRD"
+
+

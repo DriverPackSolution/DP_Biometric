@@ -1,0 +1,226 @@
+;/*++
+;
+;Copyright (c) AuthenTec, Inc 2005, 2006, 2007.  All rights reserved.
+;
+;Module Name:
+;
+;    ATSwpDrv.inf
+;
+;Description:
+;
+;    Driver INF file for installing Authentec Swipe sensor external
+;    releaseed Windows USB drivers on x86 or x64 platforms.
+;
+;    NOTE: Currently not supporting IA64 platforms.
+;
+;--*/
+[Version]
+Signature="$WINDOWS NT$"
+Class=Biometric
+ClassGUID={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%AuthentecInc%
+DriverVer=04/17/2008,7.10.1.0
+CatalogFile.NTx86   = AtswpDrv.cat
+CatalogFile.NTamd64 = AtswpDrvAMD64.cat
+
+
+; ================= Class section =====================
+
+[ClassInstall32.NT]
+Addreg=BiometricClassReg
+
+[BiometricClassReg]
+HKR,,,,%ClassName%
+HKR,,NoInstallClass,,1
+HKR,,Icon,,-30
+
+; ================= Device Install section =====================
+
+
+;
+; Manufacturer section
+;  This consists of [Manufacturer][Models] with the
+;	supported OS platform decorations
+;
+;
+[Manufacturer]
+%AuthentecInc%=AuthentecModels,NTx86,NTamd64
+
+;-----------------------------------------------------------------
+; Models for Win2K, x86 based machines
+;
+;These are the VID/PIDs reserved for AuthenTec reference boards.
+;
+[AuthentecModels]
+%AES1600REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_1600
+%AES2500REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2500
+%AES2501REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2501
+%AES2502REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2502
+%AES2503REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2503
+%AES2504REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2504
+%AES2505REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2505
+%AES2506REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2506
+%AES2507REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2507
+%AES2508REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2508
+%AES2509REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2509
+%AES250AREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250A
+%AES250BREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250B
+%AES250CREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250C
+%AES250DREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250D
+%AES250EREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250E
+%AES250FREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250F
+%AES2580REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2580
+%AES2588REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2588
+%AES2589REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2589
+%AES258AREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258A
+%AES258BREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258B
+%AES258CREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258C
+%AES258DREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258D
+%AES258EREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258E
+%AES258FREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258F
+
+;-----------------------------------------------------------------
+; Models for XP or later, x86 based machines
+;
+[AuthentecModels.NTx86]
+%AES1600REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_1600
+%AES2500REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2500
+%AES2501REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2501
+%AES2502REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2502
+%AES2503REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2503
+%AES2504REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2504
+%AES2505REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2505
+%AES2506REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2506
+%AES2507REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2507
+%AES2508REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2508
+%AES2509REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2509
+%AES250AREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250A
+%AES250BREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250B
+%AES250CREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250C
+%AES250DREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250D
+%AES250EREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250E
+%AES250FREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250F
+%AES2580REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2580
+%AES2588REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2588
+%AES2589REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2589
+%AES258AREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258A
+%AES258BREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258B
+%AES258CREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258C
+%AES258DREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258D
+%AES258EREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258E
+%AES258FREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258F
+
+;-----------------------------------------------------------------
+; Models for AMD64 (or Intel EM64T) based machines
+;
+[AuthentecModels.NTamd64]
+%AES1600REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_1600
+%AES2500REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2500
+%AES2501REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2501
+%AES2502REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2502
+%AES2503REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2503
+%AES2504REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2504
+%AES2505REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2505
+%AES2506REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2506
+%AES2507REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2507
+%AES2508REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2508
+%AES2509REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2509
+%AES250AREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250A
+%AES250BREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250B
+%AES250CREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250C
+%AES250DREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250D
+%AES250EREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250E
+%AES250FREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_250F
+%AES2580REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2580
+%AES2588REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2588
+%AES2589REFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_2589
+%AES258AREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258A
+%AES258BREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258B
+%AES258CREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258C
+%AES258DREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258D
+%AES258EREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258E
+%AES258FREFBoard%=ATSwpDrv_Inst, USB\VID_08FF&PID_258F
+
+
+; ================= File Copy section =====================
+
+
+[ATSwpDrv_Inst]
+CopyFiles=ATSwpDrvCopy
+
+[ATSwpDrvCopy]
+atswpdrv.sys
+
+; "12" is expanded by the installer to be
+;  %SystemRoot%\System32\Drivers
+[DestinationDirs]
+DefaultDestDir = 12
+
+[SourceDisksFiles]
+ATSwpDrv.sys=1
+
+[SourceDisksNames.x86]
+1=%Disk1Name%,,,\i386
+
+[SourceDisksNames.amd64]
+1=%Disk1Name%,,,\amd64
+
+
+; ================= Service Installation section =====================
+
+[ATSwpDrv_Inst.Services]
+Addservice = ATSWPDRV, 0x00000002, ATSwpDrvAddService, ATSwpDrv_EventLog_Install
+
+[ATSwpDrvAddService]
+DisplayName    = %ATSwpDrv.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\ATSwpDrv.sys
+AddReg         = ATSwpDrv_AddReg
+
+
+[ATSwpDrv_EventLog_Install]
+AddReg = ATSwpDrv_EventLog_AddReg
+
+[ATSwpDrv_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\ATSwpDrv.sys"
+HKR,,TypesSupported,0x00010001,7
+
+[ATSwpDrv_AddReg]
+HKR,,"DriverVersion",0,%DriverVersionInfo%
+
+; ================= Strings section =====================
+
+[Strings]
+AuthentecInc="AuthenTec, Inc."
+AES1600REFBoard=" AuthenTec Inc. AES1610"
+AES2500REFBoard=" AuthenTec Inc. AES2501"
+AES2501REFBoard=" AuthenTec Inc. AES2501"
+AES2502REFBoard=" AuthenTec Inc. AES2501"
+AES2503REFBoard=" AuthenTec Inc. AES2501"
+AES2504REFBoard=" AuthenTec Inc. AES2501"
+AES2505REFBoard=" AuthenTec Inc. AES2501"
+AES2506REFBoard=" AuthenTec Inc. AES2501"
+AES2507REFBoard=" AuthenTec Inc. AES2501"
+AES2508REFBoard=" AuthenTec Inc. AES2501"
+AES2509REFBoard=" AuthenTec Inc. AES2501"
+AES250AREFBoard=" AuthenTec Inc. AES2501"
+AES250BREFBoard=" AuthenTec Inc. AES2501"
+AES250CREFBoard=" AuthenTec Inc. AES2501"
+AES250DREFBoard=" AuthenTec Inc. AES2501"
+AES250EREFBoard=" AuthenTec Inc. AES2501"
+AES250FREFBoard=" AuthenTec Inc. AES2501"
+AES2580REFBoard=" AuthenTec Inc. AES2501A"
+AES2588REFBoard=" AuthenTec Inc. AES2501A"
+AES2589REFBoard=" AuthenTec Inc. AES2501A"
+AES258AREFBoard=" AuthenTec Inc. AES2501A"
+AES258BREFBoard=" AuthenTec Inc. AES2501A"
+AES258CREFBoard=" AuthenTec Inc. AES2501A"
+AES258DREFBoard=" AuthenTec Inc. AES2501A"
+AES258EREFBoard=" AuthenTec Inc. AES2501A"
+AES258FREFBoard=" AuthenTec Inc. AES2501A"
+ATSwpDrv.SvcDesc="AuthenTec TruePrint USB Driver (SwipeSensor)"
+Disk1Name="Fingerprint Device CD-ROM"
+ClassName = "Personal identification devices"
+DriverVersionInfo="7.10.1.0"

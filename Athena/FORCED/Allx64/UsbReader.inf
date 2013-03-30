@@ -1,0 +1,225 @@
+;/*++
+;
+;Copyright (c) Athena Smart Card Ltd.
+;
+;Module Name:
+;
+;    UsbReader.INF
+;
+;--*/
+[Version]
+Signature=$CHICAGO$
+CatalogFile=UsbReader.cat
+Class=USB
+ClassGuid={36fc9e60-c465-11cf-8056-444553540000} 
+Provider=%MFGNAME%
+DriverVer=10/27/2009,1.5.0.0
+
+[ControlFlags]
+; Prevent legacy install for PnP readers
+ExcludeFromSelect=USB\VID_0DC3&PID_1701,USB\VID_0DC3&PID_1702
+ExcludeFromSelect.nt=USB\VID_0DC3&PID_1701,USB\VID_0DC3&PID_1702
+ExcludeFromSelect.ntx86=USB\VID_0DC3&PID_1701,USB\VID_0DC3&PID_1702
+ExcludeFromSelect.ntamd64=USB\VID_0DC3&PID_1701,USB\VID_0DC3&PID_1702
+ExcludeFromSelect.ntia64=USB\VID_0DC3&PID_1701,USB\VID_0DC3&PID_1702
+
+
+[Manufacturer]
+%MFGNAME%=DeviceList,ntamd64,ntia64
+
+[DestinationDirs]
+AMDDriverCopyFiles = 10,System32\Drivers
+IADriverCopyFiles = 10,System32\Drivers
+DriverCopyFiles = 10,System32\Drivers
+CoInstallerCopyFiles_nt = 11 ; System Dir( system32 on NT )
+CoInstallerCopyFiles_amd64 = 11 ; System Dir( system32 on NT )
+CoInstallerCopyFiles_ia64 = 11 ; System Dir( system32 on NT )
+
+[SourceDisksFiles]
+ASEKey.sys=1
+VirtSCR.inf=1
+ASEKey.sys=1
+ASEKeyOptions.exe=1
+ASEKeyOptions.exe.manifest=1
+ASEVirtual.cpl=1
+ASEKeyInst.dll=1
+VirtSCR.txt=1
+
+[SourceDisksNames]
+1=%INSTDISK%,,,
+
+[DeviceList]
+%DESCRIPTION%=DriverInstall, USB\VID_0DC3&PID_1701
+%DESCRIPTIONTOKEN%=DriverInstall, USB\VID_0DC3&PID_1702
+
+[DeviceList.ntamd64]
+%DESCRIPTION%=DriverInstall.ntamd64, USB\VID_0DC3&PID_1701
+%DESCRIPTIONTOKEN%=DriverInstall.ntamd64, USB\VID_0DC3&PID_1702
+
+[DeviceList.ntia64]
+%DESCRIPTION%=DriverInstall.ntia64, USB\VID_0DC3&PID_1701
+%DESCRIPTIONTOKEN%=DriverInstall.ntia64, USB\VID_0DC3&PID_1702
+
+;------------------------------------------------------------------------------
+;  Windows ntamd64 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.ntamd64]
+CopyFiles=AMDDriverCopyFiles
+
+[AMDDriverCopyFiles]
+ASEKey.sys,,,2
+
+[DriverInstall.ntamd64.Services]
+AddService=ASEKey,2,DriverService
+
+[DriverInstall.ntamd64.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+
+[DriverService.ntamd64]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEKey.sys
+
+;-------------- Coinstaller installation
+
+[DriverInstall.ntamd64.CoInstallers]
+AddReg=CoInstaller_AddReg_amd64
+CopyFiles=CoInstallerCopyFiles_amd64
+
+[CoInstallerCopyFiles_amd64]
+VirtSCR.inf
+ASEKey.sys
+ASEKeyOptions.exe
+ASEKeyOptions.exe.manifest
+ASEVirtual.cpl
+ASEKeyInst.dll
+VirtSCR.txt
+
+[CoInstaller_AddReg_amd64]
+HKR,,CoInstallers32,0x00010000,"ASEKeyInst.dll,ASEKeyCoInstaller"
+
+
+;------------------------------------------------------------------------------
+;  Windows ntia64 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.ntia64]
+CopyFiles=IADriverCopyFiles
+
+[IADriverCopyFiles]
+ASEKey.sys,,,2
+
+[DriverInstall.ntia64.Services]
+AddService=ASEKey,2,DriverService
+
+[DriverInstall.ntia64.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+
+[DriverService.ntaia64]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEKey.sys
+
+;-------------- Coinstaller installation
+
+[DriverInstall.ntaia64.CoInstallers]
+AddReg=CoInstaller_AddReg_ia64
+CopyFiles=CoInstallerCopyFiles_ia64
+
+[CoInstallerCopyFiles_ia64]
+VirtSCR.inf
+ASEKey.sys
+ASEKeyOptions.exe
+ASEKeyOptions.exe.manifest
+ASEVirtual.cpl
+ASEKeyInst.dll
+VirtSCR.txt
+
+[CoInstaller_AddReg_ia64]
+HKR,,CoInstallers32,0x00010000,"ASEKeyInst.dll,ASEKeyCoInstaller"
+
+;------------------------------------------------------------------------------
+;  Windows 2000 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.NT]
+CopyFiles=DriverCopyFiles
+
+[DriverCopyFiles]
+ASEKey.sys,,,2
+
+[DriverInstall.NT.Services]
+AddService=ASEKey,2,DriverService
+
+[DriverInstall.nt.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+
+[DriverService]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEKey.sys
+
+
+;-------------- Coinstaller installation
+
+[DriverInstall.NT.CoInstallers]
+AddReg=CoInstaller_AddReg_nt
+CopyFiles=CoInstallerCopyFiles_nt
+
+[CoInstallerCopyFiles_nt]
+VirtSCR.inf
+ASEKey.sys
+ASEKeyOptions.exe
+ASEKeyOptions.exe.manifest
+ASEVirtual.cpl
+ASEKeyInst.dll
+VirtSCR.txt
+
+[CoInstaller_AddReg_nt]
+HKR,,CoInstallers32,0x00010000,"ASEKeyInst.dll,ASEKeyCoInstaller"
+
+
+;------------------------------------------------------------------------------
+;  Windows 98 Sections
+;------------------------------------------------------------------------------
+
+[DriverInstall]
+AddReg=DriverAddReg
+CopyFiles=DriverCopyFiles
+; TODO Add a LogConfig command and section if this is a legacy device
+
+[DriverAddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,ASEKey.sys
+
+[DriverInstall.HW]
+AddReg=DriverHwAddReg
+
+;------------------------------------------------------------------------------
+;  String Definitions
+;------------------------------------------------------------------------------
+
+[Strings]
+MFGNAME="Athena Smartcard Solutions"
+INSTDISK="Athena Smartcard Solutions Installation Disc"
+DESCRIPTION="Athena ASEKey"
+DESCRIPTIONTOKEN="eToken J"

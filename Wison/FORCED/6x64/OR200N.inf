@@ -1,0 +1,73 @@
+; Installation inf for the OR200N
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%WISON%
+DriverVer=12/29/2009,1.0.0.0
+
+[SourceDisksNames]
+1="OR200N Sensor Installation Disk",,,
+
+[SourceDisksFiles]
+OR200N.sys = 1
+OR200N.inf = 1
+
+[Manufacturer]
+%MfgName%=Wison
+
+[Wison]
+%USB\VID_093A&PID_247E.DeviceDesc%=OR200N.Dev, USB\VID_093A&PID_247E
+
+;[PreCopySection]
+;HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+OR200N.Files.Ext = 10,System32\Drivers
+OR200N.Files.Inf = 10,INF
+
+[OR200N.Dev]
+CopyFiles=OR200N.Files.Ext, OR200N.Files.Inf
+AddReg=OR200N.AddReg
+
+[OR200N.Dev.NT]
+CopyFiles=OR200N.Files.Ext, OR200N.Files.Inf
+AddReg=OR200N.AddReg
+
+[OR200N.Dev.NT.Services]
+Addservice = OR200N, 0x00000002, OR200N.AddService
+
+[OR200N.AddService]
+DisplayName    = %OR200N.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\OR200N.sys
+LoadOrderGroup = SERVICE_DEMAND_START	;Base
+
+[OR200N.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,OR200N.sys
+HKLM,"System\Currentcontrolset\Services\OR200N\Parameters","MaximumTransferSize",0x10001,64448
+HKLM,"System\Currentcontrolset\Services\OR200N\Parameters","DebugLevel",0x10001,2
+HKLM,"System\Currentcontrolset\Services\OR200N\Parameters","AlternateSetting",0x10001,6
+HKLM,"System\Currentcontrolset\Services\OR200N\Parameters","IsoFlag",0x10001,0
+
+
+[OR200N.Files.Ext]
+OR200N.sys
+
+[OR200N.Files.Inf]
+OR200N.Inf
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+WISON="Wison"
+MfgName="Wison"
+USB\VID_093A&PID_247E.DeviceDesc="OR200N Fingerprint Sensor"
+OR200N.SvcDesc="OR200N Fingerprint Sensor Driver for (Windows Vista x64)"
+

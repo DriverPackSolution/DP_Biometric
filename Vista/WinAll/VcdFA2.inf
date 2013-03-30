@@ -1,0 +1,121 @@
+;
+; VcdFa2.inf - Install the Vista Imaging VistaFa2 USB user-mode driver
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=VistaImaging
+ClassGUID={1BF284CF-E918-4617-AD66-27D2807E62BE}
+Provider=%VII%
+DriverVer=04/30/2012,6.1.7600.16385
+CatalogFile=wudf.cat
+
+[Manufacturer]
+%VII%=Vii,NTx86,NTamd64
+
+[Vii.NTx86]
+%ViiUsbDeviceName%=ViiUsb_Install, USB\VID_0602&PID_3020
+%ViiUsbDeviceName%=ViiUsb_Install, USB\VID_0602&PID_3120&MI_00
+
+[Vii.NTamd64]]
+%ViiUsbDeviceName%=ViiUsb_Install, USB\VID_0602&PID_3020
+%ViiUsbDeviceName%=ViiUsb_Install, USB\VID_0602&PID_3120&MI_00
+
+[ClassInstall32]
+AddReg=CustomClass_RegistryAdd
+
+[CustomClass_RegistryAdd]
+HKR,,,,%ClassName%
+HKR,,Icon,,-10
+
+; =================== UMDF VCD Usb Device ==================================
+
+[ViiUsb_Install.NT]
+CopyFiles=UMDriverCopy
+Include=WINUSB.INF                      ; Import sections from WINUSB.INF
+Needs=WINUSB.NT                         ; Run the CopyFiles & AddReg directives for WinUsb.INF
+
+[ViiUsb_Install.NT.hw]
+AddReg=ViiUsb_Device_AddReg
+
+[ViiUsb_Install.NT.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+[ViiUsb_Install.NT.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+UmdfDispatcher=WinUsb
+UmdfService=VcdFa2, Vcd_Install
+UmdfServiceOrder=VcdFa2
+
+[ViiUsb_Install.NT.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[WinUsb_Install]
+KmdfLibraryVersion = 1.9
+
+[Vcd_Install]
+UmdfLibraryVersion=1.9.0
+DriverCLSID = "{116D86DD-DBBA-4875-A57D-42A693D9E2A6}"
+ServiceBinary = "%12%\UMDF\VcdFa2.dll"
+
+[ViiUsb_Device_AddReg]
+HKR,,"LowerFilters",0x00010008,"WinUsb" ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
+
+[WUDFRD_ServiceInstall]
+DisplayName = %WudfRdDisplayName%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\WUDFRd.sys
+LoadOrderGroup = Base
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WudfUpdate_01009.dll", "WinUsbCoinstaller2.dll", "WdfCoInstaller01009.dll,WdfCoInstaller"
+
+[CoInstallers_CopyFiles]
+WudfUpdate_01009.dll
+WdfCoInstaller01009.dll
+WinUsbCoinstaller2.dll
+
+[DestinationDirs]
+UMDriverCopy=12,UMDF ; copy to drivers\UMDF
+CoInstallers_CopyFiles=11
+
+[SourceDisksNames]
+1 = %DISK_NAME%,,,\i386
+2 = %DISK_NAME%,,,\amd64
+
+[SourceDisksFiles.x86]
+WinUSBCoInstaller2.dll=1
+WdfCoInstaller01009.dll=1
+WudfUpdate_01009.dll=1
+VcdFA2.dll=1
+
+[SourceDisksFiles.amd64]
+WinUSBCoInstaller2.dll=2
+WdfCoInstaller01009.dll=2
+WudfUpdate_01009.dll=2
+VcdFA2.dll=2
+
+[UMDriverCopy]
+VcdFa2.dll
+
+; =================== Generic ==================================
+
+[Strings]
+VII="Vista Imaging"
+DISK_NAME="Vista Imaging Driver Installation Media"
+ClassName="Vista Imaging"
+WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"
+ViiUsbDeviceName="VistaFA2 Camera" 
+WinUsb_SvcDesc="WinUSB Driver"
+

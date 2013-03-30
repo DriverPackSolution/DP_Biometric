@@ -1,0 +1,150 @@
+;///////////////////////////////////////////////////////////////////////////////
+;//
+;//	Copyright (c) 2011 - Lumidigm, Inc. - All rights reserved.
+;//
+;//	File:			LumiDrivers.inf
+;//	Description: Device installation file for Lumidigm USB Streaming
+;//		     Fingerprint Readers.
+;//
+;///////////////////////////////////////////////////////////////////////////////
+
+[Version]
+Signature="$CHICAGO$"
+Class="Lumidigm Biometric Sensor"
+ClassGUID={06B62F68-E35E-4f57-8BE2-A5BC6CCCC708}
+provider=%PROVIDER%
+CatalogFile=LUMIDRIVER.cat
+DriverVer=10/08/2010,3.4.2.0
+
+[SourceDisksNames]
+1 = %LUMIDIGM_INSTALL%,,,
+
+[SourceDisksFiles]
+LumiDriver.sys 		= 1
+
+[Manufacturer]
+%MfgName%		= Lumidigm, NT, NTx86, NTamd64
+
+[ClassInstall]
+Addreg=Class_AddReg
+
+[ClassInstall32]
+Addreg=Class_AddReg
+
+[ClassInstall32.ntamd64]
+Addreg=Class_AddReg
+
+[Class_AddReg]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-5"
+
+[Class_AddReg.ntamd64]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-5"
+
+
+[Lumidigm]
+%VID_1FAE&PID_0020.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0020
+%VID_1FAE&PID_0021.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0021
+%VID_1FAE&PID_0040.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0040
+%VID_1FAE&PID_0041.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0041
+
+;for windows 2000 non intel platforms
+[Lumidigm.NT]
+%VID_1FAE&PID_0020.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0020
+%VID_1FAE&PID_0021.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0021
+%VID_1FAE&PID_0040.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0040
+%VID_1FAE&PID_0041.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0041
+
+;for x86 platforms
+[Lumidigm.NTx86]
+%VID_1FAE&PID_0020.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0020
+%VID_1FAE&PID_0021.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0021
+%VID_1FAE&PID_0040.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0040
+%VID_1FAE&PID_0041.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0041
+
+;for x64 platforms
+[Lumidigm.NTamd64]
+%VID_1FAE&PID_0020.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0020
+%VID_1FAE&PID_0021.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0021
+%VID_1FAE&PID_0040.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0040
+%VID_1FAE&PID_0041.DeviceDesc%	= LUMIDRIVER, USB\VID_1FAE&PID_0041
+
+
+[DestinationDirs]
+LUMIDRIVER.Files = 10,System32\Drivers
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+
+
+;=======================================
+[LUMIDRIVER]
+CopyFiles=LUMIDRIVER.Files
+AddReg=LUMIDRIVER.AddReg
+
+[LUMIDRIVER.Files]
+LUMIDRIVER.SYS
+
+[LUMIDRIVER.NT]
+CopyFiles=LUMIDRIVER.Files
+AddReg=LUMIDRIVER.AddReg
+
+[LUMIDRIVER.NT.HW]
+AddReg=LUMIDRIVER.AddReg.Guid
+
+[LUMIDRIVER.NT.Services]
+Addservice = LUMIDRIVER, 0x00000002, LUMIDRIVER.AddService
+
+[LUMIDRIVER.NTx86]
+CopyFiles=LUMIDRIVER.Files
+AddReg=LUMIDRIVER.AddReg
+
+[LUMIDRIVER.NTx86.HW]
+AddReg=LUMIDRIVER.AddReg.Guid
+
+[LUMIDRIVER.NTx86.Services]
+Addservice = LUMIDRIVER, 0x00000002, LUMIDRIVER.AddService
+
+[LUMIDRIVER.NTamd64]
+CopyFiles=LUMIDRIVER.Files
+AddReg=LUMIDRIVER.AddReg
+
+[LUMIDRIVER.NTamd64.HW]
+AddReg=LUMIDRIVER.AddReg.Guid
+
+[LUMIDRIVER.NTamd64.Services]
+Addservice = LUMIDRIVER, 0x00000002, LUMIDRIVER.AddService
+
+[LUMIDRIVER.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,LumiDriver.sys
+
+[LUMIDRIVER.AddReg.Guid]
+HKR,,DriverGUID,,%LUMIDRIVER.GUID%
+
+;=======================================
+
+[LUMIDRIVER.AddService]
+DisplayName = %LUMIDRIVER.SvcDesc%
+ServiceType = 1 ; SERVICE_KERNEL_DRIVER
+StartType = 3 ; SERVICE_DEMAND_START
+ErrorControl = 1 ; SERVICE_ERROR_NORMAL
+ServiceBinary = %10%\System32\Drivers\LUMIDRIVER.SYS
+LoadOrderGroup = Base
+
+
+[Strings]
+PROVIDER			="Lumidigm, Inc."
+MFGNAME				="Lumidigm, Inc."
+LUMIDIGM_INSTALL		="Lumidigm Installation Disk"
+VID_1FAE&PID_0020.DeviceDesc	="Lumidigm V31x Fingerprint Reader Pre Enum"
+VID_1FAE&PID_0021.DeviceDesc	="Lumidigm V31x Fingerprint Reader"
+VID_1FAE&PID_0040.DeviceDesc	="Lumidigm M31x Fingerprint Reader Pre Enum"
+VID_1FAE&PID_0041.DeviceDesc	="Lumidigm M31x Fingerprint Reader"
+
+DeviceClassName			="Lumidigm Biometric Sensor"
+LUMIDRIVER.SvcDesc		="Lumidigm USB Biometric Strm Sensor Driver"
+LUMIDRIVER.GUID			="{5F70A64F-A8BE-456e-9ADA-D341C668410B}"
+

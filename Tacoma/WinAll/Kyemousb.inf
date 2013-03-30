@@ -1,0 +1,68 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+provider=%KYE%
+LayoutFile=layout.inf
+
+[Manufacturer]
+%KYE%=KYE
+
+[DestinationDirs]
+KyeMouse.Files.Ext   = 10,System32\Drivers
+KyeMouse.Files.Inf   = 10,INF
+
+[SourceDisksNames]
+51 = "Install.CD",,1
+
+[SourceDisksFiles]
+Kyemousb.sys=51
+Kyeimage.sys=51
+Kyeimage.inf=51
+
+[KYE]
+%USB\VID_0458&PID_0013.DeviceDesc%=KyeMouse.Dev, USB\VID_0458&PID_0013
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+
+[KyeMouse.Dev]
+CopyFiles = KyeMouse.Files.Ext , KyeMouse.Files.Inf
+AddReg    = KyeMouse.AddReg
+
+[KyeMouse.Dev.NT]
+CopyFiles = KyeMouse.Files.Ext , KyeMouse.Files.Inf
+AddReg    = KyeMouse.AddReg
+
+[KyeMouse.Dev.NT.Services]
+Addservice = KyeMouse, 0x00000002, KyeMouse.AddService
+
+[KyeMouse.AddService]
+DisplayName    = %KyeMouse.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 2                  ; SERVICE_AUTO_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\kyemousb.sys
+LoadOrderGroup = Base
+
+[KyeMouse.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,kyemousb.sys
+
+[KyeMouse.Files.Ext]
+kyemousb.sys
+kyeimage.sys
+
+[KyeMouse.Files.Inf]
+;kyemousb.Inf
+kyeimage.inf
+
+[Strings]
+KYE=""
+USB\VID_0458&PID_0013.DeviceDesc="TACOMA Fingerprint Mouse V1.06.01"
+DiskName="Fingerprint Mouse Install CD-ROM"
+
+
+
+
+

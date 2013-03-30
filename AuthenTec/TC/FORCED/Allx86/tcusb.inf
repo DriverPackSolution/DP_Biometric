@@ -1,0 +1,139 @@
+; Copyright (c) 2003,2012 AuthenTec, Inc.
+; Manufacturer: AuthenTec, Inc.
+
+[Version]
+Signature="$Windows NT$"
+Class=Authentication Devices
+ClassGUID={73395523-cec2-41c2-8dd4-b357f479e66b}
+Provider=%Mfg%
+DriverVer=08/26/2012,1.9.2.0204
+CatalogFile=tcusb.cat
+
+[SourceDisksNames]
+1=%DiskName%,,,
+
+[SourceDisksFiles]
+tcusb.sys = 1
+
+[Manufacturer]
+%Mfg%=Models, NTx86.5.1
+
+[Models]
+; empty section to avoid installation on NT4, w2k and w9x
+
+[Models.NTx86.5.1]
+; XP and above at x86
+%USB\VID_0483&PID_2015.DeviceDesc%          = TcUsb.Dev,USB\VID_0483&PID_2015
+%USB\VID_0483&PID_2015&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_0483&PID_2015&MI_00
+%USB\VID_0483&PID_2016.DeviceDesc%          = TcUsb.Dev,USB\VID_0483&PID_2016
+%USB\VID_0483&PID_2016&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_0483&PID_2016&MI_00
+%USB\VID_147E&PID_2015.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_2015
+%USB\VID_147E&PID_2015&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_2015&MI_00
+%USB\VID_147E&PID_2016.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_2016
+%USB\VID_147E&PID_2016&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_2016&MI_00
+%USB\VID_147E&PID_2020.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_2020
+%USB\VID_147E&PID_2020&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_2020&MI_00
+%USB\VID_147E&PID_1000.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_1000
+%USB\VID_147E&PID_1000&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_1000&MI_00
+%USB\VID_147E&PID_1001.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_1001
+%USB\VID_147E&PID_1001&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_1001&MI_00
+%USB\VID_147E&PID_1002.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_1002
+%USB\VID_147E&PID_1002&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_1002&MI_00
+%USB\VID_147E&PID_5002.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_5002
+%USB\VID_147E&PID_5002&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_5002&MI_00
+%USB\VID_147E&PID_1003.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_1003
+%USB\VID_147E&PID_1003&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_1003&MI_00
+%USB\VID_147E&PID_5003.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_5003
+%USB\VID_147E&PID_5003&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_5003&MI_00
+%USB\VID_147E&PID_3000.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_3000
+%USB\VID_147E&PID_3000&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_3000&MI_00
+%USB\VID_147E&PID_3001.DeviceDesc%          = TcUsb.Dev,USB\VID_147E&PID_3001
+%USB\VID_147E&PID_3001&MI_00.DeviceDesc%    = TcUsb.Dev,USB\VID_147E&PID_3001&MI_00
+
+; class installation is necessary despite of chkinf warning (driver can't be installed without it)
+[ClassInstall32]
+AddReg=AuthClass.AddReg
+
+[AuthClass.AddReg]
+HKR,,,,Authentication Devices
+HKR,,Icon,,"-30"
+
+[DestinationDirs]
+TcUsb.Files.Ext = 10,System32\Drivers
+
+[TcUsb.Dev.NTx86]
+CopyFiles=TcUsb.Files.Ext
+FeatureScore=0x80
+
+[TcUsb.Dev.NTx86.HW]
+DelReg=TcUsb.TcWbfCleanup.DelReg
+AddReg=TcUsb.Device.AddReg
+
+[TcUsb.Dev.NTx86.Services]
+AddService = TcUsb, 0x00000002, TcUsb.AddService
+
+[TcUsb.AddService]
+DisplayName    = %TcUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\tcusb.sys
+AddReg         = TcUsb.Driver.AddReg
+
+[TcUsb.Driver.AddReg]
+
+[TcUsb.Device.AddReg]
+HKR,,"DeviceCharacteristics",0x10001,0x0100                                 ; use same security checks on relative opens
+HKR,,"Security",,"D:P(A;;GRGW;;;WD)(A;;GR;;;RC)(A;;GA;;;SY)(A;;GA;;;BA)"    ; emulates default SD for update scenarios
+
+[TcUsb.TcWbfCleanup.DelReg]
+HKR,,"DeviceCharacteristics"
+HKR,,"Security"
+HKR,,"LowerFilters"
+HKR,,"Exclusive"
+HKR,,"SystemWakeEnabled"
+HKR,,"DeviceIdleEnabled"
+HKR,,"UserSetDeviceIdleEnabled"
+HKR,,"ResetPortEnabled"
+HKR,,"DefaultIdleState"
+HKR,,"DefaultIdleTimeout"
+HKR,,"DeviceSelectiveSuspended"
+HKR,WinBio
+HKR,WDF
+HKR,WUDF
+HKR,WUDFDiagnosticInfo
+
+[TcUsb.Files.Ext]
+tcusb.sys
+
+; strings
+[Strings]
+Mfg="AuthenTec"
+DiskName="TC USB Driver Installation media"
+USB\VID_0483&PID_2015&MI_00.DeviceDesc    = "TouchChip Fingerprint Reader"
+USB\VID_0483&PID_2015.DeviceDesc          = "TouchChip Fingerprint Reader"
+USB\VID_0483&PID_2016&MI_00.DeviceDesc    = "TouchChip Fingerprint Coprocessor"
+USB\VID_0483&PID_2016.DeviceDesc          = "TouchChip Fingerprint Coprocessor"
+USB\VID_147E&PID_2015&MI_00.DeviceDesc    = "TouchChip Fingerprint Reader"
+USB\VID_147E&PID_2015.DeviceDesc          = "TouchChip Fingerprint Reader"
+USB\VID_147E&PID_2016&MI_00.DeviceDesc    = "TouchChip Fingerprint Coprocessor"
+USB\VID_147E&PID_2016.DeviceDesc          = "TouchChip Fingerprint Coprocessor"
+USB\VID_147E&PID_2020&MI_00.DeviceDesc    = "TouchChip Fingerprint Coprocessor"
+USB\VID_147E&PID_2020.DeviceDesc          = "TouchChip Fingerprint Coprocessor"
+USB\VID_147E&PID_1000&MI_00.DeviceDesc    = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1000.DeviceDesc          = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1001&MI_00.DeviceDesc    = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1001.DeviceDesc          = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1002&MI_00.DeviceDesc    = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1002.DeviceDesc          = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_5002&MI_00.DeviceDesc    = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_5002.DeviceDesc          = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1003&MI_00.DeviceDesc    = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_1003.DeviceDesc          = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_5003&MI_00.DeviceDesc    = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_5003.DeviceDesc          = "TouchStrip Fingerprint Sensor"
+USB\VID_147E&PID_3000&MI_00.DeviceDesc    = "TouchChip Fingerprint Reader"
+USB\VID_147E&PID_3000.DeviceDesc          = "TouchChip Fingerprint Reader"
+USB\VID_147E&PID_3001&MI_00.DeviceDesc    = "TouchChip Fingerprint Reader"
+USB\VID_147E&PID_3001.DeviceDesc          = "TouchChip Fingerprint Reader"
+TcUsb.SvcDesc                             = "TC USB Kernel Driver"

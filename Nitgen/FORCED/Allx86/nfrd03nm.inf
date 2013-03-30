@@ -1,0 +1,142 @@
+;
+; Installation file (.inf) for the MFDU03 devices.
+; 
+; Copyright(C) 2006 NITGEN Co., Ltd. 
+;
+; Windows 2000/XP
+;
+
+[Version]
+Signature="$Chicago$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+
+Provider=%NITGEN%
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+CatalogFile=fdu03.cat
+DriverVer=03/30/2006,1.0.0.0 
+
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1=%DISK1%,,,
+
+[SourceDisksFiles]
+nfrd03nm.sys=1,,
+nfrd03nm.dll=1,, 
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+MFDU03.Files.Ext = 10,System32\Drivers
+MFDU03.Files.Dll = 11			; 9x - System Dir, NT - System32 Dir
+
+[ControlFlags]
+;ExcludeFromSelect=*             	; removes all device here from the device installer list
+
+[Manufacturer]
+%NITGEN%=NITGEN
+
+[NITGEN]
+
+;------------------------------------------
+; NITGEN USB Fingerprint Device (FDU11)
+;------------------------------------------
+;%USB\VID_0A86&PID_0600.DeviceDesc%=FDU11, USB\VID_0A86&PID_0600
+
+
+;--------------------------------------------------------
+; NITGEN USB Fingerprint Device with USB Mouse (MFDU03)
+;--------------------------------------------------------
+;%USB\VID_0A86&PID_0700.DeviceDesc%=MFDU03Composite, USB\VID_0A86&PID_0700, USB\COMPOSITE
+%USB\VID_0A86&PID_0700&MI_00.DeviceDesc%=MFDU03, USB\VID_0A86&PID_0700&MI_00
+;%USB\VID_0A86&PID_0700&MI_01.DeviceDesc%=MFDU03Hid, USB\VID_0A86&PID_0700&MI_01, USB\Class_03
+
+
+
+; =================== MFDU03 USB FRD Driver ===================
+
+;---------------
+; For Win98...
+;---------------
+
+[MFDU03Hid]
+Include=hiddev.inf
+Needs=USBHIDDevice
+
+[MFDU03Composite]
+Include=usb.inf
+Needs=composite.dev
+
+[MFDU03]
+CopyFiles=MFDU03.Files.Ext, MFDU03.Files.Dll
+AddReg=MFDU03.AddReg
+
+[MFDU03.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,nfrd03nm.sys
+
+[MFDU03.Files.Ext]
+nfrd03nm.sys
+
+[MFDU03.Files.Dll]
+nfrd03nm.dll
+
+
+;-------------------
+; For Windows NT...
+;-------------------
+
+; HID
+
+[MFDU03Hid.NT]
+Include=input.inf
+Needs=HID_Inst.NT
+
+[MFDU03Hid.NT.Services]
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+; composite
+
+[MFDU03Composite.NT]
+Include=usb.inf
+Needs= Composite.Dev.NT
+
+[MFDU03Composite.NT.Services]
+Include=usb.inf
+Needs=Composite.Dev.NT.Services
+
+; FRD
+
+[ClassInstall32]
+AddReg=AddRegBiometricClass
+
+[AddRegBiometricClass]
+HKR,,,,%BiometricClassName%
+
+
+[MFDU03.NT]
+CopyFiles=MFDU03.Files.Ext, MFDU03.Files.Dll
+
+[MFDU03.NT.Services]
+Addservice = MFDU03, 0x00000002, MFDU03_AddService_Inst 
+
+[MFDU03_AddService_Inst]
+DisplayName    = %MFDU03.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\nfrd03nm.sys
+
+[Strings]
+BiometricClassName="Biometric"
+NITGEN="NITGEN"
+MFDU03.SvcDesc="MFDU03 Service"
+USB\VID_0A86&PID_0700&MI_00.DeviceDesc="NITGEN MFDU03 USB FRD"
+USB\VID_0A86&PID_0700&MI_01.DeviceDesc="NITGEN MFDU03 USB FRD HID"
+USB\VID_0A86&PID_0700.DeviceDesc="NITGEN MFDU03 USB FRD Composite"
+
+DISK1="NITGEN FRD Installation Disk"

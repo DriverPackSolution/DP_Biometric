@@ -1,0 +1,86 @@
+; Bioki.inf
+; inf file for Certis device
+; (c) copyright id3 semiconductors
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$chicago$"
+Provider=%ProviderName%
+Class=Bioki
+ClassGUID={E218901A-2D4C-46dc-828C-0615E465F885}
+DriverVer=10/09/2003
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+;--------- ClassInstall/ClassInstall32 Section -------------------------------
+
+; Not necessary if using a standard class
+
+; 9X Style
+[ClassInstall]
+Addreg=Class_AddReg
+
+; NT Style
+[ClassInstall32]
+Addreg=Class_AddReg
+
+[Class_AddReg]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-20"
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Mfg0, NTamd64
+
+[Mfg0.NTamd64]
+%DeviceDesc%=Bioki_DDI, USB\VID_0b81&PID_0100
+
+;---------- DDInstall Sections -----------------------------------------------
+; --------- Windows 9X -----------------
+
+; Experimentation has shown that DDInstall root names greater than 19 characters
+; cause problems in Windows 98
+
+[Bioki_DDI]
+AddReg=Bioki_9X_AddReg
+DriverVer=09/30/2002
+
+[Bioki_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,UsbBiok.sys
+HKR, "Parameters", "BreakOnEntry", 0x00010001, 0
+
+; --------- Windows NT -----------------
+
+[Bioki_DDI.NT]
+AddReg=Bioki_NT_AddReg
+DriverVer=09/30/2002
+
+[Bioki_DDI.NT.Services]
+Addservice = Bioki, 0x00000002, Bioki_AddService
+
+[Bioki_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\UsbBiok.sys
+
+[Bioki_NT_AddReg]
+HKLM, "System\CurrentControlSet\Services\Bioki\Parameters",\
+	"BreakOnEntry", 0x00010001, 0
+
+[DestinationDirs]
+Bioki_DDI.CopyFiles = 12
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="id3 Semiconductors"
+MfgName="id3"
+DeviceDesc="Certis Fingerprint reader"
+DeviceClassName="Fingerprint reader"
+SvcDesc="Service Fingerprint reader"

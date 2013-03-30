@@ -1,0 +1,324 @@
+;/*++
+;
+;Copyright (c) Athena Smart Card Ltd.
+;
+;Module Name:
+;
+;    ASEDRV3.INF
+;
+;--*/
+[Version]
+Signature=$CHICAGO$
+CatalogFile=ASEDRV3.cat
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%MFGNAME%
+DriverVer=07/18/2011,1.5.2.0
+
+[Manufacturer]
+%MFGNAME%=DeviceList,ntamd64,ntia64
+
+[DestinationDirs]
+AMDDriverCopyFiles = 10,System32\Drivers
+IADriverCopyFiles = 10,System32\Drivers
+DriverCopyFiles = 10,System32\Drivers
+DefaultDestDir=10,System32\Drivers
+Copy_Enum_Dll_AMD=10,System32
+Copy_Enum_Dll_IA=10,System32
+Copy_Enum_Dll_NTX86=10,System32
+Copy_Enum_Dll_2000=10,System32
+
+[SourceDisksFiles]
+ASEDRV3.sys=1
+ASEDRV3.inf=1
+ASEDriveProp.dll=1
+
+[SourceDisksNames]
+1=%INSTDISK%,,,
+
+[ControlFlags]
+; Prevent legacy install for PnP readers
+ExcludeFromSelect=USB\VID_0DC3&PID_0802,
+SERENUM\ATN1001,
+USB\VID_0DC3&PID_1104&MI_01,
+USB\VID_0DC3&PID_1107&MI_01,
+USB\VID_0DC3&PID_1108&MI_00,
+USB\VID_0DC3&PID_1109&MI_00,
+USB\VID_0DC3&PID_110A&MI_01,
+USB\VID_0DC3&PID_110B,
+USB\VID_0DC3&PID_110C,
+USB\VID_0DC3&PID_110D,
+USB\VID_0DC3&PID_110E&MI_00,
+USB\VID_0DC3&PID_110E&MI_01,
+
+[DeviceList]
+%DESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_0802
+%KBDESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_1104&MI_01
+%KBPDESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_1107&MI_01
+%BPDESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_1108&MI_00
+%BP2DESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_1109&MI_00
+%KBP2DESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_110A&MI_01
+%CLDESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_110B
+%PPDESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_110C
+%ACDESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_110D
+%USB2DESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_110E&MI_00
+%CL2DESCRIPTION%=DriverInstall,USB\VID_0DC3&PID_110E&MI_01
+%SERIALDESCRIPTION%=DriverInstall,SERENUM\ATN1001
+
+[DeviceList.ntamd64]
+%DESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_0802
+%KBDESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_1104&MI_01
+%KBPDESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_1107&MI_01
+%BPDESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_1108&MI_00
+%BP2DESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_1109&MI_00
+%KBP2DESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_110A&MI_01
+%CLDESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_110B
+%PPDESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_110C
+%ACDESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_110D
+%USB2DESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_110E&MI_00
+%CL2DESCRIPTION%=DriverInstall.ntamd64,USB\VID_0DC3&PID_110E&MI_01
+%SERIALDESCRIPTION%=DriverInstall.ntamd64,SERENUM\ATN1001
+
+[DeviceList.ntia64]
+%DESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_0802
+%KBDESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_1104&MI_01
+%KBPDESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_1107&MI_01
+%BPDESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_1108&MI_00
+%BP2DESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_1109&MI_00
+%KBP2DESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_110A&MI_01
+%CLDESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_110B
+%PPDESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_110C
+%ACDESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_110D
+%USB2DESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_110E&MI_00
+%CL2DESCRIPTION%=DriverInstall.ntia64,USB\VID_0DC3&PID_110E&MI_01
+%SERIALDESCRIPTION%=DriverInstall.ntia64,SERENUM\ATN1001
+
+;------------------------------------------------------------------------------
+;  Windows ntamd64 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.ntamd64]
+CopyFiles=AMDDriverCopyFiles
+
+[DriverInstall.ntamd64.CoInstallers]
+AddReg = EnumPropPage_AddReg
+CopyFiles=Copy_Enum_Dll_AMD
+
+
+[AMDDriverCopyFiles]
+ASEDRV3.sys,,,2
+
+[Copy_Enum_Dll_AMD]
+ASEDriveProp.dll
+
+[EnumPropPage_AddReg]
+HKR,,EnumPropPages,0,ASEDriveProp.dll
+; HKR,,EnumPropPages32,,"ASEDriveProp.dll, EnumPropPages"
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+HKLM, System\CurrentControlSet\Services\CertPropSvc,Start,0x00010001,2
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+[DriverInstall.ntamd64.Services]
+AddService=ASEDRV3,2,DriverService.ntamd64
+
+[DriverService.ntamd64]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEDRV3.sys
+
+[DriverInstall.ntamd64.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+
+;------------------------------------------------------------------------------
+;  Windows ntia64 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.ntia64]
+CopyFiles=IADriverCopyFiles
+
+[DriverInstall.ntia64.CoInstallers]
+AddReg = EnumPropPage_AddReg
+CopyFiles=Copy_Enum_Dll_IA
+
+[IADriverCopyFiles]
+ASEDRV3.sys,,,2
+
+[Copy_Enum_Dll_IA]
+ASEDriveProp.dll
+
+[EnumPropPage_AddReg]
+HKR,,EnumPropPages,0,ASEDriveProp.dll
+; HKR,,EnumPropPages32,,"ASEDriveProp.dll, EnumPropPages"
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+HKLM, System\CurrentControlSet\Services\CertPropSvc,Start,0x00010001,2
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+[DriverInstall.ntia64.Services]
+AddService=ASEDRV3,2,DriverService.ntia64
+
+[DriverService.ntia64]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEDRV3.sys
+
+[DriverInstall.ntia64.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+;------------------------------------------------------------------------------
+;  Windows ntx86 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.ntx86]
+CopyFiles=DriverCopyFiles
+
+[DriverInstall.ntx86.CoInstallers]
+AddReg = EnumPropPage_AddReg
+CopyFiles=Copy_Enum_Dll_NTX86
+
+[DriverCopyFiles]
+ASEDRV3.sys,,,2
+
+[Copy_Enum_Dll_NTX86]
+ASEDriveProp.dll,,,2
+
+[EnumPropPage_AddReg]
+HKR,,EnumPropPages32,,"ASEDriveProp.dll, EnumPropPages"
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+HKLM, System\CurrentControlSet\Services\CertPropSvc,Start,0x00010001,2
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+[DriverInstall.ntx86.Services]
+AddService=ASEDRV3,2,DriverService.ntx86
+
+[DriverService.ntx86]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEDRV3.sys
+
+[DriverInstall.ntx86.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+
+;------------------------------------------------------------------------------
+;  Windows 2000 Sections
+;------------------------------------------------------------------------------
+
+; TODO Add a LogConfig command to the following install section if this is a legacy device
+
+[DriverInstall.NT]
+CopyFiles=DriverCopyFiles
+
+[DriverInstall.NT.CoInstallers]
+AddReg = EnumPropPage_AddReg
+CopyFiles=Copy_Enum_Dll_2000
+
+[DriverCopyFiles]
+ASEDRV3.sys,,,2
+
+[Copy_Enum_Dll_2000]
+ASEDriveProp.dll,,,2
+
+[EnumPropPage_AddReg]
+HKR,,EnumPropPages32,,"ASEDriveProp.dll, EnumPropPages"
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+HKLM, System\CurrentControlSet\Services\CertPropSvc,Start,0x00010001,2
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+[DriverInstall.NT.Services]
+AddService=ASEDRV3,2,DriverService
+
+[DriverService]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\ASEDRV3.sys
+
+[DriverInstall.nt.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+;------------------------------------------------------------------------------
+;  Windows 98 Sections
+;------------------------------------------------------------------------------
+
+[DriverInstall]
+AddReg=DriverAddReg
+CopyFiles=DriverCopyFiles
+
+; TODO Add a LogConfig command and section if this is a legacy device
+
+[DriverAddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,ASEDRV3.sys
+
+[DriverInstall.HW]
+AddReg=DriverHwAddReg
+
+;------------------------------------------------------------------------------
+;  String Definitions
+;------------------------------------------------------------------------------
+
+[Strings]
+MFGNAME="Athena Smartcard Solutions"
+INSTDISK="Athena Smartcard Solutions Installation Disc"
+DESCRIPTION="Athena ASEDrive IIIe USB"
+KBDESCRIPTION="Athena ASEDrive IIIe KB"
+KBPDESCRIPTION="Athena ASEDrive IIIe KB BIO-PIV"
+BPDESCRIPTION="Athena ASEDrive IIIe BIO-PIV"
+BP2DESCRIPTION="Athena ASEDrive IIIe BIO-PIV2"
+KBP2DESCRIPTION="Athena ASEDrive IIIe KB BIO-PIV2"
+CLDESCRIPTION="Athena ASEDrive IIIe CL"
+PPDESCRIPTION="Athena ASEDrive IIIe PP"
+ACDESCRIPTION="Athena ASEDrive IIIe AC"
+USB2DESCRIPTION="Athena ASEDrive IIIe USB2"
+CL2DESCRIPTION="Athena ASEDrive IIIe CL2"
+SERIALDESCRIPTION = "Athena ASEDrive IIIe Serial"

@@ -1,0 +1,147 @@
+[Version]
+Signature="$CHICAGO$"
+
+Class=IrisGuardIris
+ClassGUID=%IrisGuardClassGUID%
+provider="IrisGuard"
+DriverVer=11/02/2005, 1.0.0.0
+
+[ClassInstall32.NT]
+AddReg=ClassInstall32AddReg
+
+[ClassInstall32AddReg]
+HKR,,,,"IrisGuard Iris Imagers"
+HKR,,Installer32,,"IGIrisCls.dll,IGIrisClassInstaller"
+HKR,,Icon,,100
+;
+;------------------------------------------------------------------------------------
+;
+[Manufacturer]
+"IrisGuard"=IrisGuard
+
+[IrisGuard]
+"IrisGuard AD100Loader"=IG_AD100Loader, USB\VID_1946&PID_2001
+"IrisGuard AD100"=IG_AD100, USB\VID_1946&PID_1500
+;
+;-----------------------------------------------------------------
+; Loader
+;
+[IG_AD100Loader.NT]
+AddReg=IG_AD100Loader.AddReg
+
+
+[IG_AD100Loader.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,IG_AD100Loader.sys
+
+[IG_AD100Loader.NT.Services]
+Addservice = IG_AD100Loader, 0x00000002, IG_AD100Loader.AddService
+
+[IG_AD100Loader.AddService]
+DisplayName = "IG_AD100Loader"
+ServiceType = 1 ; SERVICE_KERNEL_DRIVER
+StartType = 3 ; SERVICE_DEMAND_START
+ErrorControl = 1 ; SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\IG_AD100Loader.sys
+LoadOrderGroup = Base
+
+;-----------------------------------------------------------------
+; IG_AD100
+;
+[IG_AD100.NT]
+Include=    ks.inf, kscaptur.inf
+Needs=      KS.Registration.NT, KSCAPTUR.Registration.NT
+AddReg	    = IG_AD100.AddReg,VID.AddReg
+
+[VID.AddReg]
+HKCR,CLSID\%GUID.Video_Pin_Prop%\InprocServer32,ThreadingModel,,Both
+HKLM,%MediaCategories%\%GUID.PinName_Capture%\PropertyPages\%GUID.Video_Pin_Prop%,,,
+HKLM,%MediaCategories%\%GUID.PinName_Preview%\PropertyPages\%GUID.Video_Pin_Prop%,,,
+
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,IG_AD100.sys
+HKR,,OkToHibernate,3,01
+
+; Disable driver page out
+HKR,,PageOutWhenUnopened,3,0
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+
+[IG_AD100.NT.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,%AD100Filter%,VID_Interface,
+AddInterface=%KSCATEGORY_CROSSBAR%,%AD100XBARReferenceGUID%,XBAR_Interface,
+
+[VID_Interface]
+AddReg=VID_Interface.AddReg
+AddReg=IG_AD100_DESCRIPTION.AddReg
+
+[VID_Interface.AddReg]
+HKR,,CLSID,,%Proxy.CLSID% 
+HKR,,DeviceGUID,,%AD100Filter% 
+HKR,,FriendlyName,,%VIDFriendlyName%
+
+[IG_AD100_DESCRIPTION.AddReg]
+HKR,,Description,,"IG_AD100"
+
+[XBAR_Interface]
+AddReg=XBAR_Interface.AddReg
+
+[XBAR_Interface.AddReg]
+HKR,,CLSID,,%CLSID_CrossbarFilter%
+HKR,,FriendlyName,,%XBARFriendlyName%
+
+;
+; Services installation
+;
+
+[IG_AD100.NT.Services]
+AddService = IG_AD100,2,VID.ServiceInstall
+
+
+[VID.ServiceInstall]
+DisplayName   = "IG_AD100"
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %12%\IG_AD100.sys
+
+;---------------------------------------------------------------;
+[Strings]
+;
+; Friendly Names
+;
+VIDFriendlyName              = "IrisGuard AD100"
+XBARFriendlyName             = "IrisGuard AD100 XBar"
+
+;
+; Reference GUIDS
+;
+;///////////////////////////////////////////////////////////////////////////////////////////
+;//*****************************************************************************************
+;//****  This GUID is defined in Ig_ad100.inf, AD100_GUID.H & T100Driver\T100\main.cpp  ****
+;//****             The value MUST be the same in all places                            ****
+;//*****************************************************************************************
+AD100Filter		     = "{D0F9F2A8-AD05-473f-8A65-E05F6AC33422}"
+;///////////////////////////////////////////////////////////////////////////////////////////
+AD100XBARReferenceGUID       = "{3D76A3A4-4702-4da7-92CD-CD60841E8FB2}"
+KSCATEGORY_CAPTURE	     = "{65e8773d-8f56-11d0-a3b9-00a0c9223196}"
+KSCATEGORY_CROSSBAR	     = "{a799a801-a46d-11d0-a18c-00a02401dcd4}"
+IrisGuardClassGUID	     = "{9131E14E-87DC-4da4-B712-6608B89BAA22}"
+
+
+; Pin Name GUIDS
+;
+;
+; Pin Names
+;
+;
+; Other Strings
+;
+
+CLSID_CrossbarFilter         = "{71F96460-78F3-11d0-A18C-00A0C9118956}"
+Proxy.CLSID                  = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+
+MediaCategories              = "SYSTEM\CurrentControlSet\Control\MediaCategories"
+
+GUID.PinName_Capture         = "{FB6C4281-0353-11d1-905F-0000C0CC16BA}"
+GUID.PinName_Preview	     = "{FB6C4282-0353-11d1-905F-0000C0CC16BA}"
+

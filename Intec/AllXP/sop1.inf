@@ -1,0 +1,84 @@
+[Version]
+Signature="$Windows NT$"
+Class=DFR
+ClassGuid = {4151AE36-457E-4CB8-A941-4FE7C8EA9E4B}
+provider=%DeviceManufacturer%
+DriverVer=15/02/2007,2.0.0.1
+
+;---------- Class installer
+; Win NT 2000 section
+[ClassInstall32]
+CopyFiles=DllCopyFileSection
+AddReg=SOP1_ClassAddReg32
+
+; Win 98 section
+[ClassInstall]
+CopyFiles=DllCopyFileSection
+AddReg=SOP1_ClassAddReg
+
+[SOP1_ClassAddReg]
+HKR,,,0,%SOP1ClassName%
+HKR,,Icon,,-20
+
+[SOP1_ClassAddReg32]
+HKR,,,0,%SOP1ClassName%
+HKR,,Icon,,-11
+
+[Manufacturer]
+%DeviceManufacturer%=IT_Concepts_Incorporated
+
+[IT_Concepts_Incorporated]
+%VID_192A&PID_0101.DeviceDesc%=Sop1Usb2, USB\VID_192A&PID_0101
+
+; SOP1USB2
+; --- for Win98
+[Sop1Usb2]
+CopyFiles=Sop1Usb2.SysCopyFileSection98
+AddReg=SOP1USB2_AddReg98
+
+[Sop1Usb2_AddReg98]
+HKR,,DevLoader,0,*ntkern
+HKR,,NTMPDriver,0,sop1.sys
+
+; --- for WinNT 2000
+[Sop1Usb2.NT]
+CopyFiles=Sop1Usb2.SysCopyFileSection2K
+
+[Sop1Usb2.NT.Services]
+AddService = Sop1Usb2,0x00000002,Sop1Usb2_ServiceInst2K
+
+[Sop1Usb2_ServiceInst2K]
+DisplayName=%Sop1Usb2.DeviceDescription%
+ServiceType=1 ; kernel driver
+StartType=3; 3-demand start  2-service auto start
+ErrorControl=1 ; normal
+ServiceBinary=%12%\sop1.sys
+LoadOrderGroup = extended base
+DelReg = Sop1Usb2DelReg2K
+
+[Sop1Usb2DelReg2K]
+HKR,Security
+
+[Sop1Usb2.SysCopyFileSection98]
+sop1.sys
+
+[Sop1Usb2.SysCopyFileSection2K]
+sop1.sys
+
+
+[DllCopyFileSection]
+
+[ControlFlags]
+ExcludeFromSelect= *
+
+[DestinationDirs]
+DefaultDestDir=11
+Sop1Usb2.SysCopyFileSection2K=12
+Sop1Usb2.SysCopyFileSection98=11
+DllCopyFileSection=11
+
+[Strings]
+DeviceManufacturer="InTech"
+VID_192A&PID_0101.DeviceDesc="SOP1 USB2 Fingerprint Reader"
+SOP1ClassName="Fingerprint Readers"
+Sop1Usb2.SvcDesc="SOP1 USB2 Driver"

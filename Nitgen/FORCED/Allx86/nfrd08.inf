@@ -1,0 +1,126 @@
+;
+; Installation file (.inf) for the HFDU08 devices.
+; 
+; Copyright(C) 2012 NITGEN&COMPANY Co., Ltd. 
+;
+; Windows 2000/XP/2003/Vista/7/2008 
+;
+
+[Version]
+Signature="$Chicago$"
+Class=Biometric
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359} 
+
+Provider=%NITGEN%
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+CatalogFile=fdu08.cat
+DriverVer=11/29/2012, 1.0.0.2 
+
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1=%DISK1%,,,
+
+[SourceDisksFiles]
+nfrd08c.sys=1,,
+nfrd08c.dll=1,, 
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+FDU08.Files.Ext = 10,System32\Drivers
+FDU08.Files.Dll = 11			; 9x - System Dir, NT - System32 Dir
+
+[ControlFlags]
+;ExcludeFromSelect=*             	; removes all device here from the device installer list
+
+[Manufacturer]
+%NITGEN%=NITGEN, NTx86, NTia64, NTamd64
+
+[NITGEN]
+
+;------------------------------------------
+; NITGEN USB Fingerprint Device (FDU08)
+;------------------------------------------
+%USB\VID_0A86&PID_0650.DeviceDesc%=FDU08, USB\VID_0A86&PID_0650
+
+
+[NITGEN.NTx86]
+
+;------------------------------------------
+; NITGEN USB Fingerprint Device (FDU08)
+;------------------------------------------
+%USB\VID_0A86&PID_0650.DeviceDesc%=FDU08, USB\VID_0A86&PID_0650
+
+
+[NITGEN.NTia64]
+
+;------------------------------------------
+; NITGEN USB Fingerprint Device (FDU08)
+;------------------------------------------
+%USB\VID_0A86&PID_0650.DeviceDesc%=FDU08, USB\VID_0A86&PID_0650
+
+
+[NITGEN.NTamd64]
+
+;------------------------------------------
+; NITGEN USB Fingerprint Device (FDU08)
+;------------------------------------------
+%USB\VID_0A86&PID_0650.DeviceDesc%=FDU08, USB\VID_0A86&PID_0650
+
+
+; =================== HFDU08 USB FRD Driver ===================
+
+;---------------
+; For Win98...
+;---------------
+[FDU08]
+CopyFiles=FDU08.Files.Ext, FDU08.Files.Dll
+AddReg=FDU08.AddReg
+
+[FDU08.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,nfrd08c.sys
+
+[FDU08.Files.Ext]
+nfrd08c.sys
+
+[FDU08.Files.Dll]
+nfrd08c.dll
+
+
+;-------------------
+; For Windows NT...
+;-------------------
+
+; FRD
+
+[ClassInstall32]
+AddReg=AddRegBiometricClass
+
+[AddRegBiometricClass]
+HKR,,,,%BiometricClassName%
+
+
+[FDU08.NT]
+CopyFiles=FDU08.Files.Ext, FDU08.Files.Dll
+
+[FDU08.NT.Services]
+Addservice = FDU08, 0x00000002, FDU08_AddService_Inst 
+
+[FDU08_AddService_Inst]
+DisplayName    = %FDU08.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\nfrd08c.sys
+
+[Strings]
+BiometricClassName="Biometric"
+NITGEN="NITGEN"
+FDU08.SvcDesc="FDU08 Service"
+USB\VID_0A86&PID_0650.DeviceDesc="NITGEN HFDU08 USB FRD"
+
+DISK1="NITGEN FRD Installation Disk"

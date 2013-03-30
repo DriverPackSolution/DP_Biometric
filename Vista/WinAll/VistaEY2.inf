@@ -1,0 +1,99 @@
+;
+; Vista Imaging VistaEY2 Installation File
+;
+
+[Version]
+Signature = "$Windows NT$"
+Class=VistaImaging
+ClassGUID={1BF284CF-E918-4617-AD66-27D2807E62BE}
+Provider=%VII%
+DriverVer=06/14/2011,1.0.0.0
+CatalogFile=VistaEY2.cat
+
+; ================== Class section ==================
+
+[ClassInstall32]
+AddReg=CustomClass_RegistryAdd
+
+[CustomClass_RegistryAdd]
+HKR,,,,%ClassName%
+HKR,,Icon,,-10
+
+; ========== Manufacturer/Models sections ===========
+
+[Manufacturer]
+%VII% = Vii,NTx86,NTamd64
+
+[Vii.NTx86]
+%USB\VII.DeviceDesc% = USB_Install, USB\VID_0602&PID_3036
+%USB\VII.DeviceDesc% = USB_Install, USB\VID_0602&PID_3136&MI_00
+
+[Vii.NTamd64]
+%USB\VII.DeviceDesc% = USB_Install, USB\VID_0602&PID_3036
+%USB\VII.DeviceDesc% = USB_Install, USB\VID_0602&PID_3136&MI_00
+
+; =================== Installation ===================
+
+[USB_Install]
+Include=winusb.inf
+Needs=WINUSB.NT
+
+[USB_Install.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[WinUSB_ServiceInstall]
+DisplayName     = %WinUSB_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\winusb.sys
+
+[USB_Install.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[WinUSB_Install]
+KmdfLibraryVersion=1.9
+
+[USB_Install.HW]
+AddReg=Dev_AddReg
+
+[Dev_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{82BE3EC9-05E3-4c7a-88FE-B81814A0F5C6}"
+
+[USB_Install.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01009.dll,WdfCoInstaller","WinUSBCoInstaller2.dll"
+
+[CoInstallers_CopyFiles]
+WdfCoInstaller01009.dll
+WinUSBCoInstaller2.dll
+
+[DestinationDirs]
+CoInstallers_CopyFiles=11
+
+; ================= Source Media Section =====================
+
+[SourceDisksNames]
+1 = %DISK_NAME%,,,\i386
+2 = %DISK_NAME%,,,\amd64
+
+[SourceDisksFiles.x86]
+WinUSBCoInstaller2.dll=1
+WdfCoInstaller01009.dll=1
+
+[SourceDisksFiles.amd64]
+WinUSBCoInstaller2.dll=2
+WdfCoInstaller01009.dll=2
+
+; =================== Strings ===================
+
+[Strings]
+VII="Vista Imaging"
+USB\VII.DeviceDesc="VistaEY2 Camera"
+WinUSB_SvcDesc="WinUSB Driver"
+DISK_NAME="Vista Imaging Driver Installation Media"
+ClassName="Vista Imaging"

@@ -1,0 +1,110 @@
+; Copyright (c) 2009 Athena, Inc.
+; Manufacturer: Athena, Inc.
+
+[Version]
+Signature="$Windows NT$"
+Class=Biometric
+ClassGUID={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%Mfg%
+DriverVer=03/10/2010,1.9.2.0167
+CatalogFile=asebio3.cat
+
+[SourceDisksNames]
+1=%DiskName%,,,
+
+[SourceDisksFiles]
+asebio3.sys = 1
+
+[Manufacturer]
+%Mfg%=Models, NTamd64
+
+[Models]
+; empty section to avoid installation on NT4, w2k and w9x
+
+[Models.NTamd64]
+; x64 systems
+%USB\VID_0DC3&PID_1107&MI_02.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_1107&MI_02
+%USB\VID_0DC3&PID_1108&MI_01.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_1108&MI_01
+%USB\VID_0DC3&PID_1109&MI_01.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_1109&MI_01
+%USB\VID_0DC3&PID_110A&MI_02.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_110A&MI_02
+%USB\VID_0DC3&PID_1007&MI_02.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_1007&MI_02
+%USB\VID_0DC3&PID_1008&MI_01.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_1008&MI_01
+%USB\VID_0DC3&PID_1009&MI_01.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_1009&MI_01
+%USB\VID_0DC3&PID_100A&MI_02.DeviceDesc%    = asebio3.Dev,USB\VID_0DC3&PID_100A&MI_02
+
+; biometry class installation is necessary despite of chkinf warning
+[ClassInstall32]
+AddReg=biometry_class_addreg
+
+[biometry_class_addreg]
+HKR,,,,Biometric
+HKR,,Icon,,"-24"
+
+[DestinationDirs]
+asebio3.Files.Ext = 10,System32\Drivers
+
+[asebio3.Dev.NTamd64]
+CopyFiles=asebio3.Files.Ext
+AddReg=asebio3.AddReg
+FeatureScore=0x80
+
+[asebio3.Dev.NTamd64.HW]
+AddReg=asebio3.Device.AddReg
+DelReg=asebio3.TcWbfCleanup.DelReg
+
+[asebio3.Dev.NTamd64.Services]
+AddService = asebio3, 0x00000002, asebio3.AddService
+
+[asebio3.AddService]
+DisplayName    = %asebio3.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\asebio3.sys
+LoadOrderGroup = Base
+AddReg         = asebio3.Driver.AddReg
+
+[asebio3.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,asebio3.sys
+
+[asebio3.Driver.AddReg]
+HKR,"Parameters","SelectiveSuspendDisable",0x10001,1
+
+[asebio3.Device.AddReg]
+HKR,,"SelectiveSuspendEnable",0x10001,0
+HKR,,"TcDeviceType",0x10001,0x501
+
+[asebio3.TcWbfCleanup.DelReg]
+HKR,,"DeviceCharacteristics"
+HKR,,"Security"
+HKR,,"LowerFilters"
+HKR,,"Exclusive"
+HKR,,"SystemWakeEnabled"
+HKR,,"DeviceIdleEnabled"
+HKR,,"UserSetDeviceIdleEnabled"
+HKR,,"ResetPortEnabled"
+HKR,,"DefaultIdleState"
+HKR,,"DefaultIdleTimeout"
+HKR,,"DeviceSelectiveSuspended"
+HKR,WinBio
+HKR,WDF
+HKR,WUDF
+HKR,WUDFDiagnosticInfo
+
+[asebio3.Files.Ext]
+asebio3.sys
+
+; strings
+[Strings]
+Mfg="Athena Smartcard Solutions"
+DiskName="ASEBIO USB Driver Installation media"
+USB\VID_0DC3&PID_1107&MI_02.DeviceDesc    = "ASEDrive KB Fingerprint Reader"
+USB\VID_0DC3&PID_1108&MI_01.DeviceDesc    = "ASEDrive PIV Fingerprint Reader"
+USB\VID_0DC3&PID_1109&MI_01.DeviceDesc    = "ASEDrive KBM Fingerprint Reader"
+USB\VID_0DC3&PID_110A&MI_02.DeviceDesc    = "ASEDrive PIVM Fingerprint Reader"
+USB\VID_0DC3&PID_1007&MI_02.DeviceDesc    = "ASEDrive KB Fingerprint Reader"
+USB\VID_0DC3&PID_1008&MI_01.DeviceDesc    = "ASEDrive PIV Fingerprint Reader"
+USB\VID_0DC3&PID_1009&MI_01.DeviceDesc    = "ASEDrive KBM Fingerprint Reader"
+USB\VID_0DC3&PID_100A&MI_02.DeviceDesc    = "ASEDrive PIVM Fingerprint Reader"
+asebio3.SvcDesc                             = "ASEBIO USB Kernel Driver"

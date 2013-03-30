@@ -1,0 +1,115 @@
+; Installation INF for the Cypress Generic USB Driver for Windows 98ME/2000/XP
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=IMAGE
+
+;USB Class GUID
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+provider=%PROVIDER%
+
+DriverVer=03/20/2009,1.0.0.0
+
+[SourceDisksNames]
+1=%HDUSB_INSTALL%,,,
+
+[SourceDisksFiles]
+hds700.sys = 1
+
+[Manufacturer]
+%MFGNAME%=Hongda, NTx86
+
+[Hongda]
+;S700
+%VID_7D45&PID_100B.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_100D
+%VID_7D45&PID_100C.DeviceDesc%=HdUsb, USB\VID_7D45&PID_100E
+
+%VID_04b4&PID_8613.DeviceDesc%=HdFpDev, USB\VID_04B4&PID_8613
+[Hongda.NTx86]
+;S700
+%VID_7D45&PID_100D.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_100D
+%VID_7D45&PID_100E.DeviceDesc%=HdUsb, USB\VID_7D45&PID_100E
+
+
+[DestinationDirs]
+HdUsbME.Files.Ext = 10,System32\Drivers
+HdUsb.Files.Ext = 10,System32\Drivers
+
+;==============================================
+; S700
+[HdFpDev]
+;CopyFiles = HdUsbME.Files.Ext,
+AddReg = HdUsbME.AddReg
+
+[HdFpDev.NT]
+;CopyFiles = HdUsb.Files.Ext
+AddReg = HdUsb.AddReg
+
+[HdFpDev.NT.HW]
+AddReg = HdFpDev.AddReg.Guid
+
+[HdFpDev.NT.Services]
+Addservice = HdS700, 0x00000002, HdUsb.AddService
+
+[HdFpDev.AddReg.Guid]
+HKR,,DriverGUID,,%HdFpDev.GUID%
+
+;==============================================
+;S700
+
+[HdUsb]
+;CopyFiles=HdUsbME.Files.Ext
+AddReg=HdUsbME.AddReg
+
+[HdUsb.HW]
+AddReg=HdUsb.AddReg.Guid
+
+[HdUsb.NT]
+;CopyFiles=HdUsb.Files.Ext
+AddReg=HdUsb.AddReg
+
+[HdUsb.NT.HW]
+AddReg=HdUsb.AddReg.Guid
+
+[HdUsb.NT.Services]
+Addservice = HdS700, 0x00000002, HdUsb.AddService
+
+[HdUsb.AddService]
+DisplayName    = %HdUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\hds700.sys
+LoadOrderGroup = Base
+
+[HdUsbME.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds700.sys
+
+[HdUsb.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds700.sys
+
+[HdUsbME.Files.Ext]
+hds700.sys
+
+[HdUsb.Files.Ext]
+hds700.sys
+
+[HdUsb.AddReg.Guid]
+;HKR,,DriverGUID,,%HdUsb.GUID%
+;---------------------------------------------------------------;
+
+[Strings]
+PROVIDER="Hongda"
+MFGNAME="Hongda"
+HDUSB_INSTALL="USB Driver Installation Disk"
+
+VID_7D45&PID_100D.DeviceDesc="Four-Finger Scanner - no eeprom"
+VID_7D45&PID_100E.DeviceDesc="Four-Finger Scanner"
+
+
+HdUsb.SvcDesc="Four-Finger Scanner"
+HdUsb.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B4E}"
+HdFpDev.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B4D}"

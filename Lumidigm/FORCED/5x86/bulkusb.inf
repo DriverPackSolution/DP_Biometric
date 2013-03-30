@@ -1,0 +1,130 @@
+;///////////////////////////////////////////////////////////////////////////////
+;//
+;//		Copyright (c) 2003 - Analog Devices Inc. - All rights reserved.
+;//
+;//		File:			bulkldi.inf
+;//		Description: Device installation file for the Blackfin USB-LAN
+;//                          EZ-EXTENDER USB connection
+;//
+;///////////////////////////////////////////////////////////////////////////////
+
+;///////////////////////////////////////////////////////////////////////////////
+;// Version Section 
+
+[Version]
+Signature="$CHICAGO$"
+Provider=%ProviderName%
+Class="LUMIDIGM VENUS Devices"
+ClassGUID={06B62F68-E35E-4f57-8BE2-A5BC6CCCC708}
+DriverVer=04/21/2009,6.1.7000.0
+Catalogfile.ntx86=bulkusbx86.cat
+Catalogfile.ntamd64=bulkusbx64.cat
+DriverPackageType=PlugAndPlay
+DriverPackageDisplayName=%PackDesc%
+
+;///////////////////////////////////////////////////////////////////////////////
+;// ClassInstall/ClassInstall32 Section
+
+; Windows-95/98 installation
+[ClassInstall]
+Addreg=Class_AddReg
+
+; Windows-NT/2000 installation
+[ClassInstall32]
+Addreg=Class_AddReg
+
+
+[ClassInstall32.ntamd64]
+Addreg=Class_AddReg
+
+[Class_AddReg]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-5"
+
+[Class_AddReg.ntamd64]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-5"
+
+;///////////////////////////////////////////////////////////////////////////////
+;// DestinationDirs Section 
+
+[DestinationDirs]
+DefaultDestDir = 10,System32\Drivers
+
+;///////////////////////////////////////////////////////////////////////////////
+;// Manufacturer and Models Sections 
+
+[Manufacturer]
+%MfgName%=Lumidigm, NTx86, NTia64, NTamd64
+
+#[Lumidigm]
+#%DeviceDesc3424%=DriverInstall, USB\VID_0525&PID_3424
+#%DeviceDesc212C%=DriverInstall, USB\VID_1FAE&PID_212C
+#%DeviceDesc2064%=DriverInstall, USB\VID_1FAE&PID_2064
+
+[Lumidigm.NTx86]
+%DeviceDesc3424%=DriverInstall.NTx86, USB\VID_0525&PID_3424
+%DeviceDesc212C%=DriverInstall.NTx86, USB\VID_1FAE&PID_212C
+%DeviceDesc2064%=DriverInstall.NTx86, USB\VID_1FAE&PID_2064
+
+[Lumidigm.NTia64]
+;%DeviceDesc3424%=DriverInstall, USB\VID_0525&PID_3424
+;%DeviceDesc212C%=DriverInstall, USB\VID_1FAE&PID_212C
+;%DeviceDesc2064%=DriverInstall, USB\VID_1FAE&PID_2064
+
+
+[Lumidigm.NTamd64]
+%DeviceDesc3424%=DriverInstall.NTamd64, USB\VID_0525&PID_3424
+%DeviceDesc212C%=DriverInstall.NTamd64, USB\VID_1FAE&PID_212C
+%DeviceDesc2064%=DriverInstall.NTamd64, USB\VID_1FAE&PID_2064
+
+[DriverInstall.NTx86]
+CopyFiles=DriverInstall_Files
+
+[DriverInstall.NTamd64]
+CopyFiles=DriverInstall_Files.NTamd64
+
+
+[DriverInstall.NTx86.Services]
+Addservice = bulkldi, 0x00000002, DriverInstall_AddService
+
+[DriverInstall.NTamd64.Services]
+Addservice = bulkldi, 0x00000002, DriverInstall_AddService
+
+[DriverInstall_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\bulkldi.sys
+LoadOrderGroup = Base
+
+;///////////////////////////////////////////////////////////////////////////////
+;// Files (common) - Note, filenames must be 8.3 format for Win9x
+
+[DriverInstall_Files]
+bulkldi.sys
+
+[DriverInstall_Files.NTamd64]
+bulkldi.sys,bulkldix64.sys
+
+
+;///////////////////////////////////////////////////////////////////////////////
+;// Strings Section 
+
+[Strings]
+ProviderName="Lumidigm, Inc."
+MfgName="Lumidigm, Inc."
+DeviceDesc3424="Venus V100 MultiSpectral Biometric"
+DeviceDesc212C="Mercury M300 MultiSpectral Biometric"
+DeviceDesc2064="Mercury M100 MultiSpectral Biometric"
+DeviceClassName="Lumidigm Biometric Sensor"
+SvcDesc="Lumidigm USB Biometric Sensor Driver"
+PackDesc="Lumidigm USB Biometric Sensor Driver"
+
+[sourcedisksfiles]
+bulkldi.sys=1
+bulkldix64.sys=1
+
+[sourcedisksnames]
+1 = "Lumi disk"

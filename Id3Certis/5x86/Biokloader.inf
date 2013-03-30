@@ -1,0 +1,69 @@
+;; Biokloader.inf
+; inf file for Bioki device
+; (c) copyright id3 semiconductors
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$chicago$"
+Provider=%ProviderName%
+DriverVer=01/24/2003
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[DestinationDirs]
+Biokloader_Files_Driver = 10,system32\drivers
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Mfg0
+
+[Mfg0]
+%DeviceDesc%=Biokey_LD, USB\VID_0b81&PID_0102
+
+;---------- DDInstall Sections -----------------------------------------------
+; --------- Windows 9X -----------------
+
+; Experimentation has shown that DDInstall root names greater than 19 characters
+; cause problems in Windows 98
+
+[Biokey_LD]
+AddReg=Biokey_9X_AddReg
+
+[Biokey_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,bioload.sys
+HKR, "Parameters", "BreakOnEntry", 0x00010001, 0
+
+; --------- Windows NT -----------------
+
+[Biokey_LD.NT]
+AddReg=Biokey_NT_AddReg
+DriverVer=01/24/2003
+
+[Biokey_LD.NT.Services]
+Addservice = Biokloader, 0x00000002, Biokey_AddService
+
+[Biokey_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\bioload.sys
+
+[Biokey_NT_AddReg]
+HKLM, "System\CurrentControlSet\Services\Biokload\Parameters",\
+	"BreakOnEntry", 0x00010001, 0
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="id3 S"
+MfgName="id3"
+DeviceDesc="Biokiloader"
+DeviceClassName=" Biokiloader"
+SvcDesc="Biokiloader"

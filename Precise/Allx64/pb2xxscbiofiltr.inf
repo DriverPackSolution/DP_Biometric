@@ -1,0 +1,148 @@
+; PB2xxWin7.inf
+; Copyright © 2009 Precise Biometrics AB
+
+[Version]
+Signature="$Windows NT$"
+Class=SmartCardReader
+ClassGUID={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%PBAB%
+CatalogFile.NTx86=PB2xxScBioFiltrNTx86.cat
+CatalogFile.NTamd64=PB2xxScBioFiltrNTamd64.cat
+
+DriverVer=12/13/2011,1.1.1.0
+
+[DestinationDirs]
+;DefaultDestDir   = 12
+PB2xxScBioFiltr.CopyFiles = 12
+PB2xxScBioFiltr_CoInstaller_CopyFiles = 11
+;UMDriverCopy=12,UMDF ; copy to drivers\umdf
+
+[SourceDisksNames]
+1 = %MediaDescription%,,,
+
+[SourceDisksFiles]
+PB2xxScBioFiltr.sys = 1,,
+WdfCoInstaller01009.dll=1 ; make sure the number matches with SourceDisksNames
+
+[Manufacturer]
+%PBAB%=PreciseBiometricsModels,NTx86,NTamd64
+
+[PreciseBiometricsModels.NTx86]
+%PB250ReaderName%=PB2xxScBioFiltr_Install.NT, USB\VID_08c3&PID_0401
+%PB200ReaderName%=PB2xxScBioFiltr_Install.NT, USB\VID_08c3&PID_0402
+
+[PreciseBiometricsModels.NTamd64]
+%PB250ReaderName%=PB2xxScBioFiltr_Install.NT,USB\VID_08c3&PID_0401
+%PB200ReaderName%=PB2xxScBioFiltr_Install.NT,USB\VID_08c3&PID_0402
+
+[PB2xxScBioFiltr_Install.NT]
+AddReg=Reader.Install.AddReg
+Include=WUDFUsbccidDriver.inf, WINUSB.INF
+Needs=Usbccid_Install.NT, WINUSB.NT
+CopyFiles=PB2xxScBioFiltr_Install.CopyFiles
+;Include=wudfusbcciddriver.inf
+;Needs=Reader.Install.AddReg
+;Needs=UMDriverCopy									;;; NEEDED?????
+;Include=WINUSB.INF                      ; Import sections from WINUSB.INF
+;Needs=WINUSB.NT 
+;Needs=Usbccid_Install
+;Needs=Usbccid_Install.NT
+;CopyFiles=PB2xxScBioFiltr_Install.CopyFiles
+
+[PB2xxScBioFiltr_Install.CopyFiles]
+PB2xxScBioFiltr.sys
+
+[PB2xxScBioFiltr_Install.NT.Services]
+AddService=PB2xxScBioFiltr,,PB2xxScBioFiltr_ServiceInstall
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+[PB2xxScBioFiltr_ServiceInstall]
+DisplayName    = %PB200SeriesSmartCardDisplayName%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\PB2xxScBioFiltr.sys
+
+[WUDFRD_ServiceInstall]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\WUDFRd.sys
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_Service_DisplayName%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+LoadOrderGroup  = Base
+
+[PB2xxScBioFiltr_Install.NT.HW]
+AddReg = PB2xxScBioFiltr.HW.AddReg
+AddReg=Usbccid_Device_AddReg
+;Include=wudfusbcciddriver.inf
+;Needs=Usbccid_Install.NT.HW
+
+[PB2xxScBioFiltr.HW.AddReg]
+HKR,,"UpperFilters",%REG_MULTI_SZ%,"PB2xxScBioFiltr"
+HKR,"WUDFUsbccidDriver","EscapeCommandEnable", %REG_DWORD%, 1
+HKR, "WUDFUsbccidDriver", "DeviceFlags", 0x00010001, 4
+
+[Usbccid_Device_AddReg]
+HKR,,"LowerFilters",0x00010008,"WinUsb" ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
+HKR,"WUDF","Exclusive",0x10001,1
+HKR,,"SystemWakeEnabled",0x00010001,1
+HKR,,"DeviceIdleEnabled",0x00010001,1
+HKR,,"UserSetDeviceIdleEnabled",0x00010001,1
+HKR,,"DefaultIdleState",0x00010001,1
+HKR,,"DefaultIdleTimeout",0x00010001,5000
+HKR,"WDF","WdfDefaultWakeFromSleepState",0x00010001,0
+HKR,"WDF","WdfDefaultIdleInWorkingState",0x00010001,1
+
+[PB2xxScBioFiltr_Install.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,%REG_MULTI_SZ%, "WdfCoInstaller01009.dll,WdfCoInstaller"
+HKR,,CoInstallers32,%REG_MULTI_SZ%, "WudfCoinstaller.dll"						;;; CAN BE REMOVED ???
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01009.dll
+
+[PB2xxScBioFiltr_Install.NT.Wdf]
+KmdfService = PB2xxScBioFiltr, PB2xxScBioFiltr_wdfsect
+KmdfService = WINUSB, WinUsb_Install_wdfsect
+UmdfService=WUDFUsbccidDriver, WUDFUsbccidDriver_Install
+UmdfServiceOrder=WUDFUsbccidDriver
+UmdfDispatcher=WinUsb
+UmdfKernelModeClientPolicy=AllowKernelModeClients
+
+[PB2xxScBioFiltr_Install_wdfsect]
+KmdfLibraryVersion = 1.9
+
+[WinUsb_Install_wdfsect]
+KmdfLibraryVersion = 1.0
+
+[WUDFUsbccidDriver_Install]
+UmdfLibraryVersion=1.9.0
+DriverCLSID="{5EB949F2-78C6-443b-9964-07588EB151C6}"
+ServiceBinary=%12%\UMDF\WUDFUsbccidDriver.dll
+
+[Strings]
+; Non-Localizable Strings
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+
+; Localizable Strings
+MediaDescription="Precise Biometrics Installer Package"
+PBAB = "Precise Biometrics"
+PB200SeriesSmartCardDisplayName="Precise 200-Series Smart Card Device Service"
+PB250ReaderName="Precise 250 MC Smart Card Reader"
+PB200ReaderName="Precise 200 MC Smart Card Reader"
+WinUsb_Service_DisplayName="WinUSB Driver"
+WinUsb_SvcDesc="WinUSB Driver"

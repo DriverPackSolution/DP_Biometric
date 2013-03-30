@@ -1,0 +1,186 @@
+; BIOUSB.INF
+; Copyright (c) 2002-2007 STMicroelectronics, Inc.
+; Manufacturer:  STMicroelectronics, Inc.
+;
+; [20071130, ACS] 1 inf for windows 98 and up (x86 & x64)
+; [20081231, ACS] updated models section
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=SmartCardReader
+ClassGUID={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%STM%
+DriverVer=12/31/2008,3.1.0.1
+CatalogFile=biousbvs.cat
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+
+[ControlFlags]
+;Uncomment this line to disallow user's to manually add this device
+ExcludeFromSelect=*
+
+; ================= Class section =====================
+
+[ClassInstall]
+Addreg=SmartCardReaderClassReg
+
+[SmartCardReaderClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-25
+HKLM,"\Software\Microsoft\Cryptography\Calais\Readers",,,
+
+[Manufacturer]
+%Mfg%=Models,NTamd64
+
+[DestinationDirs]
+DefaultDestDir		   = 11
+Usb.Scanner.CopySys32Files = 10,system32\drivers
+SCReader.Files.Ext.NTx86   = 12
+SCReader.Files.Ext.NTamd64 = 12
+
+[Models]
+;%USB\VID_0483&PID_2015.DeviceDesc%       = ST92163.Scanner, USB\VID_0483&PID_2015
+%USB\VID_0483&PID_2015&MI_00.DeviceDesc% = ST92163.Scanner, USB\VID_0483&PID_2015&MI_00
+%USB\VID_0483&PID_2015&MI_01.DeviceDesc% = SCReader.Dev,    USB\VID_0483&PID_2015&MI_01
+
+;%USB\VID_0483&PID_2017.DeviceDesc%       = ST92163.Scanner, USB\VID_0483&PID_2017
+%USB\VID_0483&PID_2017&MI_00.DeviceDesc% = ST92163.Scanner, USB\VID_0483&PID_2017&MI_00
+%USB\VID_0483&PID_2017&MI_01.DeviceDesc% = SCReader.Dev,    USB\VID_0483&PID_2017&MI_01
+
+;%USB\VID_0483&PID_2018.DeviceDesc%       = ST92163.Scanner, USB\VID_0483&PID_2018
+%USB\VID_0483&PID_2018&MI_00.DeviceDesc% = ST92163.Scanner, USB\VID_0483&PID_2018&MI_00
+%USB\VID_0483&PID_2018&MI_01.DeviceDesc% = SCReader.Dev,    USB\VID_0483&PID_2018&MI_01
+
+[Models.NTamd64]
+;%USB\VID_0483&PID_2015.DeviceDesc%       = ST92163.Scanner, USB\VID_0483&PID_2015
+%USB\VID_0483&PID_2015&MI_00.DeviceDesc% = ST92163.Scanner, USB\VID_0483&PID_2015&MI_00
+%USB\VID_0483&PID_2015&MI_01.DeviceDesc% = SCReader.Dev,    USB\VID_0483&PID_2015&MI_01
+
+;%USB\VID_0483&PID_2017.DeviceDesc%       = ST92163.Scanner, USB\VID_0483&PID_2017
+%USB\VID_0483&PID_2017&MI_00.DeviceDesc% = ST92163.Scanner, USB\VID_0483&PID_2017&MI_00
+%USB\VID_0483&PID_2017&MI_01.DeviceDesc% = SCReader.Dev,    USB\VID_0483&PID_2017&MI_01
+
+;%USB\VID_0483&PID_2018.DeviceDesc%       = ST92163.Scanner, USB\VID_0483&PID_2018
+%USB\VID_0483&PID_2018&MI_00.DeviceDesc% = ST92163.Scanner, USB\VID_0483&PID_2018&MI_00
+%USB\VID_0483&PID_2018&MI_01.DeviceDesc% = SCReader.Dev,    USB\VID_0483&PID_2018&MI_01
+
+; =============== ST92163-specific sections ===============
+
+; Win98 section
+[ST92163.Scanner]
+AddReg    = Scanner.AddReg,   Usb.Scanner.AddReg
+CopyFiles = Scanner.CopyFiles,Usb.Scanner.CopySys32Files, DataSource.CopyFiles
+
+; Win2000 and up section
+[ST92163.Scanner.NT]
+Include   = sti.inf
+Needs     = STI.USBSection
+AddReg	  = Scanner.AddReg.NT
+CopyFiles = Scanner.CopyFiles.NT,DataSource.CopyFiles
+
+[ST92163.Scanner.NT.Services]
+Include	  = sti.inf
+Needs	  = STI.USBSection.Services
+
+
+; =============== Driver installation for Smart Card Reader ===============
+
+; Win98 section
+[SCReader.Dev]
+CopyFiles = SCReader.Files.Ext
+AddReg    = SCReader.AddReg
+
+[SCReader.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,biousb98.sys
+HKR,,"ReadTimeout",0,%SCReader.Timeout%
+[SCReader.Files.Ext]
+biousb98.sys
+
+; Win2000 and up section
+[SCReader.Dev.NTx86]
+CopyFiles = SCReader.Files.Ext.NTx86
+AddReg    = SCReader.AddReg.NT
+
+[SCReader.Dev.NTamd64]
+CopyFiles = SCReader.Files.Ext.NTamd64
+AddReg    = SCReader.AddReg.NT
+
+[SCReader.Dev.NTx86.Services]
+Addservice = BioSimKey, 0x00000002, SCReader.AddService
+
+[SCReader.Dev.NTamd64.Services]
+Addservice = BioSimKey, 0x00000002, SCReader.AddService
+
+[SCReader.AddService]
+DisplayName    = %SCReader.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\biousbvs.sys
+LoadOrderGroup = Base
+
+[SCReader.AddReg.NT]
+HKR,,AdapterType,0,"0100"
+HKR,,"ReadTimeout",0,%SCReader.Timeout%
+
+[SCReader.Files.Ext.NTx86]
+biousbvs.sys
+
+[SCReader.Files.Ext.NTamd64]
+biousbvs.sys,biousbvsx64.sys
+
+; =============== Model-generic add registry and copy sections ===============
+
+; Win98 add registry section
+[Scanner.AddReg]
+HKR,,HardwareConfig,1,2
+HKR,,DevLoader,,*NTKERN
+
+; Win98/USB add registry section
+[Usb.Scanner.AddReg]
+HKR,,NTMPDriver,,"usbscan.sys"
+
+; Win2000 and up add registry section
+[Scanner.AddReg.NT]
+HKR,,HardwareConfig,1,2
+HKR,,DevLoader,,*NTKERN
+
+; Win98 copy files section
+[Scanner.CopyFiles]
+
+; Win2000 copy files section
+[Scanner.CopyFiles.NT]
+
+; Only used by Win98 - modified 5/25/00 pts
+[Usb.Scanner.CopySys32Files]
+
+; Used by Win98 and Win2000 to copy data source to twain_32 directory
+[DataSource.CopyFiles]
+
+; =============== Source disk sections ===============
+[SourceDisksNames]
+1=%DiskName%,,
+
+[SourceDisksFiles]
+biousb98.sys	= 1	; win98 
+biousbvs.sys    = 1	; win2000 and up
+biousbvsx64.sys = 1	; winxp   and up (x64)
+
+[Strings]
+STM					= "STMicroelectronics"
+Provider				= "Microsoft"
+Mfg					= "STMicroelectronics"
+DiskName				= "ST BSCR Software CD"
+ClassName				= "Biometric Smart Card Readers"
+SCReader.SvcDesc			= "ADT60 BioSIMKey / AET60 BioCARDKey"
+SCReader.Timeout			= "60"		
+USB\VID_0483&PID_2015.DeviceDesc        = "USB ST92163 Biometric SC Reader"
+USB\VID_0483&PID_2015&MI_00.DeviceDesc  = "TouchChip Sensor"
+USB\VID_0483&PID_2015&MI_01.DeviceDesc  = "ADT60 BioSIMKey / AET60 BioCARDKey"
+USB\VID_0483&PID_2017.DeviceDesc        = "USB ST92163 Biometric SC Reader"
+USB\VID_0483&PID_2017&MI_00.DeviceDesc  = "TouchChip Sensor"
+USB\VID_0483&PID_2017&MI_01.DeviceDesc  = "ADT60 BioSIMKey / AET60 BioCARDKey"
+USB\VID_0483&PID_2018.DeviceDesc        = "USB ST92163 Biometric SC Reader"
+USB\VID_0483&PID_2018&MI_00.DeviceDesc  = "TouchChip Sensor"
+USB\VID_0483&PID_2018&MI_01.DeviceDesc  = "ADT60 BioSIMKey / AET60 BioCARDKey"

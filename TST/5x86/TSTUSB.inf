@@ -1,0 +1,114 @@
+; Installer for TSTUSB Driver (BiRD-III USB and TST BiRD-4 USB)
+; Copyright (c) by TST Group 2007
+
+[Version]
+Signature="$WINDOWS NT$"
+Provider=%S_Provider%
+DriverVer=04/17/2007,2.0.0.2
+
+Class=BiometricDevices
+ClassGUID={A815B48F-213F-4e73-A264-BE29B81BB283}
+
+; install class, Windows 98:
+[ClassInstall] 
+AddReg=_AddReg_ClassInstall
+
+; install class, Windows 2000:
+[ClassInstall32] 
+AddReg=_AddReg_ClassInstall
+
+; registry entries required for class 
+[_AddReg_ClassInstall]
+HKR,,,,"%S_DeviceClassDisplayName%"
+HKR,,Icon,,"-20"
+
+
+[Manufacturer]
+; Details about the models are to be taken from the "TST" section
+%S_Manufacturer%=TST
+
+[SourceDisksNames]
+1=%S_SourceDisksNames%,,,
+
+[SourceDisksFiles]
+usbbbfwl.sys=1
+tstusb.sys=1
+
+[TST]
+%USB\VID_1013&PID_0014.DeviceDesc%=USBBBFWL.Dev, USB\VID_1013&PID_0014
+%USB\VID_1013&PID_0015.DeviceDesc%=TSTUSB.Dev, USB\VID_1013&PID_0015
+%USB\VID_1013&PID_0018.DeviceDesc%=TSTUSB.Dev, USB\VID_1013&PID_0018
+%USB\VID_1013&PID_0019.DeviceDesc%=TSTUSB.Dev, USB\VID_1013&PID_0019
+
+[DestinationDirs]
+DefaultDestDir=12	; copy to %windir%\system32\drivers
+USBBBFWL.Files.Ext=10,System32\Drivers
+TSTUSB.Files.Ext=10,System32\Drivers
+
+[USBBBFWL.Dev]
+CopyFiles=USBBBFWL.Files.Ext
+AddReg=USBBBFWL.AddReg
+
+[USBBBFWL.Dev.NT]
+CopyFiles=USBBBFWL.Files.Ext
+AddReg=USBBBFWL.AddReg
+
+[USBBBFWL.Dev.NT.Services]
+Addservice=USBBBFWL,0x00000002,USBBBFWL.AddService
+
+[USBBBFWL.AddService]
+DisplayName=%USBBBFWL.SvcDesc%
+ServiceType=1	; SERVICE_KERNEL_DRIVER
+StartType=3		; SERVICE_DEMAND_START
+ErrorControl=1	; SERVICE_ERROR_NORMAL
+ServiceBinary=%10%\System32\Drivers\usbbbfwl.sys
+
+[USBBBFWL.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbbbfwl.sys
+
+[USBBBFWL.Files.Ext]
+usbbbfwl.sys
+
+[TSTUSB.Dev]
+CopyFiles=TSTUSB.Files.Ext
+2AddReg=TSTUSB.AddReg
+
+[TSTUSB.Dev.NT]
+CopyFiles=TSTUSB.Files.Ext
+AddReg=TSTUSB.AddReg
+
+[TSTUSB.Dev.NT.Services]
+Addservice=TSTUSB,0x00000002,TSTUSB.AddService
+
+[TSTUSB.AddService]
+DisplayName=%TSTUSB.SvcDesc%
+ServiceType=1	; SERVICE_KERNEL_DRIVER
+StartType=3		; SERVICE_DEMAND_START
+ErrorControl=1	; SERVICE_ERROR_NORMAL
+ServiceBinary=%10%\System32\Drivers\tstusb.sys
+LoadOrderGroup=Base
+
+[TSTUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,tstusb.sys
+
+[TSTUSB.Files.Ext]
+tstusb.sys
+
+
+[ControlFlags]
+ExcludeFromSelect=*		; removes all devices here from the device installer list
+
+
+[Strings]
+S_Provider="TST Group"
+S_Manufacturer="ISC AG"
+S_SourceDisksNames="TST Group USB Drivers"
+S_DeviceClassDisplayName="Biometric Devices"
+USB\VID_1013&PID_0014.DeviceDesc="TST Firmware Loader"
+USB\VID_1013&PID_0015.DeviceDesc="TST BiRD-III USB"
+USB\VID_1013&PID_0018.DeviceDesc="TST BiRD-3 USB"
+USB\VID_1013&PID_0019.DeviceDesc="TST BiRD-4 USB"
+USBBBFWL.SvcDesc="TST Firmware Loader (usbbbfwl.sys)"
+TSTUSB.SvcDesc="TST BiRD-III USB Driver (tstusb.sys)"

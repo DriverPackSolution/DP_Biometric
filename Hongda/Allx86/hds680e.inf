@@ -1,0 +1,126 @@
+; Installation INF for the Hongda USB Scanner Driver for Windows 2000/XP/2003/vista
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=IMAGE
+
+;USB Class GUID
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+provider=%PROVIDER%
+
+DriverVer=08/15/2008,1.3.0.8
+
+[SourceDisksNames]
+1=%HDUSB_INSTALL%,,,
+
+[SourceDisksFiles]
+hds680e.sys = 1
+
+[Manufacturer]
+%MFGNAME%=Hongda, NTx86
+
+[Hongda]
+;S680E
+%VID_7D45&PID_1003.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1003
+%VID_7D45&PID_1004.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1004
+;S680DW
+%VID_7D45&PID_1007.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1007
+%VID_7D45&PID_1008.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1008
+;S680DB
+%VID_7D45&PID_1009.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1009
+%VID_7D45&PID_100a.DeviceDesc%=HdUsb, USB\VID_7D45&PID_100a
+
+[Hongda.NTx86]
+;S680E
+%VID_7D45&PID_1003.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1003
+%VID_7D45&PID_1004.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1004
+;S680DW
+%VID_7D45&PID_1007.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1007
+%VID_7D45&PID_1008.DeviceDesc%=HdUsb, USB\VID_7D45&PID_1008
+;S680DB
+%VID_7D45&PID_1009.DeviceDesc%=HdFpDev, USB\VID_7D45&PID_1009
+%VID_7D45&PID_100a.DeviceDesc%=HdUsb, USB\VID_7D45&PID_100a
+[DestinationDirs]
+HdUsbME.Files.Ext = 10,System32\Drivers
+HdUsb.Files.Ext = 10,System32\Drivers
+
+;==============================================
+; S680E
+[HdFpDev]
+;CopyFiles = HdUsbME.Files.Ext,
+AddReg = HdUsbME.AddReg
+
+[HdFpDev.NT]
+;CopyFiles = HdUsb.Files.Ext
+AddReg = HdUsb.AddReg
+
+[HdFpDev.NT.HW]
+AddReg = HdFpDev.AddReg.Guid
+
+[HdFpDev.NT.Services]
+Addservice = HdS680E, 0x00000002, HdUsb.AddService
+
+[HdFpDev.AddReg.Guid]
+HKR,,DriverGUID,,%HdFpDev.GUID%
+
+;==============================================
+;S680E
+
+[HdUsb]
+;CopyFiles=HdUsbME.Files.Ext
+AddReg=HdUsbME.AddReg
+
+[HdUsb.HW]
+AddReg=HdUsb.AddReg.Guid
+
+[HdUsb.NT]
+;CopyFiles=HdUsb.Files.Ext
+AddReg=HdUsb.AddReg
+
+[HdUsb.NT.HW]
+AddReg=HdUsb.AddReg.Guid
+
+[HdUsb.NT.Services]
+Addservice = HdS680E, 0x00000002, HdUsb.AddService
+
+[HdUsb.AddService]
+DisplayName    = %HdUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\hds680e.sys
+LoadOrderGroup = Base
+
+[HdUsbME.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds680e.sys
+
+[HdUsb.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,hds680e.sys
+
+[HdUsbME.Files.Ext]
+hds680e.sys
+
+[HdUsb.Files.Ext]
+hds680e.sys
+
+[HdUsb.AddReg.Guid]
+;HKR,,DriverGUID,,%HdUsb.GUID%
+;---------------------------------------------------------------;
+
+[Strings]
+PROVIDER="Hongda"
+MFGNAME="Hongda"
+HDUSB_INSTALL="Hongda USB Driver Installation Disk"
+VID_7D45&PID_1003.DeviceDesc="USB Roll Fingerprint Scanner"
+VID_7D45&PID_1004.DeviceDesc="USB Roll Fingerprint Scanner"
+VID_7D45&PID_1008.DeviceDesc="USB Roll Fingerprint Scanner"
+VID_7D45&PID_1007.DeviceDesc="USB Roll Fingerprint Scanner"
+VID_7D45&PID_1009.DeviceDesc="USB Roll Fingerprint Scanner"
+VID_7D45&PID_100a.DeviceDesc="USB Roll Fingerprint Scanner"
+
+HdUsb.SvcDesc="USB Roll Fingerprint Scanner Driver"
+HdUsb.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B44}"
+HdFpDev.GUID="{85A8CE85-BFF7-4015-83BC-740967BA5B43}"

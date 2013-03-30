@@ -1,0 +1,143 @@
+; FtrWinUSB.inf
+;
+; Copyright (c) Futronic Technology Company Ltd.
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=Biometric
+CatalogFile=FtrWinUSB.cat
+ClassGUID={53D29EF7-377C-4D14-864B-EB3A85769359}
+Provider=%FTRUSB.Provider%
+DriverVer=04/04/2008, 3.7.0.4
+
+[Manufacturer]
+%FTRUSB.Manufacturer%=FTRUSB_WinUSB, NTx86, NTamd64, NTia64, NTx86.6.0, NTamd64.6.0, NTia64.6.0
+
+[ClassInstall32]
+AddReg=FTRUSB_WinUSB.AddClassReg
+
+[FTRUSB_WinUSB.NTx86.6.0]
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0090
+
+[FTRUSB_WinUSB.NTamd64.6.0]
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0090
+
+[FTRUSB_WinUSB.NTia64.6.0]
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_InstallVista, USB\VID_1491&PID_0090
+
+[FTRUSB_WinUSB.NTx86]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+
+[FTRUSB_WinUSB.NTamd64]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+
+[FTRUSB_WinUSB.NTia64]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+
+[FTRUSB_WinUSB]
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_0834&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0020
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0088
+%FTRUSB.DeviceDesc% = USB_Install, USB\VID_1491&PID_0090
+
+[USB_Install]
+
+[USB_InstallVista]
+Include=winusb.inf
+Needs=WINUSB.NT
+
+[USB_Install.Services]
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[USB_InstallVista.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[WinUSB_ServiceInstall]
+DisplayName     = %WinUSB_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[USB_Install.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[USB_InstallVista.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[WinUSB_Install]
+KmdfLibraryVersion=1.7
+
+[USB_Install.HW]
+AddReg=Dev_AddReg
+
+[USB_InstallVista.HW]
+AddReg=Dev_AddReg
+
+[FTRUSB_WinUSB.AddClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-21
+
+[Dev_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{ec0db5fc-48f8-49f3-880b-ee51bd0de8c6}"
+
+[USB_Install.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[USB_InstallVista.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01007.dll,WdfCoInstaller","WinUSBCoInstaller.dll"
+
+[CoInstallers_CopyFiles]
+WinUSBCoInstaller.dll
+WdfCoInstaller01007.dll
+
+[DestinationDirs]
+CoInstallers_CopyFiles=11
+
+[SourceDisksNames]
+1=%FTRUSB.DriverDiskName%,,,
+
+[SourceDisksFiles.x86]
+WinUSBCoInstaller.dll=1,x86
+WdfCoInstaller01007.dll=1,x86
+
+[SourceDisksFiles.amd64]
+WinUSBCoInstaller.dll=1,amd64
+WdfCoInstaller01007.dll=1,amd64
+
+[SourceDisksFiles.ia64]
+WinUSBCoInstaller.dll=1,ia64
+WdfCoInstaller01007.dll=1,ia64
+
+[Strings]
+FTRUSB.Provider="Futronic Technology Company Ltd."
+FTRUSB.Manufacturer="Futronic Technology Company Ltd."
+FTRUSB.DeviceDesc="Futronic USB Fingerprint Scanner Device"
+ClassName="Personal identification devices"
+FTRUSB.DriverDiskName="Futronic Drivers Installation Disk (Fingerprint Scanner)"
+WinUSB_SvcDesc="WinUSB Driver"

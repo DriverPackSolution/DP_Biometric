@@ -1,0 +1,136 @@
+; P100.inf
+; Copyright © 2004 Precise Biometrics AB
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$CHICAGO$"
+Provider=%ProviderName%
+
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+DriverVer=05/26/2005,3.0.1.0
+CatalogFile=P100.cat
+
+
+;--------- SourceDisksNames Section ------------------------------------------
+
+[SourceDisksNames]
+1=%CDName%,,,""
+
+
+;--------- SourceDisksFiles Section ------------------------------------------
+
+[SourceDisksFiles]
+P100Usb.sys=1
+P100Mgma.sys=1
+cocpyinf.dll=1
+
+
+;--------- DestinationDirs Section -------------------------------------------
+
+[DestinationDirs]
+DefaultDestDir       = 10,System32\Drivers
+P100Usb_Files_Driver = 10,System32\Drivers
+Wdmstub_Files_Driver = 10,System32\Drivers
+CoCopyINF.CopyFiles  = 11 
+
+
+;--------- Control Flags Sections --------------------------------------------
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Mfg0
+
+[Mfg0]
+%Dev1Desc%=P100Usb,USB\VID_08c3&PID_0001&REV_0001
+%Dev2Desc%=P100Usb,USB\VID_08c3&PID_0001&REV_0002
+%Dev3Desc%=P100Usb,USB\VID_08c3&PID_0002&REV_0002
+%Dev4Desc%=P100Usb,USB\VID_08c3&PID_0003&REV_0002
+%Dev5Desc%=P100Usb,USB\VID_08c3&PID_0003&REV_0100
+%Dev6Desc%=P100Usb,USB\VID_08c3&PID_0006&REV_0100
+
+%ProgDesc%=P100Usb,USB\VID_08c3&PID_0100
+%Ali4Desc%=P100Usb,USB\VID_08c3&PID_0101
+
+%Ala4Desc%=P100Usb,USB\VID_08c3&PID_0300
+
+
+;---------- Windows 2000/XP ------------
+
+[P100Usb.NTx86]
+DriverVer=05/26/2005,3.0.1.0
+AddReg=P100Usb_NTx86_AddReg
+CopyFiles=P100Usb_Files_Driver
+CopyINF=P100SCrd.INF
+
+[P100Usb.NTx86.CoInstallers]
+AddReg=CoCopyINF.AddReg
+CopyFiles=CoCopyINF.CopyFiles
+
+[CoCopyINF.AddReg]
+HKR,,CoInstallers32,0x10000,"cocpyinf.DLL,CoCopyINF"
+
+[CoCopyINF.CopyFiles]
+cocpyinf.dll,,,0x10
+
+[P100Usb.NTx86.HW]
+AddReg=P100Usb.NTx86.HW.AddReg
+
+[P100Usb.NTx86.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"P100Magma"
+
+[P100Usb.NTx86.Services]
+Addservice = P100Usb, 0x00000002, P100Usb_AddService
+Addservice = P100Magma, , P100Magma_AddService
+
+[P100Usb_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\P100Usb.sys
+
+[P100Magma_AddService]
+DisplayName    = %magma.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\P100Mgma.sys
+
+[P100Usb_NTx86_AddReg]
+
+
+; --------- Files (common) -------------
+
+[P100Usb_Files_Driver]
+P100Usb.sys,,,2
+P100Mgma.sys,,,2
+
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="Precise Biometrics"
+MfgName="Precise Biometrics"
+CDName="Precise 100 Drivers"
+SvcDesc="Precise 100 USB Driver"
+magma.SvcDesc="Precise 100 HAL Driver"
+
+Dev1Desc="Precise 100 SC"
+Dev2Desc="Precise 100 SC"
+Dev3Desc="Precise 100 A"
+Dev4Desc="Precise 100 SC BioKeyboard"
+Dev5Desc="Precise 100 SC BioKeyboard"
+Dev6Desc="Precise 100 A BioKeyboard"
+
+ProgDesc="Precise 100 MC ISP"
+Ali4Desc="Precise 100 MC"
+Ala4Desc="Precise 100 AX"
+
+CopyINF="Microsoft CopyINF Co-installer"

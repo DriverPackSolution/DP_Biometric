@@ -1,0 +1,158 @@
+;
+; Installation file (.inf) for the SecuGen FDU03, SDU03M and SDU03P USB fingerprint devices.
+;
+; (c) Copyright 2004 - 2012 SecuGen Corp. 
+;
+
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf  
+Signature="$Chicago$"                            ;win9x, winnt
+Provider=%SecuGen%
+Class=%BiometricClassName%
+ClassGuid={53D29EF7-377C-4D14-864B-EB3A85769359}
+DriverVer=06/07/2012,2.8.1.1
+CatalogFile.NT=sgfdu03x64.cat
+
+[ClassInstall32]
+Addreg=BiometricClassReg
+
+[BiometricClassReg]
+HKR,,,0,%BiometricClassName%
+HKR,,Icon,,-20
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[SourceDisksNames]
+1 = %DISK1%,,,
+
+[SourceDisksFiles]
+SGFu03x64.sys=1,,
+SGFu03x64.dll=1,,
+SGFu03m.dll=1,,
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+SGFPUSB.Files.Ext = 10,System32\Drivers
+SGFPUSB.Files.Dll = 11					; 9x - System Dir, NT - System32 Dir
+SGFPUSB.Files.Dll.Wow64 = 10, SysWow64			; Windows\SysWow64
+
+[ControlFlags]
+;ExcludeFromSelect=*             ; removes all device here from the device installer list
+
+[Manufacturer]
+%SecuGen%=SecuGen, NTamd64
+
+[SecuGen.NTamd64]
+;-------------------------------------------------------------------------------------------
+; FDU03A, SecuGen USB Fingerprint device, 2005.3
+; SDU03M(PID_0322), SecuGen USB Fingerprint device, 05/2008
+; SDU03P(PID_1000), SecuGen USB Fingerprint device, 08/2011
+;-------------------------------------------------------------------------------------------
+%USB\VID_1162&PID_0320.DeviceDesc%=SGFPUSB, USB\VID_1162&PID_0320
+%USB\VID_1162&PID_0322.DeviceDesc%=SGFPUSB, USB\VID_1162&PID_0322
+%USB\VID_1162&PID_1000.DeviceDesc%=SGFPUSB, USB\VID_1162&PID_1000	
+
+;---------------------------------------------------------------------------------------------------------------
+; SDU03M Mouse(PID_0325), SecuGen USB Fingerprint Device with USB Mouse, April 2009
+; SDU03P Mouse(PID_0325), SecuGen USB Fingerprint Device with USB Mouse, Aug 2011
+;---------------------------------------------------------------------------------------------------------------
+;%USB\VID_1162&PID_0325.DeviceDesc%=SGFPUSBComposite, USB\VID_1162&PID_0325, USB\COMPOSITE
+%USB\VID_1162&PID_0325&MI_00.DeviceDesc%=SGFPUSB, USB\VID_1162&PID_0325&MI_00
+%USB\VID_1162&PID_0325&MI_01.DeviceDesc%=SGFPUSBHid, USB\VID_1162&PID_0325&MI_01
+
+%USB\VID_1162&PID_3000&MI_00.DeviceDesc%=SGFPUSB, USB\VID_1162&PID_3000&MI_00
+%USB\VID_1162&PID_3000&MI_01.DeviceDesc%=SGFPUSBHid, USB\VID_1162&PID_3000&MI_01
+
+; =================== FDU03 USB FRD Driver ===================
+;---------------
+; For Win98...
+;---------------
+[SGFPUSBHid]
+Include=hiddev.inf
+Needs=USBHIDDevice
+
+[SGFPUSBComposite]
+Include=usb.inf
+Needs=composite.dev
+
+[SGFPUSB]
+CopyFiles=SGFPUSB.Files.Ext, SGFPUSB.Files.Dll, SGFPUSB.Files.Dll.WOW64
+AddReg=SGFPUSB.AddReg
+
+[SGFPUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SGFu03x64.sys
+
+[SGFPUSB.Files.Ext]
+SGFu03x64.sys
+
+[SGFPUSB.Files.Dll]
+SGFu03x64.dll
+
+[SGFPUSB.Files.Dll.WOW64]
+SGFu03m.dll
+
+
+;-------------------
+; For Windows NT...
+;-------------------
+; HID
+[SGFPUSBHid.NT]
+Include=input.inf
+Needs=HID_Inst.NT
+
+[SGFPUSBHid.NT.Services]
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+; composite
+[SGFPUSBComposite.NT]
+Include=usb.inf
+Needs= Composite.Dev.NT
+
+[SGFPUSBComposite.NT.Services]
+Include=usb.inf
+Needs=Composite.Dev.NT.Services
+
+; FRD
+[SGFPUSB.NT]
+CopyFiles=SGFPUSB.Files.Ext, SGFPUSB.Files.Dll, SGFPUSB.Files.Dll.WOW64
+
+[SGFPUSB.NT.Services]
+Addservice = SGFPUSB, 0x00000002, SGFPUSB_AddService_Inst 
+
+[SGFPUSB_AddService_Inst]
+DisplayName    = %SGFPUSB.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_SYSTEM_START 
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\SGFu03x64.sys
+
+[Strings]
+SecuGen="SecuGen Corporation"
+DISK1="SecuGen Installation Disk"
+SGFPUSB.SvcDesc="SecuGen USB FRD Service03"
+BiometricClassName="Biometric"
+
+;FDU03A, 2005.3
+USB\VID_1162&PID_0320.DeviceDesc="SecuGen FDU03 USB FRD"
+
+;SDU03M, May 2008
+USB\VID_1162&PID_0322.DeviceDesc="SecuGen SDU03M USB FRD"
+
+;SDU03P, Aug 2011
+USB\VID_1162&PID_1000.DeviceDesc="SecuGen SDU03P USB FRD"
+
+;SDU03M Mouse, April 2009
+USB\VID_1162&PID_0325&MI_00.DeviceDesc="SecuGen SDU03M USB FRD"
+USB\VID_1162&PID_0325&MI_01.DeviceDesc="SecuGen SDU03M USB FRD HID"
+USB\VID_1162&PID_0325.DeviceDesc="SecuGen SDU03M USB FRD Composite"
+
+;SDU03P Mouse, October 2011
+USB\VID_1162&PID_3000&MI_00.DeviceDesc="SecuGen SDU03P USB FRD"
+USB\VID_1162&PID_3000&MI_01.DeviceDesc="SecuGen SDU03P USB FRD HID"
+USB\VID_1162&PID_3000.DeviceDesc="SecuGen SDU03P USB FRD Composite"
+
+

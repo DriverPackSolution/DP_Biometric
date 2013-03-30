@@ -1,0 +1,205 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%Authentec%
+DriverVer=12/15/2004,5.0.2036.0
+CatalogFile = flmckusb.cat 
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%Authentec%=Authentec
+
+[Authentec]
+;
+;These are the VID/PIDs reserved for AuthenTec reference boards.
+;
+;AES4000
+%AES4000REFBoard%=FLMckUSB.Dev, USB\VID_08FF&PID_5500
+%AES4000REFBoard1%=FLMckUSB.Dev, USB\VID_08FF&PID_5501
+%AES4000REFBoard2%=FLMckUSB.Dev, USB\VID_08FF&PID_55FF
+%AES4000REFBoard_90%=FLMckUSB.Dev, USB\VID_08FF&PID_5503
+%AES4000REFBoard_0%=FLMckUSB.Dev, USB\VID_08FF&PID_5505
+%AES4000REFBoard_270%=FLMckUSB.Dev, USB\VID_08FF&PID_5507
+
+;AES3500
+%AES3500REFBoard%=FLMckUSB.Dev, USB\VID_08FF&PID_5700
+%AES3500REFBoard90%=FLMckUSB.Dev, USB\VID_08FF&PID_5701
+%AES3500REFBoard0%=FLMckUSB.Dev, USB\VID_08FF&PID_5702
+%AES3500REFBoard270%=FLMckUSB.Dev, USB\VID_08FF&PID_5703
+%AES3500REFBoardB%=FLMckUSB.Dev, USB\VID_08FF&PID_5704
+%AES3500REFBoard90B%=FLMckUSB.Dev, USB\VID_08FF&PID_5705
+%AES3500REFBoard0B%=FLMckUSB.Dev, USB\VID_08FF&PID_5706
+%AES3500REFBoard270B%=FLMckUSB.Dev, USB\VID_08FF&PID_5707
+
+;AES34XX
+%GoldFingerII_180%=FLMckUSB.DEV, USB\VID_08FF&PID_3400
+%GoldFingerII_270%=FLMckUSB.DEV, USB\VID_08FF&PID_3401
+%GoldFingerII_00%=FLMckUSB.DEV, USB\VID_08FF&PID_3402
+%GoldFingerII_90%=FLMckUSB.DEV, USB\VID_08FF&PID_3403
+%Indian_00%=FLMckUSB.DEV, USB\VID_08FF&PID_3404
+%Indian_90%=FLMckUSB.DEV, USB\VID_08FF&PID_3405
+%Indian_180%=FLMckUSB.DEV, USB\VID_08FF&PID_3406
+%Indian_270%=FLMckUSB.DEV, USB\VID_08FF&PID_3407
+%SYN3455REFBoard%=FLMckUSB.Dev, USB\VID_06CB&PID_0005
+
+;
+;These VID/PIDs are reserved for special products.
+;
+%AES3500SpecBoard0%=FLMckUSB.Dev, USB\VID_08FF&PID_5710
+%AES3500SpecBoard270%=FLMckUSB.Dev, USB\VID_08FF&PID_5711
+%AES3500SpecBoard180%=FLMckUSB.Dev, USB\VID_08FF&PID_5712
+%AES3500SpecBoard90%=FLMckUSB.Dev, USB\VID_08FF&PID_5713
+%AES3500SpecBoard0B%=FLMckUSB.Dev, USB\VID_08FF&PID_5714
+%AES3500SpecBoard270B%=FLMckUSB.Dev, USB\VID_08FF&PID_5715
+%AES3500SpecBoard180B%=FLMckUSB.Dev, USB\VID_08FF&PID_5716
+%AES3500SpecBoard90B%=FLMckUSB.Dev, USB\VID_08FF&PID_5717
+
+;These VID/PIDs are reserved for chattoooga version F.
+%AES3500ChattyF0%=FLMckUSB.Dev, USB\VID_08FF&PID_5730
+%AES3500ChattyF90%=FLMckUSB.Dev, USB\VID_08FF&PID_5731
+%AES3500ChattyF180%=FLMckUSB.Dev, USB\VID_08FF&PID_5732
+%AES3500ChattyF270%=FLMckUSB.Dev, USB\VID_08FF&PID_5733
+%AES3500ChattyF0B%=FLMckUSB.Dev, USB\VID_08FF&PID_5734
+%AES3500ChattyF90B%=FLMckUSB.Dev, USB\VID_08FF&PID_5735
+%AES3500ChattyF180B%=FLMckUSB.Dev, USB\VID_08FF&PID_5736
+%AES3500ChattyF270B%=FLMckUSB.Dev, USB\VID_08FF&PID_5737
+
+;These VID/PIDs are reserved for the memory keys product family
+%AES3500mkey%=FLMckUSB.DEV, USB\VID_067B&PID_3500
+%AES3400mkey%=FLMckUSB.DEV, USB\VID_067B&PID_3400
+%SONYBioMV%=FLMckUSB.DEV, USB\VID_054C&PID_0171
+
+[DestinationDirs]
+FLMckUSB.Files.Ext = 10,System32\Drivers
+FLMckUSB.Files.Coinst = 11
+DefaultDestDir = 11
+
+[FLMckUSB.Dev]
+CopyFiles=FLMckUSB.Files.Ext
+AddReg=FLMckUSB.AddReg
+
+[FLMckUSB.Dev.NT]
+CopyFiles=FLMckUSB.Files.Ext
+AddReg=FLMckUSB.AddReg
+
+[FLMckUSB.Dev.NT.CoInstallers]
+CopyFiles=FLMckUSB.Files.Coinst
+AddReg=FLMckUSB.Coinst.AddReg
+
+[FLMckUSB.Dev.NT.Services]
+Addservice = FLMCKUSB, 0x00000002, FLMckUSB.AddService, FLMckUSB_EventLog_Install
+
+[FLMckUSB.AddService]
+DisplayName    = %FLMckUSB.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\FLMckUSB.sys
+LoadOrderGroup = Base
+
+[FLMckUSB.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FLMckUSB.sys
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5503, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5505, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5507, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5701, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5702, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5703, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5705, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5706, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5707, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5710, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5711, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5713, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5714, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5715, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5717, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5730, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5731, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5733, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5734, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5735, 0x00010001, 90
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08ff_PID5737, 0x00010001, 270
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID06CB_PID0005, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08FF_PID4902, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID08FF_PID4903, 0x00010001, 0
+HKLM,"Software\AuthenTec\ATSC\Sensors", Rotation_VID054C_PID0171, 0x00010001, 0
+
+[FLMckUSB.Coinst.AddReg]
+HKR,,CoInstallers32,0x00010000,"FLMckUSB.dll"
+
+[FLMckUSB_EventLog_Install]
+AddReg = FLMckUSB_EventLog_AddReg
+
+[FLMckUSB_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\FLMckUSB.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+[FLMckUSB.Files.Ext]
+FLMckUSB.sys
+
+[FLMckUSB.Files.Coinst]
+FLMckUSB.dll
+
+[SourceDisksNames]
+1 = %Disk1Name%,,,""
+
+[SourceDisksFiles]
+FLMckUSB.sys=1
+FLMckUSB.dll=1
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+Authentec="AuthenTec, Inc."
+AES4000REFBoard="AuthenTec AES4000"
+AES4000REFBoard1="AuthenTec AES4000 TruePrint Sensor"
+AES4000REFBoard2="AuthenTec AES4000 TruePrint Sensor."
+AES4000REFBoard_90="AuthenTec  AES4000 TruePrint Sensor"
+AES4000REFBoard_0="AuthenTec  AES4000  TruePrint Sensor"
+AES4000REFBoard_270="AuthenTec  AES4000  TruePrint  Sensor"
+AES3500REFBoard="AuthenTec AES3500 TruePrint Sensor"
+AES3500REFBoard90="AuthenTec  AES3500 TruePrint Sensor"
+AES3500REFBoard0="AuthenTec  AES3500  TruePrint Sensor"
+AES3500REFBoard270="AuthenTec  AES3500  TruePrint  Sensor"
+AES3500REFBoardB="AuthenTec AES3500-BZ TruePrint Sensor"
+AES3500REFBoard90B="AuthenTec  AES3500-BZ TruePrint Sensor"
+AES3500REFBoard0B="AuthenTec  AES3500-BZ  TruePrint Sensor"
+AES3500REFBoard270B="AuthenTec  AES3500-BZ  TruePrint  Sensor"
+AES3500SpecBoard0="AuthenTec   AES3500  TruePrint Sensor"
+AES3500SpecBoard270="AuthenTec   AES3500  TruePrint  Sensor"
+AES3500SpecBoard180="AuthenTec   AES3500 TruePrint Sensor"
+AES3500SpecBoard90="AuthenTec   AES3500 TruePrint  Sensor"
+AES3500SpecBoard0B="AuthenTec   AES3500-BZ  TruePrint Sensor"
+AES3500SpecBoard270B="AuthenTec   AES3500-BZ  TruePrint  Sensor"
+AES3500SpecBoard180B="AuthenTec   AES3500-BZ TruePrint Sensor"
+AES3500SpecBoard90B="AuthenTec   AES3500-BZ TruePrint  Sensor"
+AES3500ChattyF0=" AuthenTec   AES3500  TruePrint Sensor"
+AES3500ChattyF270=" AuthenTec   AES3500  TruePrint  Sensor"
+AES3500ChattyF180=" AuthenTec   AES3500 TruePrint Sensor"
+AES3500ChattyF90=" AuthenTec   AES3500 TruePrint  Sensor"
+AES3500ChattyF0B=" AuthenTec   AES3500-BZ  TruePrint Sensor"
+AES3500ChattyF270B=" AuthenTec   AES3500-BZ  TruePrint  Sensor"
+AES3500ChattyF180B=" AuthenTec   AES3500-BZ TruePrint Sensor"
+AES3500ChattyF90B=" AuthenTec   AES3500-BZ TruePrint  Sensor"
+GoldFingerII_00="Synaptics AES3400 Sensor"
+GoldFingerII_90="Synaptics  AES3400 Sensor"
+GoldFingerII_180="Synaptics AES3400  Sensor"
+GoldFingerII_270="Synaptics  AES3400  Sensor"
+Indian_00="AuthenTec AES3400 TruePrint Sensor"
+Indian_90="AuthenTec  AES3400 TruePrint Sensor"
+Indian_180="AuthenTec  AES3400  TruePrint Sensor"
+Indian_270="AuthenTec  AES3400  TruePrint  Sensor"
+SYN3455REFBoard="Synaptics Touchpad/FPS"
+AES3500mkey=" Hi-Speed USB Flash Disk with AuthenTec TruePrint AES3500"
+AES3400mkey=" Hi-Speed USB Flash Disk with AuthenTec TruePrint AES3400"
+SONYBioMV="SONY Fingerprint Sensor 3500"
+FLMckUSB.SvcDesc="AuthenTec TruePrint USB Driver (AES3400, AES3500, AES4000)"
+Disk1Name="Fingerprint Device CD-ROM"
+

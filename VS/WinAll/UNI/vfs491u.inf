@@ -1,0 +1,112 @@
+; INF file for Validity vfs491 fingerprint scanner USB driver
+; Copyright 2010, 2011,2012 Validity Sensors, Inc.
+
+[Version]
+Signature = "$Windows NT$"
+Class = Biometric
+ClassGuid = {ff5262c8-9032-4b05-92cf-9f53044592a6}
+Provider = %ProviderName%
+DriverVer=07/19/2012,4.4.228.00
+CatalogFile=vfs491u.cat
+
+; ========== Manufacturer/Models sections ===========
+
+[Manufacturer]
+%ProviderName% = Validity,NTx86,NTamd64
+
+[Validity.NTx86]
+%USB\vfs491u.DeviceDesc% =USB_Install, USB\VID_138A&PID_0031
+
+[Validity.NTamd64]
+%USB\vfs491u.DeviceDesc% =USB_Install, USB\VID_138A&PID_0031
+
+[ClassInstall32]
+AddReg=ClassAddReg
+
+[ClassAddReg]
+HKR,,,,%ClassName%
+HKR,,NoInstallClass,,1
+HKR,,Icon,,"-30"
+
+; =================== Installation ===================
+
+;[1]
+[USB_Install]
+Include=winusb.inf
+Needs=WINUSB.NT
+FeatureScore=0xA0
+
+;[2]
+[USB_Install.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+;[3]
+[WinUSB_ServiceInstall]
+DisplayName     = %WinUSB_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+;[4]
+[USB_Install.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[WinUSB_Install]
+KmdfLibraryVersion=1.9
+
+;[5]
+[USB_Install.HW]
+AddReg=Dev_AddReg
+
+[Dev_AddReg]
+HKR,,FriendlyName,,%FriendlyName%
+HKR,,DeviceInterfaceGUIDs,0x10000,"{3DAD1A1C-7D52-4891-8CA3-EE9AA3902090}"
+; Enable USB selective suspend with timeout of 5 seconds
+HKR,,"DeviceIdleEnabled",0x00010001,1
+HKR,,"DefaultIdleState",0x00010001,1
+HKR,,"DefaultIdleTimeout",0x00010001,5000
+HKR,,"UserSetDeviceIdleEnabled",0x00010001,1
+; Disable system wake
+HKR,,"SystemWakeEnabled",0x00010001,0
+
+;[6]
+[USB_Install.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01009.dll,WdfCoInstaller","WinUSBCoInstaller2.dll"
+
+[CoInstallers_CopyFiles]
+WinUSBCoInstaller2.dll
+WdfCoInstaller01009.dll
+
+[DestinationDirs]
+CoInstallers_CopyFiles=11
+
+; ================= Source Media Section =====================
+;[7]
+
+[SourceDisksNames]
+1 = %DISK_NAME%,,,\x86
+2 = %DISK_NAME%,,,\amd64
+
+[SourceDisksFiles.x86]
+WinUSBCoInstaller2.dll=1
+WdfCoInstaller01009.dll=1
+
+[SourceDisksFiles.amd64]
+WinUSBCoInstaller2.dll=2
+WdfCoInstaller01009.dll=2
+
+; =================== Strings ===================
+
+[Strings]
+ClassName="Biometric"
+ProviderName="Validity Sensors, Inc."
+FriendlyName="Validity Sensor"
+USB\vfs491u.DeviceDesc="Validity Sensor (VFS491 Unprovisioned)"
+WinUSB_SvcDesc="WinUSB Service"
+DISK_NAME="Validity Driver Install Disk"

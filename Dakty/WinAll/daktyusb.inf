@@ -1,0 +1,103 @@
+[Version]
+Signature = "$Chicago$"
+provider  = %manufacturer%
+DriverVer = 03/03/2008,2.0.0.0
+
+DriverPackageType        = PlugAndPlay
+DriverPackageDisplayName = %driver_display_name%
+
+Class = DaktyUsbDevices
+ClassGUID = {EB781AAF-9C70-4523-A5DF-642A87ECA567}
+
+[ClassInstall]
+AddReg=add_reg_class_install
+
+[ClassInstall32]
+AddReg=add_reg_class_install
+
+[add_reg_class_install]
+HKR,,,,"Dakty Fingerprint Devices"
+HKR,,Icon,,"-20"
+
+[Manufacturer]
+%manufacturer%=Devices,NT
+
+;--------------------------------------------------------------------------
+; Files
+;--------------------------------------------------------------------------
+
+[SourceDisksNames]
+1 = "Dakty Driver Installation Disk",,
+
+[SourceDisksFiles]
+daktyusb.sys = 1,,
+
+[DestinationDirs]
+daktyusb_files_sys = 10,system32\drivers
+
+[daktyusb_files_sys]
+daktyusb.sys
+
+;--------------------------------------------------------------------------
+; Device driver
+;--------------------------------------------------------------------------
+
+[DaktyDevice]
+CopyFiles = daktyusb_files_sys
+AddReg    = daktyusb_add_reg
+
+[DaktyDevice.NT]
+CopyFiles = daktyusb_files_sys
+
+[DaktyDevice.HW]
+AddReg = daktyusb_add_reg_hw
+
+[DaktyDevice.NT.HW]
+AddReg = daktyusb_add_reg_hw
+
+[DaktyDevice.NT.Services]
+AddService = DaktyUsbDrvService, 0x00000002, daktyusb_add_service
+
+[daktyusb_add_reg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,daktyusb.sys
+
+; Device properties
+[daktyusb_add_reg_hw]
+HKR,,SurpriseRemovalOK, 0x00010001, 1
+
+;--------------------------------------------------------------------------
+; Services
+;--------------------------------------------------------------------------
+
+[daktyusb_add_service]
+DisplayName    = "Dakty Sensor USB Device Driver (Naos)"
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\daktyusb.sys
+
+;--------------------------------------------------------------------------
+; Devices
+;--------------------------------------------------------------------------
+
+[Devices]
+"Dakty Sensor USB Device Driver (Naos4X)"=DaktyDevice, USB\VID_0de8&PID_00c1
+"Dakty Sensor USB Device Driver (NaosA)"=DaktyDevice, USB\VID_0de8&PID_00c2
+"Dakty Sensor USB Device Driver (Naos4ID)"=DaktyDevice, USB\VID_0de8&PID_00c3
+"Dakty Sensor USB Device Driver (Naos2)"=DaktyDevice, USB\VID_0de8&PID_00c4
+
+[Devices.NT]
+"Dakty Sensor USB Device Driver (Naos4X)"=DaktyDevice, USB\VID_0de8&PID_00c1
+"Dakty Sensor USB Device Driver (NaosA)"=DaktyDevice, USB\VID_0de8&PID_00c2
+"Dakty Sensor USB Device Driver (Naos4ID)"=DaktyDevice, USB\VID_0de8&PID_00c3
+"Dakty Sensor USB Device Driver (Naos2)"=DaktyDevice, USB\VID_0de8&PID_00c4
+
+
+;--------------------------------------------------------------------------
+; Strings
+;--------------------------------------------------------------------------
+
+[Strings]
+manufacturer = "Dakty GmbH"
+driver_display_name = "Dakty Sensor USB Device Driver"

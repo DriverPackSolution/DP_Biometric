@@ -1,0 +1,87 @@
+; id3cerII.inf
+; inf file for Certis II device 
+; (c) copyright id3 semiconductors
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature="$chicago$"
+Provider=%ProviderName%
+Class=Bioki
+ClassGUID={E218901A-2D4C-46dc-828C-0615E465F885}
+DriverVer=31/08/2006
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+;--------- ClassInstall/ClassInstall32 Section -------------------------------
+
+; Not necessary if using a standard class
+
+; 9X Style
+[ClassInstall]
+Addreg=Class_AddReg
+
+; NT Style
+[ClassInstall32]
+Addreg=Class_AddReg
+
+[Class_AddReg]
+HKR,,,,%DeviceClassName%
+HKR,,Icon,,"-20"
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Mfg0, NTamd64
+
+[Mfg0.NTamd64]
+%DeviceDesc%=CertisII_DDI, USB\VID_0b81&PID_0103
+
+
+;---------- DDInstall Sections -----------------------------------------------
+; --------- Windows 9X -----------------
+
+; Experimentation has shown that DDInstall root names greater than 19 characters
+; cause problems in Windows 98
+
+[CertisII_DDI]
+AddReg=CertisII_9X_AddReg
+DriverVer=31/08/2006
+
+[CertisII_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,id3cerII.sys
+HKR, "Parameters", "BreakOnEntry", 0x00010001, 0
+
+; --------- Windows NT -----------------
+
+[CertisII_DDI.NT]
+AddReg=CertisII_NT_AddReg
+DriverVer=09/30/2002
+
+[CertisII_DDI.NT.Services]
+Addservice = CertisII, 0x00000002, CertisII_AddService
+
+[CertisII_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\id3cerII.sys
+
+[CertisII_NT_AddReg]
+HKLM, "System\CurrentControlSet\Services\CertisII\Parameters",\
+	"BreakOnEntry", 0x00010001, 0
+
+[DestinationDirs]
+CertisII_DDI.CopyFiles = 12
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="id3 Semiconductors"
+MfgName="id3"
+DeviceDesc="Certis II"
+DeviceClassName="Fingerprint reader"
+SvcDesc="CertisII"

@@ -1,0 +1,143 @@
+; MultiScan1000 Setup Information file V2.0 (Win64)
+; Copyright (c) 2008 by Green Bit S.p.A.
+;
+; This file supports:
+;     Windows XP x64 Edition
+;     Windows Server 2003 x64 Edition
+;     Windows Vista x64 Edition (Test Mode only - need signature)
+
+;******************************************************************************
+; Version section
+;------------------------------------------------------------------------------
+[Version]
+Signature="$Windows NT$"
+Provider=%S_Provider%
+DriverVer=04/11/2007,2.41.0.0
+
+Class=GreenBitUSBDevices
+ClassGUID={77533137-5A31-477c-A0D9-F560E2088217}
+
+;******************************************************************************
+; Class Install section
+;------------------------------------------------------------------------------
+[ClassInstall32] 
+AddReg=_AddReg_ClassInstall
+
+[_AddReg_ClassInstall]
+HKR,,,,"%S_DeviceClassDisplayName%"
+HKR,,Icon,,"-20"
+
+;******************************************************************************
+; Options
+;------------------------------------------------------------------------------
+[ControlFlags]
+
+;******************************************************************************
+; Manufacturer section
+;------------------------------------------------------------------------------
+[Manufacturer]
+%S_Mfg%=_Models, ntamd64
+
+;******************************************************************************
+; Models section
+;------------------------------------------------------------------------------
+; x64-based systems
+[_Models.ntamd64]
+%S_DeviceDesc1%=_Install, USB\VID_17B9&PID_1000
+
+;******************************************************************************
+; Install sections x64-based systems
+;------------------------------------------------------------------------------
+[_Install.ntamd64]
+CopyFiles=_CopyFiles_sys_x64
+
+[_Install.ntamd64.Services]
+AddService = %S_ServiceName%, 0x00000002, _AddService_x64, _EventLog_x64
+
+[_Install.ntamd64.HW]
+AddReg=_AddReg_HW
+
+[_AddService_x64]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\%S_DriverName_x64%.sys
+
+[_EventLog_x64]
+AddReg=_EventLog_x64_AddReg
+
+[_EventLog_x64_AddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\%S_DriverName_x64%.sys"
+HKR,,TypesSupported,  %REG_DWORD%,7
+
+;******************************************************************************
+; Registry sections
+;------------------------------------------------------------------------------
+[_AddReg_HW]
+HKR,,DriverUserInterfaceGuid,%REG_SZ%,"{77533137-5A31-477c-A0D9-F560E2088217}"
+
+HKR,,DisableDefaultInterface,%REG_DWORD%, 1
+
+HKR,,PowerStateOnOpen,     %REG_DWORD%, 0
+HKR,,PowerStateOnClose,    %REG_DWORD%, 0
+HKR,,MinPowerStateUsed,    %REG_DWORD%, 3
+HKR,,MinPowerStateUnused,  %REG_DWORD%, 3
+HKR,,EnableRemoteWakeup,   %REG_DWORD%, 0
+HKR,,AbortPipesOnPowerDown,%REG_DWORD%, 1
+HKR,,UnconfigureOnClose,   %REG_DWORD%, 1
+HKR,,ResetDeviceOnClose,   %REG_DWORD%, 0
+HKR,,MaxIsoPackets,        %REG_DWORD%, 512
+HKR,,ShortTransferOk,      %REG_DWORD%, 1
+HKR,,RequestTimeout,       %REG_DWORD%, 1000
+HKR,,SuppressPnPRemoveDlg, %REG_DWORD%, 1
+
+;******************************************************************************
+; Copy Files section
+;------------------------------------------------------------------------------
+[_CopyFiles_sys_x64]
+MultiScan1000_x64.sys
+
+;******************************************************************************
+; Destination Directories
+;------------------------------------------------------------------------------
+[DestinationDirs]
+DefaultDestDir =     12   ; %windir%\system32\drivers 
+_CopyFiles_sys_x64 = 12
+
+;******************************************************************************
+; Disk Layout
+;------------------------------------------------------------------------------
+[SourceDisksNames.amd64]
+1=%S_DiskName%,,
+
+[SourceDisksFiles.amd64]
+MultiScan1000_x64.sys=1
+
+;******************************************************************************
+; Text Strings
+;------------------------------------------------------------------------------
+[Strings]
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+
+; provider/manufacturer name
+S_Provider="Green Bit"
+S_Mfg="Green Bit S.p.A."
+
+; device class display name, shown in Device Manager
+S_DeviceClassDisplayName="Green Bit USB devices"
+
+; device description
+S_DeviceDesc1="Green Bit device: VID=17B9 PID=1000 (Green Bit MultiScan1000)"
+
+; disk name
+S_DiskName="MultiScan1000 Driver Disk"
+
+; File name of driver executable.
+S_ServiceName="MultiScan1000"
+S_DriverName_x64="MultiScan1000_x64"
+
+; *** EOF ***

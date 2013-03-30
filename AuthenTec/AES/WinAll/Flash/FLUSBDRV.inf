@@ -1,0 +1,66 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+provider=%Authentec%
+LayoutFile=layout.inf
+DriverVer=04/27/2001
+
+[Manufacturer]
+%Authentec%=Authentec
+
+[Authentec]
+;
+; These are the VID/PIDs for the Shasta FingerLoc boards.
+;
+%ShastaBoardName%=FLUSBDrv.Dev, USB\VID_08FF&PID_AFE3
+%ShastaBoardName%=FLUSBDrv.Dev, USB\VID_08FF&PID_AFE4
+%ShastaBoardName%=FLUSBDrv.Dev, USB\VID_08FF&PID_AFE5
+%ShastaBoardName%=FLUSBDrv.Dev, USB\VID_08FF&PID_AFE6
+
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+FLUSBDrv.Files.Ext = 10,System32\Drivers
+
+[FLUSBDrv.Dev]
+CopyFiles=FLUSBDrv.Files.Ext
+AddReg=FLUSBDrv.AddReg
+
+[FLUSBDrv.Dev.NT]
+CopyFiles=FLUSBDrv.Files.Ext
+AddReg=FLUSBDrv.AddReg
+
+[FLUSBDrv.Dev.NT.Services]
+Addservice = FLUSBDRV, 0x00000002, FLUSBDrv.AddService
+
+[FLUSBDrv.AddService]
+DisplayName    = %FLUSBDrv.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\flusbdrv.sys
+LoadOrderGroup = Base
+
+[FLUSBDrv.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,flusbdrv.sys
+
+[FLUSBDrv.Files.Ext]
+flusbdrv.sys
+
+[SourceDisksNames]
+1 = %Disk1Name%,,,""
+
+[SourceDisksFiles]
+flusbdrv.sys=1
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+Authentec="AuthenTec, Inc."
+ShastaBoardName="AuthenTec FingerLoc Sensor Module (Anchor)"
+FLUSBDrv.SvcDesc="AuthenTec FingerLoc USB Driver (Anchor)"
+Disk1Name="AuthenTec FingerLoc SDK CD-ROM"

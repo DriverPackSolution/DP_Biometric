@@ -1,0 +1,526 @@
+[Sections]
+AddReg=OVT.9600.Setting
+
+[OVT.9600.Setting]
+;this data is for check camera type, there are four data segment 
+;1. I2C subAddress, 
+;2. which register driver should read
+;3. value mask
+;4. register value
+;HKR,%9600Set%, OneChannelCheck, 1, 55, 00, 80
+HKR,%9600Set%, VersionCheck, 1, 60, 0a, ff, 96
+HKR,%9600Set%, StartVidCapUsbSetting, 1, 0f, 02, 02
+HKR,%9600Set%, MinorVersionCheck,1, 60, 0b, f0, b0
+HKR,%9600Set%, ResetCamera,1, 12, 80, ff
+HKR,%9600Set%, CameraName,,Ov9600
+HKR,%9600Set%, SensorWidth,0x10001, 1280
+HKR,%9600Set%, SensorHeight,0x10001, 1024
+HKR,%9600Set%, CurrentFormat,0x10001, 0x50040024
+HKR,%9600Set%, CurrentFrameRate,0x10001, 15
+
+;USB controller register setting, only the registers that need change should 
+;set here, every three value form one group
+;Index, Value, Mask
+
+HKR,%9600Set%,UsbSetting,1, 02,01,ff, \
+e0,51,ff,e1,fa,ff,e2,f5,ff,\
+e3,c9,ff,e4,74,ff,e5,03,ff,\
+e6,fa,ff,e7,f8,ff,e8,4e,ff,e9,80,ff,ea,0,ff,ed,01,ff,ee,80,ff,ef,01,ff, f1,02,ff, \
+0f,04,04,ef,01,ff,ed,00,ff,f1,00,ff,fe,01,ff
+
+;Index, Value, Mask
+HKR,%9600Set%,CameraSetting,1, 12,80,ff,0c,28,ff, \
+11,80,ff,13,b5,ff,14,de,ff,24,b0,ff,25,90,ff,26,94,ff,33,20,ff,35,90,ff, \
+36,17,ff,37,04,ff,01,8e,ff,02,85,ff
+
+HKR,%9600Adj%,EnableLowLightControl,0x10001,0
+HKR,%9600Adj%,ClockUpTh,0x10001,150
+HKR,%9600Adj%,ClockDownTh,0x10001,60
+HKR,%9600Adj%,CheckTime,0x10001,40
+HKR,%9600Adj%,ClockUpCamRegs,1,28,00,02,12,20,04,12,24,04
+HKR,%9600Adj%,ClockDownCamRegs,1,28,02,02,ff,12,00,04,12,24,04
+HKR,%9600Adj%,ExposureCheck,1,10,50
+
+HKR,%9600DP%,EnVideoYUVProc,0x10001,0
+HKR,%9600DP%,EnVideoRGBProc,0x10001,0
+HKR,%9600DP%,EnStillYUVProc,0x10001,0
+HKR,%9600DP%,EnStillRGBProc,0x10001,0
+HKR,%9600DP%,StillSharpness,0x10001,2   ; range  0 ~ 8
+HKR,%9600DP%,DisableAutoLFCheck,0x10001,0
+HKR,%9600DP%, EnableSwQC, 0x10001, 1
+
+;HKR,%9600STIYUV%, CameraSetting,1, \
+;28,28,28, 29,80,80, 2d,00,10, 2a,04,80, 14,84,ff, 2a,84,80, 16,11,ff
+
+;HKR,%9600STIYUV%, UsbSetting,1, 28,80,ff,29,16,ff,2a,48,ff,2c,00,ff,2e,00,ff
+;HKR,%9600STIRAW%, UsbSetting,1, 28,80,ff,29,16,ff,2a,48,ff,2c,00,ff,2e,00,ff
+;HKR,%9600UVTest%, CameraSetting,1, \
+;12,26,ff,13,20,01,10,00,ff,00,30,ff,03,ff,ff,28,02,02
+
+
+;*******************************
+;[OVT.9600.VideoSetting]
+HKR,%9600Strm%, OpenStreamUsbSetting, 1, 0f,02,02
+;HKR,%9600Strm%, OpenStreamCameraSetting, 1, 
+
+HKR,%9600Strm%, CloseStreamUsbSetting, 1, 0f,00,02
+;HKR,%9600Strm%, CloseStreamCameraSetting, 1, \
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;RGB24 1280 x 1024
+HKR, %9600Vid800RGB24%, Tag, 0x10001, 0x50040024
+;HKR, %9600Vid800RGB24%, UsbSetting, 1, \
+;28,80,0f, 29,32,ff, 2a,96,ff, 2b,00,ff, 2c,00,ff, 2d,00,ff, 2e,00,ff, \
+;38,80,0f, 39,32,ff, 3a,96,ff, 3b,00,ff, 3c,00,ff, 3d,00,ff, 3e,00,ff, \
+;20,00,ff, 24,9f,ff, 25,90,ff, 2f,80,ff
+HKR, %9600Vid800RGB24%, CameraSetting, 1, 12,00,40
+HKR, %9600Vid800RGB24%, Width, 0x10001, 1280
+HKR, %9600Vid800RGB24%, Height, 0x10001, 1024
+HKR, %9600Vid800RGB24%, BitCount, 0x10001, 24
+HKR, %9600Vid800RGB24%, FourCC, 0x10001, 0
+HKR, %9600Vid800RGB24%, MaxFrameRate, 0x10001, 15000
+HKR, %9600Vid800RGB24%, typFrameRate, 0x10001, 15000
+HKR, %9600Vid800RGB24%, MinFrameRate, 0x10001, 7500
+HKR, %9600Vid800RGB24%, Progressive, 0x10001, 1
+
+;************* Frame Rate = 10fps
+;HKR, %9600Vid800RGB24%\FrameRate1, UsbSetting, 1, \
+;51,02,ff, 20,00,ff, 21,19,FF, 22,18,ff, 23,ff,ff, 2f,80,ff
+;HKR, %9600Vid800RGB24%\FrameRate1, UsbCBR, 1, \
+;80,30,02,80,03, 80,C4,02,C2,01, 80,C6,02,AF,02, \ 
+;80,C7,02,AF,02, 80,C8,02,C8,00, 80,CA,03,23,CC,02, \
+;80,CB,02,3E,05, 80,CC,02,90,1A, 80,CD,02,2D,00, \
+;80,CE,02,53,03, 00,2f,80
+HKR, %9600Vid800RGB24%\FrameRate2, CameraSetting, 1, 11,80,ff
+HKR, %9600Vid800RGB24%\FrameRate2, AlternateSetting, 0x10001, 0
+HKR, %9600Vid800RGB24%\FrameRate2, FrameRate, 0x10001, 15000
+HKR, %9600Vid800RGB24%\FrameRate2, QualityLevel, 0x10001, 1
+HKR, %9600Vid800RGB24%\FrameRate2, RawData, 0x10001, 1
+HKR, %9600Vid800RGB24%\FrameRate2, RawFrameLength, 0x10001, 1310720
+HKR, %9600Vid800RGB24%\FrameRate2, OneLine, 0x10001, 1
+
+HKR, %9600Vid800RGB24%\FrameRate1, CameraSetting, 1, 11,81,ff
+HKR, %9600Vid800RGB24%\FrameRate1, AlternateSetting, 0x10001, 0
+HKR, %9600Vid800RGB24%\FrameRate1, FrameRate, 0x10001, 7500
+HKR, %9600Vid800RGB24%\FrameRate1, QualityLevel, 0x10001, 1
+HKR, %9600Vid800RGB24%\FrameRate1, RawData, 0x10001, 1
+HKR, %9600Vid800RGB24%\FrameRate1, RawFrameLength, 0x10001, 1310720
+HKR, %9600Vid800RGB24%\FrameRate1, OneLine, 0x10001, 1
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;RGB24 640 x 480
+HKR, %9600Vid640RGB24%, Tag, 0x10001, 0x64048024
+;HKR, %9600Vid640RGB24%, UsbSetting, 1, \
+;28,80,0f, 29,32,ff, 2a,96,ff, 2b,00,ff, 2c,00,ff, 2d,00,ff, 2e,00,ff, \
+;38,80,0f, 39,32,ff, 3a,96,ff, 3b,00,ff, 3c,00,ff, 3d,00,ff, 3e,00,ff, \
+;20,00,ff, 24,9f,ff, 25,90,ff, 2f,80,ff
+HKR, %9600Vid640RGB24%, CameraSetting, 1, 12,40,40
+HKR, %9600Vid640RGB24%, Width, 0x10001, 640
+HKR, %9600Vid640RGB24%, Height, 0x10001, 480
+HKR, %9600Vid640RGB24%, BitCount, 0x10001, 24
+HKR, %9600Vid640RGB24%, FourCC, 0x10001, 0
+HKR, %9600Vid640RGB24%, MaxFrameRate, 0x10001, 30000
+HKR, %9600Vid640RGB24%, typFrameRate, 0x10001, 15000
+HKR, %9600Vid640RGB24%, MinFrameRate, 0x10001, 15000
+HKR, %9600Vid640RGB24%, Progressive, 0x10001, 1
+
+;************* Frame Rate = 10fps
+
+HKR, %9600Vid640RGB24%\FrameRate1, CameraSetting, 1, 11,81,ff
+HKR, %9600Vid640RGB24%\FrameRate1, AlternateSetting, 0x10001, 0
+HKR, %9600Vid640RGB24%\FrameRate1, FrameRate, 0x10001, 30000
+HKR, %9600Vid640RGB24%\FrameRate1, QualityLevel, 0x10001, 1
+HKR, %9600Vid640RGB24%\FrameRate1, RawData, 0x10001, 1
+HKR, %9600Vid640RGB24%\FrameRate1, RawFrameLength, 0x10001, 307200
+HKR, %9600Vid640RGB24%\FrameRate1, OneLine, 0x10001, 1
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+HKR, %9600Vid640RGB24%\FrameRate2, CameraSetting, 1, 11,83,ff
+HKR, %9600Vid640RGB24%\FrameRate2, AlternateSetting, 0x10001, 0
+HKR, %9600Vid640RGB24%\FrameRate2, FrameRate, 0x10001, 15000
+HKR, %9600Vid640RGB24%\FrameRate2, QualityLevel, 0x10001, 1
+HKR, %9600Vid640RGB24%\FrameRate2, RawData, 0x10001, 1
+HKR, %9600Vid640RGB24%\FrameRate2, RawFrameLength, 0x10001, 307200
+HKR, %9600Vid640RGB24%\FrameRate2, OneLine, 0x10001, 1
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;****************************************************************************************************
+;[OVT.9600.Properties]
+;Standard properties
+;PROPSETID_VIDCAP_VIDEOPROCAMP
+;    KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS,            // RW O		0
+;    KSPROPERTY_VIDEOPROCAMP_CONTRAST,              // RW O		1
+;    KSPROPERTY_VIDEOPROCAMP_HUE,                   // RW O		2
+;    KSPROPERTY_VIDEOPROCAMP_SATURATION,            // RW O		3
+;    KSPROPERTY_VIDEOPROCAMP_SHARPNESS,             // RW O		4
+;    KSPROPERTY_VIDEOPROCAMP_GAMMA,                 // RW O		5
+;    KSPROPERTY_VIDEOPROCAMP_COLORENABLE,           // RW O		6
+;    KSPROPERTY_VIDEOPROCAMP_WHITEBALANCE,          // RW O		7
+;    KSPROPERTY_VIDEOPROCAMP_BACKLIGHT_COMPENSATION,// RW O		8
+HKR,%9600Brit%,PropertyId,0x10001, 0
+;Control method 0-->just write calculated value to register (one register)
+;Control method 1-->Range look up table, write one or more registers for value within a range
+HKR,%9600Brit%,MapMethod,0x10001, 0
+HKR,%9600Brit%,RelatedRegister,1,6
+;true or false
+HKR,%9600Brit%,RelateUsbRegister,1,0
+
+HKR,%9600Brit%,SupportAuto,0x10001,0 ;0 not support, 1 support
+;Auto control method 0-->when turn off auto, just write current value to register
+;Auto control method 1-->when turn off auto, just read register value as current value
+ 
+HKR,%9600Brit%,PropertyId,0x10001, 0
+HKR,%9600Brit%,MapMethod,0x10001, 0
+HKR,%9600Brit%,RelatedRegister,1,ec
+;true or false
+HKR,%9600Brit%,RelateUsbRegister,1,1
+
+HKR,%9600Brit%,DefaultValue,0x10001, 0x00
+HKR,%9600Brit%,DefaultFlags,0x10001, 1
+HKR,%9600Brit%,MinValue,0x10001, 0xffffff80
+HKR,%9600Brit%,MaxValue,0x10001, 0x7f
+HKR,%9600Brit%,Step,0x10001, 1
+
+
+;#####################################
+
+HKR,%9600Cntr%,PropertyId,0x10001, 1
+HKR,%9600Cntr%,MapMethod,0x10001, 0
+HKR,%9600Cntr%,RelatedRegister,1,eb
+;true or false
+HKR,%9600Cntr%,RelateUsbRegister,1,1
+
+HKR,%9600Cntr%,DefaultValue,0x10001, 0x80
+HKR,%9600Cntr%,DefaultFlags,0x10001, 1
+HKR,%9600Cntr%,MinValue,0x10001, 0
+HKR,%9600Cntr%,MaxValue,0x10001, 255
+HKR,%9600Cntr%,Step,0x10001, 1
+ 
+;#####################################
+
+HKR,%9600Hue%,PropertyId,0x10001, 2
+HKR,%9600Hue%,MapMethod,0x10001, 0
+HKR,%9600Hue%,RelatedRegister,1,ea
+;true or false
+HKR,%9600Hue%,RelateUsbRegister,1,1
+
+HKR,%9600Hue%,DefaultValue,0x10001, 0
+HKR,%9600Hue%,DefaultFlags,0x10001, 1
+HKR,%9600Hue%,MinValue,0x10001, 0xffffff80
+HKR,%9600Hue%,MaxValue,0x10001, 0x7f
+HKR,%9600Hue%,Step,0x10001, 1
+
+;#####################################
+;#####################################
+
+HKR,%9600Sat%,PropertyId,0x10001, 3
+HKR,%9600Sat%,MapMethod,0x10001, 0
+HKR,%9600Sat%,RelatedRegister,1,e9
+HKR,%9600Sat%,RelateUsbRegister,1,1
+HKR,%9600Sat%,DefaultValue,0x10001, 128
+HKR,%9600Sat%,MinValue,0x10001, 0
+HKR,%9600Sat%,MaxValue,0x10001, 255
+HKR,%9600Sat%,Step,0x10001, 1
+
+;#####################################
+
+HKR,%9600Shp%,PropertyId,0x10001, 4
+HKR,%9600Shp%,MapMethod,0x10001, 0
+HKR,%9600Shp%,RelatedRegister,1,ee
+HKR,%9600Shp%,RelateUsbRegister,1,1
+HKR,%9600Shp%,DefaultValue,0x10001, 128
+HKR,%9600Shp%,MinValue,0x10001, 0
+HKR,%9600Shp%,MaxValue,0x10001, 255
+HKR,%9600Shp%,Step,0x10001, 1
+
+                                      
+;####################################
+;HKR,%9600Gam%\0000,UsbRegisters,1, 0f, 14, ff
+;#####################################
+;HKR,%9600Gam%,PropertyId,0x10001, 5
+;HKR,%9600Gam%,MapMethod,0x10001, 1
+;HKR,%9600Gam%,NumberOfValues,0x10001, 2
+;HKR,%9600Gam%\0000,Value,0x10001, 0
+;HKR,%9600Gam%\0000,UsbRegisters,1, ed,01,ff
+;HKR,%9600Gam%\0001,Value,0x10001, 1
+;HKR,%9600Gam%\0001,UsbRegisters,1, ed,00,ff
+;HKR,%9600Gam%,DefaultValue,0x10001, 1
+;HKR,%9600Gam%,MinValue,0x10001, 0
+;HKR,%9600Gam%,MaxValue,0x10001, 1
+;HKR,%9600Gam%,Step,0x10001, 1
+
+HKR,%9600Col%,PropertyId,0x10001, 6
+HKR,%9600Col%,MapMethod,0x10001, 1
+HKR,%9600Col%,NumberOfValues,0x10001, 2
+HKR,%9600Col%\0000,Value,0x10001, 0
+HKR,%9600Col%\0000,UsbRegisters,1, f0,00,ff
+HKR,%9600Col%\0000,CamRegisters,1, 01,80,ff,02,80,ff,24,80,ff,25,70,ff
+HKR,%9600Col%\0001,Value,0x10001, 1
+HKR,%9600Col%\0001,UsbRegisters,1, f0,01,ff 
+HKR,%9600Col%\0001,CamRegisters,1, 24,b0,ff,25,90,ff
+
+HKR,%9600Col%,DefaultValue,0x10001, 1
+HKR,%9600Col%,MinValue,0x10001, 0
+HKR,%9600Col%,MaxValue,0x10001, 1
+HKR,%9600Col%,Step,0x10001, 1
+
+;#####################################
+
+;HKR,%9600Wb%,Registers,0x10001, 
+;#####################################
+;HKR,%9600Wb%,PropertyId,0x10001, 7
+
+;HKR,%9600Wb%,MapMethod,0x10001, 0
+;HKR,%9600Wb%,RelatedRegister,1,01
+
+
+;HKR,%9600Wb%,DefaultValue,0x10001, 80
+;HKR,%9600Wb%,DefaultFlags,0x10001, 1
+;HKR,%9600Wb%,MinValue,0x10001, 0
+;HKR,%9600Wb%,MaxValue,0x10001, 255
+;HKR,%9600Wb%,Step,0x10001, 1
+
+;#####################################
+;#####################################
+;PROPSETID_VIDCAP_CAMERACONTROL
+;    KSPROPERTY_CAMERACONTROL_PAN,                       // RW O 0
+;    KSPROPERTY_CAMERACONTROL_TILT,                      // RW O 1
+;    KSPROPERTY_CAMERACONTROL_ROLL,                      // RW O 2
+;    KSPROPERTY_CAMERACONTROL_ZOOM,                      // RW O 3
+;    KSPROPERTY_CAMERACONTROL_EXPOSURE,                  // RW O 4
+;    KSPROPERTY_CAMERACONTROL_IRIS,                      // RW O 5
+;    KSPROPERTY_CAMERACONTROL_FOCUS,                     // RW O 6
+
+;HKR,%9600Pan%,Registers,0x10001, 
+;HKR,%9600Tilt%,Registers,0x10001, 
+;HKR,%9600Roll%,Registers,0x10001, 
+;HKR,%9600Zoom%,Registers,0x10001, 
+;#####################################
+
+HKR,%9600Exp%,PropertyId,0x10001, 4
+HKR,%9600Exp%,MapMethod,0x10001, 0
+HKR,%9600Exp%,RelatedRegister,1,10
+
+HKR,%9600Exp%,SupportAuto,0x10001,1 ;0 not support, 1 support
+HKR,%9600Exp%,AutoControlMode,0x10001,0
+HKR,%9600Exp%,CamRegDisableAuto,1,13,00,05
+HKR,%9600Exp%,CamRegEnableAuto,1, 13,05, 05
+
+HKR,%9600Exp%,DefaultValue,0x10001, 67
+HKR,%9600Exp%,DefaultFlags,0x10001, 1
+HKR,%9600Exp%,MinValue,0x10001, 0
+HKR,%9600Exp%,MaxValue,0x10001, 255
+HKR,%9600Exp%,Step,0x10001, 1
+
+;#####################################
+;HKR,%9600Iris%,Registers,0x10001, 
+;HKR,%9600Focus%,Registers,0x10001, 
+;#####################################
+;PROPSETID_VIDCAP_VIDEOCONTROL
+;    KSPROPERTY_VIDEOCONTROL_CAPS,               // R		0
+;    KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE,  // R O		1
+;    KSPROPERTY_VIDEOCONTROL_FRAME_RATES,        // R O		2
+;    KSPROPERTY_VIDEOCONTROL_MODE,               // RWO		3
+
+HKR,%9600Cap%,PropertyId,0x10001, 0
+HKR,%9600Cap%,MapMethod,0x10001, 1
+
+;    KS_VideoControlFlag_FlipHorizontal        = 0x0001,
+;    KS_VideoControlFlag_FlipVertical          = 0x0002,
+;    KS_VideoControlFlag_ExternalTriggerEnable = 0x0010,
+;    KS_VideoControlFlag_Trigger               = 0x0020,
+HKR,%9600Cap%,DefaultValue,0x10001, 0x33
+
+;######################################
+HKR,%9600ActFR%,PropertyId,0x10001, 1
+HKR,%9600ActFR%,MapMethod,0x10001, 1
+HKR,%9600ActFR%,DefaultValue,0x10001, 0
+
+;######################################
+HKR,%9600Fps%,PropertyId,0x10001, 2
+HKR,%9600Fps%,MapMethod,0x10001, 1
+HKR,%9600Fps%,DefaultValue,0x10001, 0
+
+;######################################
+HKR,%9600Mode%,PropertyId,0x10001, 3
+HKR,%9600Mode%,MapMethod,0x10001, 1
+HKR,%9600Mode%,NumberOfValues,0x10001, 3
+HKR,%9600Mode%,DefaultValue,0x10001, 20
+
+HKR,%9600Mode%\0000,Value,0x10001, 1
+HKR,%9600Mode%\0000,CamRegisters,1, 12,00,40
+HKR,%9600Mode%\0001,Value,0x10001, 0x80000001
+HKR,%9600Mode%\0001,CamRegisters,1, 12,0,40
+HKR,%9600Mode%\0002,Value,0x10001, 0x20
+;HKR,%9600Mode%\0002,UsbRegisters,1, 52,04,04
+
+;######################################
+;######################################
+;PROPSETID_VIDCAP_VIDEOCOMPRESSION
+;PROPSETID_VIDCAP_VIDEOCOMPRESSION
+;    KSPROPERTY_VIDEOCOMPRESSION_GETINFO,              // R		0
+;    KSPROPERTY_VIDEOCOMPRESSION_KEYFRAME_RATE,        // RW	1
+;Right now we only support upper two properties
+;    KSPROPERTY_VIDEOCOMPRESSION_PFRAMES_PER_KEYFRAME, // RW	2
+;    KSPROPERTY_VIDEOCOMPRESSION_QUALITY,              // RW	3
+;    KSPROPERTY_VIDEOCOMPRESSION_OVERRIDE_KEYFRAME,    // W		4
+;    KSPROPERTY_VIDEOCOMPRESSION_OVERRIDE_FRAME_SIZE   // W		5
+
+;######################################
+HKR,%9600CmpInfo%,PropertyId,0x10001, 0
+HKR,%9600CmpInfo%,MapMethod,0x10001, 1
+
+;    KS_CompressionCaps_CanQuality = 1,
+;    KS_CompressionCaps_CanCrunch = 2,
+;    KS_CompressionCaps_CanKeyFrame = 4,
+;    KS_CompressionCaps_CanBFrame = 8
+HKR,%9600CmpInfo%,DefaultValue,0x10001, 1
+
+;######################################
+
+HKR,%9600KeyFR%,PropertyId,0x10001, 1
+HKR,%9600KeyFR%,MapMethod,0x10001, 1
+HKR,%9600KeyFR%,DefaultValue,0x10001, 7
+
+;######################################
+HKR,%9600PFR%,PropertyId,0x10001, 2
+HKR,%9600PFR%,MapMethod,0x10001, 1
+HKR,%9600PFR%,DefaultValue,0x10001, 0
+;######################################
+HKR,%9600Qul%,PropertyId,0x10001, 3
+HKR,%9600Qul%,MapMethod,0x10001, 1
+HKR,%9600Qul%,DefaultValue,0x10001, 5000
+;######################################
+HKR,%9600RedGain%,PropertyId,0x10001, 6
+HKR,%9600RedGain%,MapMethod,0x10001, 0
+HKR,%9600RedGain%,RelatedRegister,1,02
+HKR,%9600RedGain%,DefaultValue,0x10001, 134    
+HKR,%9600RedGain%,MinValue,0x10001, 0
+HKR,%9600RedGain%,MaxValue,0x10001, 255
+HKR,%9600RedGain%,Step,0x10001, 1
+;######################################
+HKR,%9600BlueGain%,PropertyId,0x10001, 7
+HKR,%9600BlueGain%,MapMethod,0x10001, 0
+HKR,%9600BlueGain%,RelatedRegister,1,01
+HKR,%9600BlueGain%,DefaultValue,0x10001, 144
+HKR,%9600BlueGain%,MinValue,0x10001, 0
+HKR,%9600BlueGain%,MaxValue,0x10001, 255
+HKR,%9600BlueGain%,Step,0x10001, 1
+;######################################
+HKR,%9600Gain%,PropertyId,0x10001, 8
+HKR,%9600Gain%,MapMethod,0x10001, 1
+HKR,%9600Gain%,RelatedRegister,1, 0
+HKR,%9600Gain%,NumberOfValues,0x10001, 8
+HKR,%9600Gain%\0000,Value,0x10001, 0
+HKR,%9600Gain%\0000,CamRegisters,1,00,00,ff
+HKR,%9600Gain%\0001,Value,0x10001, 1
+HKR,%9600Gain%\0001,CamRegisters,1,00,04,ff
+HKR,%9600Gain%\0002,Value,0x10001, 2
+HKR,%9600Gain%\0002,CamRegisters,1,00,08,ff
+HKR,%9600Gain%\0003,Value,0x10001, 3
+HKR,%9600Gain%\0003,CamRegisters,1,00,0a,ff
+HKR,%9600Gain%\0004,Value,0x10001, 4
+HKR,%9600Gain%\0004,CamRegisters,1,00,0f,ff
+HKR,%9600Gain%\0005,Value,0x10001, 5
+HKR,%9600Gain%\0005,CamRegisters,1,00,14,ff
+HKR,%9600Gain%\0006,Value,0x10001, 6
+HKR,%9600Gain%\0006,CamRegisters,1,00,18,ff
+HKR,%9600Gain%\0007,Value,0x10001, 7
+HKR,%9600Gain%\0007,CamRegisters,1,00,1f,ff
+
+HKR,%9600Gain%,DefaultValue,0x10001, 0
+HKR,%9600Gain%,MinValue,0x10001, 0
+HKR,%9600Gain%,MaxValue,0x10001, 7
+HKR,%9600Gain%,Step,0x10001, 1
+;######################################
+;PROPSETID_OVTCAM_PROP
+HKR,%9600Reg%,PropertyId,0x10001, 0
+HKR,%9600Reg%,MapMethod,0x10001, 1
+HKR,%9600Reg%,DefaultValue,0x10001, 0
+
+HKR,%9600Regy%,PropertyId,0x10001, 3
+HKR,%9600Regy%,MapMethod,0x10001, 1
+HKR,%9600Regy%,DefaultValue,0x10001, 0
+
+HKR,%9600Sti%,PropertyId,0x10001, 1
+HKR,%9600Sti%,MapMethod,0x10001, 1
+HKR,%9600Sti%,DefaultValue,0x10001, 0
+
+HKR,%9600LF%,PropertyId,0x10001, 2
+HKR,%9600LF%,MapMethod,0x10001, 1
+HKR,%9600LF%,NumberOfValues,0x10001, 2
+
+HKR,%9600LF%\50Hz,Value,0x10001, 1
+HKR,%9600LF%\50Hz,CamRegisters,1, 2d,d2,ff
+HKR,%9600LF%\60Hz,Value,0x10001, 0
+HKR,%9600LF%\60Hz,CamRegisters,1, 2d,00,ff
+
+HKR,%9600LF%\FormatChange\640,MinValue,0x10001, 0
+HKR,%9600LF%\FormatChange\640,MaxValue,0x10001, 1
+HKR,%9600LF%\FormatChange\640,Set2LastValue,0x10001, 1
+HKR,%9600LF%\FormatChange\640,Width,0x10001, 640
+HKR,%9600LF%\FormatChange\640,NumberOfValues,0x10001, 2
+HKR,%9600LF%\FormatChange\640\50Hz,Value,0x10001, 1
+HKR,%9600LF%\FormatChange\640\50Hz,CamRegisters,1, 2d,64,ff
+HKR,%9600LF%\FormatChange\640\60Hz,Value,0x10001, 0
+HKR,%9600LF%\FormatChange\640\60Hz,CamRegisters,1, 2d,00,ff
+
+HKR,%9600LF%,DefaultValue,0x10001, 0
+HKR,%9600LF%,MinValue,0x10001, 0
+HKR,%9600LF%,MaxValue,0x10001, 1
+HKR,%9600LF%,Step,0x10001, 1
+
+[Strings]
+
+;;9600
+9600Set="CameraSetting\SupportCamera\9600"
+9600Adj="CameraSetting\SupportCamera\9600\CamAdjust"
+9600STIYUV="CameraSetting\SupportCamera\9600\DataProcessing\YUV"
+9600UVTest="CameraSetting\SupportCamera\9600\DataProcessing\UVTest"
+9600DP="CameraSetting\SupportCamera\9600\DataProcessing"
+9600STIRAW="CameraSetting\SupportCamera\9600\DataProcessing\RAW"
+9600Strm="CameraSetting\SupportCamera\9600\VideoStream"
+9600Vid800RGB24="CameraSetting\SupportCamera\9600\VideoStream\800x600RGB24"
+9600Vid800I420="CameraSetting\SupportCamera\9600\VideoStream\800x600I420"
+9600Vid640RGB24="CameraSetting\SupportCamera\9600\VideoStream\640x480RGB24"
+9600Vid640I420="CameraSetting\SupportCamera\9600\VideoStream\640x480I420"
+9600Vid352RGB24="CameraSetting\SupportCamera\9600\VideoStream\352x288RGB24"
+9600Vid352I420="CameraSetting\SupportCamera\9600\VideoStream\352x288I420"
+9600Vid320RGB24="CameraSetting\SupportCamera\9600\VideoStream\320x240RGB24"
+9600Vid320I420="CameraSetting\SupportCamera\9600\VideoStream\320x240I420"
+9600Vid176RGB24="CameraSetting\SupportCamera\9600\VideoStream\176x144RGB24"
+9600Vid176I420="CameraSetting\SupportCamera\9600\VideoStream\176x144I420"
+9600Vid160RGB24="CameraSetting\SupportCamera\9600\VideoStream\160x120RGB24"
+9600Vid160I420="CameraSetting\SupportCamera\9600\VideoStream\160x120I420"
+9600Brit="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\Brightness"
+9600Cntr="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\Contrast"
+9600Hue="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\Hue"
+9600Sat="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\Saturation"
+9600Shp="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\Sharpness"
+9600Gam="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\Gamma"
+9600Col="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\ColorEnable"
+9600Wb="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\WhiteBalance"
+9600BL="CameraSetting\SupportCamera\9600\DeviceProperties\VideoProcAmp\BackLight"
+9600Pan="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Pan"
+9600Tilt="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Tilt"
+9600Roll="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Roll"
+9600Zoom="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Zoom"
+9600Exp="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Exposure"
+9600Iris="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Iris"
+9600Focus="CameraSetting\SupportCamera\9600\DeviceProperties\CameraControl\Focus"
+9600Cap="CameraSetting\SupportCamera\9600\DeviceProperties\VideoControl\Capability"
+9600ActFR="CameraSetting\SupportCamera\9600\DeviceProperties\VideoControl\ActualFrameRate"
+9600Fps="CameraSetting\SupportCamera\9600\DeviceProperties\VideoControl\FrameRates"
+9600Mode="CameraSetting\SupportCamera\9600\DeviceProperties\VideoControl\Mode"
+9600CmpInfo="CameraSetting\SupportCamera\9600\DeviceProperties\VideoCompression\GetCompressionInfo"
+9600KeyFR="CameraSetting\SupportCamera\9600\DeviceProperties\VideoCompression\KeyFrameRate"
+9600PFR="CameraSetting\SupportCamera\9600\DeviceProperties\VideoCompression\PFrameRate"
+9600Qul="CameraSetting\SupportCamera\9600\DeviceProperties\VideoCompression\Qulaity"
+9600Reg="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\Register"
+9600Regy="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\Registry"
+9600Sti="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\StillImage"
+9600LF="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\LightFrequence"
+9600RedGain="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\RedGain"
+9600BlueGain="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\BlueGain"
+9600Gain="CameraSetting\SupportCamera\9600\DeviceProperties\CustomProperty\Gain"

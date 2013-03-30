@@ -1,0 +1,131 @@
+﻿; precise_MC200_series.inf
+; Copyright © 2010 Precise Biometrics AB
+
+[Version] 
+Signature="$Windows NT$" 
+Class=SmartCardReader 
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530} 
+Provider=%PB% 
+CatalogFile.NT=pb200x86.cat 
+CatalogFile.NTamd64=pb200amd64.cat
+DriverVer=11/21/2011,1.1.0.0
+
+[Manufacturer]
+%PB%=PreciseBiometricsModels,NTx86,NTamd64
+
+[PreciseBiometricsModels.NTx86]
+%PB250ReaderName%=pbUsbccid_Install.NT, USB\VID_08c3&PID_0401
+%PB200ReaderName%=pbUsbccid_Install.NT, USB\VID_08c3&PID_0402
+%PB250UpgReaderName% = pbUsbccid_Install.NT, USB\VID_08c3&PID_0405
+%PB200UpgReaderName% = pbUsbccid_Install.NT, USB\VID_08c3&PID_0406
+
+[PreciseBiometricsModels.NTamd64]
+%PB250ReaderName%=pbUsbccid_Install.NT,USB\VID_08c3&PID_0401
+%PB200ReaderName%=pbUsbccid_Install.NT,USB\VID_08c3&PID_0402
+%PB250UpgReaderName% = pbUsbccid_Install.NT, USB\VID_08c3&PID_0405
+%PB200UpgReaderName% = pbUsbccid_Install.NT, USB\VID_08c3&PID_0406
+
+
+;------------------------------------------------------------------------------------
+
+[Reader.Install.AddReg]
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, System\CurrentControlSet\Services\SCardSvr,Start,0x00010001,2
+HKLM, System\CurrentControlSet\Services\CertPropSvc,Start,0x00010001,2
+; Registering event log provider.
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},,0x00000000,"WudfUsbccidDriver"
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},Enabled,0x00010001,1
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},MessageFileName,0x00020000,"%SystemRoot%\System32\Drivers\UMDF\WudfUsbccidDriver.dll"
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},ResourceFileName,0x00020000,"%SystemRoot%\System32\Drivers\UMDF\WudfUsbccidDriver.dll"
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5}\ChannelReferences,Count,0x00010001,1
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5}\ChannelReferences\0,,0x00000000,"System"
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5}\ChannelReferences\0,Id,0x00010001,0x00000008
+HKLM, Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{22c370a7-a3db-4390-ade5-3a1accf4b5d5}\ChannelReferences\0,Flags,0x00010001,0x00000001
+HKLM, System\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},Enabled,0x00010001,1
+HKLM, System\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},EnableLevel,0x00010001,0
+HKLM, System\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},EnableProperty,0x00010001,0x00000001
+HKLM, System\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},LoggerName,0x00000000,"EventLog-System"
+; Note: The 0x000B0001 flag in the two entries below indicates the value is a REG_QWORD. This is not documented in MSDN!
+HKLM, System\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},MatchAnyKeyword,0x000B0001,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80
+HKLM, System\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{22c370a7-a3db-4390-ade5-3a1accf4b5d5},MatchAllKeyword,0x000B0001,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+
+;------------------------------------------------------------------------------------
+
+[SourceDisksFiles]
+[SourceDisksNames]
+[DestinationDirs]
+[CoInstallers_CopyFiles]
+
+[pbUsbccid_Install.NT]
+AddReg= Reader.Install.AddReg
+Include= WUDFUsbccidDriver.inf, WINUSB.INF
+Needs=Usbccid_Install.NT, WINUSB.NT
+
+[pbUsbccid_Install.NT.hw]
+AddReg=Usbccid_Device_AddReg
+
+[pbUsbccid_Install.NT.Services]
+AddService=WUDFRd,0x000001fa,WUDFRD_ServiceInstall  ; flag 0x2 sets this as the service for the device
+AddService=WinUsb,0x000001f8,WinUsb_ServiceInstall  ; this service is installed because its a filter.
+
+[pbUsbccid_Install.NT.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[pbUsbccid_Install.NT.Wdf]
+KmdfService = WINUSB, WinUsb_Install
+UmdfService=WUDFUsbccidDriver, WUDFUsbccidDriver_Install
+UmdfServiceOrder=WUDFUsbccidDriver
+UmdfDispatcher=WinUsb
+UmdfKernelModeClientPolicy=AllowKernelModeClients
+
+
+[WinUsb_Install]
+KmdfLibraryVersion = 1.0
+
+[WUDFUsbccidDriver_Install]
+UmdfLibraryVersion=1.9.0
+DriverCLSID="{5EB949F2-78C6-443b-9964-07588EB151C6}"
+ServiceBinary=%12%\UMDF\WUDFUsbccidDriver.dll
+
+[Usbccid_Device_AddReg]
+HKR,,"LowerFilters",0x00010008,"WinUsb" ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
+HKR,"WUDF","Exclusive",0x10001,1
+HKR,,"SystemWakeEnabled",0x00010001,1
+HKR,,"DeviceIdleEnabled",0x00010001,1
+HKR,,"UserSetDeviceIdleEnabled",0x00010001,1
+HKR,,"DefaultIdleState",0x00010001,1
+HKR,,"DefaultIdleTimeout",0x00010001,5000
+HKR,"WDF","WdfDefaultWakeFromSleepState",0x00010001,0
+HKR,"WDF","WdfDefaultIdleInWorkingState",0x00010001,1
+HKR, "WUDFUsbccidDriver", "EscapeCommandEnable", 0x00010001, 1
+HKR, "WUDFUsbccidDriver", "DeviceFlags", 0x00010001, 4
+
+[WUDFRD_ServiceInstall]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\WUDFRd.sys
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_Service_DisplayName%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+LoadOrderGroup  = Base
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WudfCoinstaller.dll"
+
+;------------------------------------------------------------------------------------
+
+[Strings]
+PB="Precise Biometrics"
+PB250ReaderName="Precise 250 MC"
+PB200ReaderName="Precise 200 MC"
+PB250UpgReaderName="Precise 250 MC Upgrade"
+PB200UpgReaderName="Precise 200 MC Upgrade"
+
+WinUsb_Service_DisplayName="WinUSB Driver"
+WinUsb_SvcDesc="WinUSB Driver"
